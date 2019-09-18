@@ -103,6 +103,40 @@ public class HabitacionDao {
         }
         return verificador;
     }
+    public boolean seModificoHabitacion(Habitacion h) {
+        boolean verificador = false;
+        String sql = "update habitacion set numero =?, simbolo =?, tipo =?, estilo =?, estado =?, numeroPiso =?, capacidad =?, numeroTelefono =?,"
+                + " detalle =?, descripcion =?, sofaCama =?, costoSofaCama =?, disponible =?, promocionFrigobar =?, tipoVenta =?, tipoTemporada =? where idhabitacion = "+h.getId();
+        
+        try {
+            PreparedStatement ps = conexion.getConexion().prepareStatement(sql);
+            
+            ps.setString(1, h.getNumero());
+            ps.setString(2, h.getSimbolo());
+            ps.setString(3, h.getTipo());
+            ps.setString(4, h.getEstilo());
+            ps.setString(5, h.getEstado());
+            ps.setString(6, h.getNumeroPiso());
+            ps.setString(7, h.getCapacidad());
+            ps.setString(8, h.getNumeroTelefono());
+            ps.setString(9, h.getDetalle());            
+            ps.setString(10, h.getDescripcion());
+            ps.setString(11, h.getSofaCama());
+            ps.setDouble(12, h.getCostoSofaCama());
+            ps.setString(13, h.getDisponible());
+            ps.setString(14, h.getPromocionFrigobar());
+            ps.setString(15, h.getTipoVenta());
+            ps.setString(16, h.getTipoTemporada());
+            
+            int resultado = ps.executeUpdate();
+            if(resultado > 0)
+                verificador = true;
+            
+        } catch (SQLException e) {
+            System.out.println("Error HabitacionDao.seModificoHabitacion(): "+e.getMessage());
+        }
+        return verificador;
+    }
     
     private Frigobar getFrigobar(int idhabitacion){
         return new FrigobarDao(conexion).getFrigobar(idhabitacion);

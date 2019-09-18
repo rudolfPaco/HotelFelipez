@@ -20,8 +20,8 @@ import com.hotelfelipez.www.modulo.controlador.CHabitaciones;
 import com.hotelfelipez.www.modulo.disponibilidad.IUVentanaDisponibilidad;
 import com.hotelfelipez.www.modulo.modelo.Asistente;
 import com.hotelfelipez.www.modulo.modelo.Habitacion;
-import com.hotelfelipez.www.modulo.modelo.Temporada;
-import com.hotelfelipez.www.modulo.temporadas.IUPanelTemporada;
+import com.hotelfelipez.www.modulo.modelo.RegistroHospedaje;
+import com.hotelfelipez.www.modulo.registroHospedaje.IUVentanaRegistroHospedajeOcupado;
 import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
@@ -66,7 +66,7 @@ public class IUVentanaHotel extends IUVentanaP{
         panelHabitaciones = new IUPanelEstadoHabitaciones(new Limitacion(0, limite.getPorcentajeAlto(15), limite.getAncho(), limite.getPorcentajeAlto(85)));
         panelHabitaciones.setArco(1);
         panelFondo.add(panelHabitaciones);
-        construirPanelHabitaciones();
+        actualizarPanelHabitaciones();
     }
     private void construirBarraBotones(Limitacion limite){
         iuLogo = new IUEtiquetaI(urlLogo, new Limitacion(limite.getPorcentajeAncho(1), limite.getPorcentajeAlto(5), limite.getPorcentajeAncho(13), limite.getPorcentajeAlto(90)));
@@ -93,11 +93,11 @@ public class IUVentanaHotel extends IUVentanaP{
         etiquetaFecha = new IUEtiqueta("Cochabamba, "+new Fecha().getFecha1(), new Limitacion(limite.getPorcentajeAncho(75), limite.getPorcentajeAlto(70), limite.getPorcentajeAncho(25), limite.getPorcentajeAlto(20)));
         barraBotones.add(etiquetaFecha);        
     }
-    private void construirPanelHabitaciones(){       
+    private void actualizarPanelHabitaciones(){       
         
         this.listaHabitaciones.clear();
-        panelHabitaciones.removeAll();//panelContenedoresPrendas
-        panelHabitaciones.updateUI();//panelConteneedoresPrendas
+        panelHabitaciones.removeAll();
+        panelHabitaciones.updateUI();
         
         CHabitaciones controlHabitaciones = new CHabitaciones();
         ArrayList<Habitacion> lista = controlHabitaciones.getListaHabitaciones();
@@ -108,17 +108,7 @@ public class IUVentanaHotel extends IUVentanaP{
         int numeroFilas = 4;
         cantidadPanelesHabitaciones = Asistente.getCantidadPaneles(numeroElementos, limite);        
         int indice = 0;
-        
-        //indicePanelesPrendas.setText(numeroPanelPrenda+"/"+cantidadPanelesHabitaciones);
-        /*if(cantidadPanelesHabitaciones > 1){
-            iconoAtrasPrendas.setVisible(true);
-            iconoAdelantePrendas.setVisible(true);
-        }else{
-            indicePanelesPrendas.setText("");
-            iconoAtrasPrendas.setVisible(false);
-            iconoAdelantePrendas.setVisible(false);
-        }*/
-                        
+                                
         for (int i = 0; i < cantidadPanelesHabitaciones; i++) {
             IUPanel panelPrenda = new IUPanel(new Limitacion(panelHabitaciones.getLimitacion().getAncho(), panelHabitaciones.getLimitacion().getAlto()));
             panelHabitaciones.add(panelPrenda);
@@ -131,10 +121,9 @@ public class IUVentanaHotel extends IUVentanaP{
                     if(indice < numeroElementos){
                         Habitacion habitacion = lista.get(indice);
                         if(habitacion != null){
-
-                            IUHabitacion iuHabitacion = new IUHabitacion(new Limitacion(columnas*2 + 2 + columnas*anchura, filas*2 + 2 + filas*altura, anchura, altura), habitacion);
+                            IUHabitacion iuHabitacion = new IUHabitacion(new Limitacion(columnas*2 + 2 + columnas*anchura, filas*2 + 2 + filas*altura, anchura, altura), controlHabitaciones, habitacion);
                             listaHabitaciones.add(iuHabitacion);
-                            panelPrenda.add(iuHabitacion);  
+                            panelPrenda.add(iuHabitacion);                              
                             iuHabitacion.addEventoRaton(new MouseAdapter() {
                                 @Override
                                 public void mousePressed(MouseEvent e) {
@@ -143,6 +132,9 @@ public class IUVentanaHotel extends IUVentanaP{
                                     switch(habitacion.getEstado()){
                                         case "VACANTE":
                                             ventanaVacante(habitacion);                                                
+                                        break;
+                                        case "OCUPADO":
+                                            ventanaOcupado(controlHabitaciones, habitacion);
                                         break;
                                     }
                                 }
@@ -175,6 +167,12 @@ public class IUVentanaHotel extends IUVentanaP{
         }
         setOpacity(1f);
     }
+    private void ventanaOcupado(CHabitaciones controlHabitaciones, Habitacion hab){
+        setOpacity(0.5f);
+        IUVentanaRegistroHospedajeOcupado registroOcupado = new IUVentanaRegistroHospedajeOcupado(this, controlHabitaciones, hab, "Registro Hospedaje Ocupado    Habitacion: "+hab.getNombreHabitacion(), new Limitacion(Asistente.ANCHO, Asistente.ALTO));
+        registroOcupado.mostrarVentana();
+        setOpacity(1f);
+    }
     private void despintarBotonHabitacion(IUHabitacion elemento){
         for (int i = 0; i < listaHabitaciones.size(); i++) {
             IUHabitacion iuhab = listaHabitaciones.get(i);
@@ -201,12 +199,13 @@ public class IUVentanaHotel extends IUVentanaP{
         IUVentanaHabitaciones iuHabitaciones = new IUVentanaHabitaciones(controlHabitaciones, this, "administracion de habitaciones");
         controlHabitaciones.controlarIUHabitaciones(iuHabitaciones);
         iuHabitaciones.mostrarVentana();
-        construirPanelHabitaciones();
+        actualizarPanelHabitaciones();
     }
     private void mostrarVentanaDisponibilidad(){
         CDisponibilidad controlDisponibilidad = new CDisponibilidad();
         IUVentanaDisponibilidad iuDisponibilidad = new IUVentanaDisponibilidad(this, controlDisponibilidad, "disponibilidad de habitaciones", new Limitacion(Asistente.ANCHO, Asistente.ALTO));
-        controlDisponibilidad.controlarVentanaDisponibilidad(iuDisponibilidad);
+        controlDisponibilidad.controlarVentanaDisponibilidad(iuDisponibilidad);        
         iuDisponibilidad.mostrarVentana();
+        actualizarPanelHabitaciones();
     }
 }

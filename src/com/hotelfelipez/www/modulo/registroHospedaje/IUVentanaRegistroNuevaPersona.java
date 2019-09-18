@@ -16,7 +16,7 @@ import com.aplicacionjava.www.paneles.IUPanelTA;
 import com.aplicacionjava.www.paneles.IUPanelTCB;
 import com.aplicacionjava.www.recursos.Archivo;
 import com.aplicacionjava.www.recursos.Digitalizacion;
-import com.aplicacionjava.www.recursos.Documento;
+import com.hotelfelipez.www.modulo.modelo.Documento;
 import com.aplicacionjava.www.recursos.Fecha;
 import com.aplicacionjava.www.recursos.Limitacion;
 import com.aplicacionjava.www.ventanas.IUVentanaL;
@@ -272,7 +272,7 @@ public class IUVentanaRegistroNuevaPersona extends IUVentanaT{
         botonEliminar.addEventoRaton(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                etiquetaImagen.setDocumento(null);
+                etiquetaImagen.setBuffered(null);
                 etiquetaImagen.setIcon(null);
                 etiquetaImagen.updateUI();
             }
@@ -295,7 +295,7 @@ public class IUVentanaRegistroNuevaPersona extends IUVentanaT{
                         break;
                         case "eliminar imagen":
                             ciCara.setIcon(null);
-                            ciCara.setDocumento(null);
+                            ciCara.setBuffered(null);
                         break;
                     }
                 }
@@ -320,7 +320,7 @@ public class IUVentanaRegistroNuevaPersona extends IUVentanaT{
                         break;
                         case "eliminar imagen":
                             ciEspalda.setIcon(null);
-                            ciEspalda.setDocumento(null);
+                            ciEspalda.setBuffered(null);
                         break;
                     }
                 }
@@ -345,7 +345,7 @@ public class IUVentanaRegistroNuevaPersona extends IUVentanaT{
                         break;
                         case "eliminar imagen":
                             passporte.setIcon(null);
-                            passporte.setDocumento(null);
+                            passporte.setBuffered(null);
                         break;
                     }
                 }
@@ -370,7 +370,7 @@ public class IUVentanaRegistroNuevaPersona extends IUVentanaT{
                         break;
                         case "eliminar imagen":
                             certificado.setIcon(null);
-                            certificado.setDocumento(null);
+                            certificado.setBuffered(null);
                         break;
                     }
                 }
@@ -442,13 +442,13 @@ public class IUVentanaRegistroNuevaPersona extends IUVentanaT{
     }
     private boolean estaValidado(){
         boolean verificador = false;
-        if(ciCara.getDocumento() != null && ciEspalda.getDocumento() != null)
+        if(ciCara.getBuffered() != null && ciEspalda.getBuffered() != null)
             verificador = true;
         else
-            if(passporte.getDocumento() != null)
+            if(passporte.getBuffered() != null)
                 verificador = true;
             else
-                if(certificado.getDocumento() != null)
+                if(certificado.getBuffered() != null)
                     verificador = true;
                 else
                     if(!panelNombres.iuTexto.getText().isEmpty() && !panelApellidos.iuTexto.getText().isEmpty())
@@ -468,7 +468,6 @@ public class IUVentanaRegistroNuevaPersona extends IUVentanaT{
         if ( result == JFileChooser.APPROVE_OPTION ){
             try {
                 BufferedImage buffered = ImageIO.read(fileChooser.getSelectedFile());
-                File file = fileChooser.getSelectedFile();                
                 
                 String[] nombres = {"desea recortar la imagen", "desea aceptar la imagen"};
                 IUVentanaL opciones = new IUVentanaL(ventanaPrincipal, "elija una opcion", new Limitacion(Asistente.ANCHO/3, Asistente.ALTO/2), nombres);
@@ -476,13 +475,13 @@ public class IUVentanaRegistroNuevaPersona extends IUVentanaT{
                 if(opciones.getEstado()){
                     switch(opciones.getNombreBoton()){
                         case "desea recortar la imagen":
-                            IUVentanaRI ventanaEspalda = new IUVentanaRI(ventanaPrincipal, "Recortar Imagen", iuImagen, new Archivo(file.getName(), file.getAbsolutePath(), "", buffered), new Limitacion(Asistente.ANCHO - Asistente.ANCHO/3 - Asistente.ANCHO/10, Asistente.ALTO), 4);
+                            IUVentanaRI ventanaEspalda = new IUVentanaRI(ventanaPrincipal, "Recortar Imagen", iuImagen, buffered, new Limitacion(Asistente.ANCHO - Asistente.ANCHO/3 - Asistente.ANCHO/10, Asistente.ALTO), 4);
                             ventanaEspalda.mostrarVentana();
                         break;
                         case "desea aceptar la imagen":
                             if(buffered != null){
                                 iuImagen.setIcon(new ImageIcon(new ImageIcon(buffered.getScaledInstance(iuImagen.getWidth(), iuImagen.getHeight(), Image.SCALE_AREA_AVERAGING)).getImage()));
-                                iuImagen.setDocumento(new Documento(buffered));
+                                iuImagen.setBuffered(buffered);
                             }                            
                         break;
                     }
@@ -496,11 +495,11 @@ public class IUVentanaRegistroNuevaPersona extends IUVentanaT{
     public Persona getPersona(){
         Persona persona = new Persona(0);
         
-        if(ciCara.getDocumento() != null && ciEspalda.getDocumento() != null){
-            Documento docCara = ciCara.getDocumento();
+        if(ciCara.getBuffered() != null && ciEspalda.getBuffered() != null){
+            Documento docCara = new Documento(ciCara.getBuffered());
             docCara.setTipo("carnetIdentidadC");
                         
-            Documento docEspalda = ciEspalda.getDocumento();
+            Documento docEspalda = new Documento(ciEspalda.getBuffered());
             docEspalda.setTipo("carnetIdentidadE");
             
             persona.setDocumento(docCara);
@@ -508,16 +507,16 @@ public class IUVentanaRegistroNuevaPersona extends IUVentanaT{
             persona.setEstadoDocumentos("SI");
         }            
         else
-            if(passporte.getDocumento() != null){
-                Documento docPassporte = passporte.getDocumento();
+            if(passporte.getBuffered() != null){
+                Documento docPassporte = new Documento(passporte.getBuffered());
                 docPassporte.setTipo("passporte");
                 
                 persona.setDocumento(docPassporte);
                 persona.setEstadoDocumentos("SI");
             }                
             else
-                if(certificado.getDocumento() != null){
-                    Documento docCertificado = certificado.getDocumento();
+                if(certificado.getBuffered() != null){
+                    Documento docCertificado = new Documento(certificado.getBuffered());
                     docCertificado.setTipo("certificado");
                     
                     persona.setDocumento(docCertificado);

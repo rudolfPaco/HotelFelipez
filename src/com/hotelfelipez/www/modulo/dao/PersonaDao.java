@@ -56,4 +56,23 @@ public class PersonaDao {
         }
         return verificador;
     }
+    public boolean seGuardoPesona_RegistroHospedaje(int idPersona, int idRegistro){
+        boolean verificador = false;
+        String sql = "insert into persona_registroHospedaje values(?, ?, ?)";
+        try {
+            PreparedStatement ps = conexion.getConexion().prepareStatement(sql);
+                                    
+            ps.setInt(1, 0);
+            ps.setInt(2, idPersona);
+            ps.setInt(3, idRegistro);
+                        
+            int resultado = ps.executeUpdate();
+            if(resultado > 0)
+                verificador = true;
+            
+        } catch (SQLException e) {
+            System.out.println("Error PersonaDao.seGuardoPeresona(): "+e.getMessage());
+        }
+        return verificador;
+    }
 }

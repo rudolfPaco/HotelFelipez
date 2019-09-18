@@ -8,15 +8,12 @@ package com.hotelfelipez.www.modulo.disponibilidad;
 import com.aplicacionjava.www.recursos.Limitacion;
 import com.aplicacionjava.www.tablas.IUTabla;
 import com.aplicacionjava.www.tablas.ModeloTabla;
-import com.hotelfelipez.www.modulo.habitaciones.IUVentanaHabitaciones;
 import com.hotelfelipez.www.modulo.modelo.Habitacion;
-import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.JTable;
-import javax.swing.SwingConstants;
 
 /**
  *

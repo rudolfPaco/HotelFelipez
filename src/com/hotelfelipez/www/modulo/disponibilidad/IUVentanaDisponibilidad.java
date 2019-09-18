@@ -24,12 +24,9 @@ import com.hotelfelipez.www.modulo.principal.IUVentanaHotel;
 import com.hotelfelipez.www.modulo.registroHospedaje.IURegistroHospedaje;
 import java.awt.Font;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import javax.swing.ButtonGroup;
-import javax.swing.JFrame;
 
 /**
  *
@@ -279,14 +276,15 @@ public class IUVentanaDisponibilidad extends IUVentanaT{
                             control.controlarRegistroHospedaje(iuRegistro);
                             iuRegistro.mostrarVentana();
                             if(iuRegistro.getEstado()){
-                                RegistroHospedaje registro = iuRegistro.getRegistroHospedaje();
-                                hab.setEstado("OCUPADO");
-                                control.guardarNuevoRegistroHospedaje(registro, hab);
-                                if(Asistente.mensajeVerificacion(ventanaPrincipal, "correcto", "en hora buena... se guardo correctamente el NUEVO REGISTRO DE HOSPEDAJE...!", "advertencia")){
-                                    if(Asistente.mensajeVerificacion(ventanaPrincipal, "peligro", "desea ir al NUEVO REGISTRO DE HOSPEDAJE...?", "advertencia")){
+                                RegistroHospedaje registro = iuRegistro.getRegistroHospedaje();  
+                                if(control.guardarNuevoRegistroHospedaje(registro, hab)){
+                                    Asistente.mensajeVerificacion(ventanaPrincipal, "correcto", "en hora buena... se guardo correctamente el NUEVO REGISTRO DE HOSPEDAJE...!", "advertencia");
+                                    if(Asistente.mensajeVerificacion(ventanaPrincipal, "peligro", "desea ir al NUEVO REGISTRO DE HOSPEDAJE...?", "verificando")){
                                         //IR AL REGISTRO DE HOSPEDAJE
+                                        buscarHabitacionesDisponibles(new Fecha(panelFechaLlegada.getTexto()), new Fecha(panelFechaSalida.getTexto()));
                                     }else{
                                         //ACTUALIZAR LA LISTA DE BUSQUEDA DE HABITACINES DISPONIBLES
+                                        buscarHabitacionesDisponibles(new Fecha(panelFechaLlegada.getTexto()), new Fecha(panelFechaSalida.getTexto()));
                                     }
                                 }
                             }

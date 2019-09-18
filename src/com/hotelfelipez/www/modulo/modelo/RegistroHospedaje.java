@@ -5,6 +5,7 @@
  */
 package com.hotelfelipez.www.modulo.modelo;
 
+import com.aplicacionjava.www.recursos.Fecha;
 import java.util.ArrayList;
 
 /**
@@ -105,6 +106,9 @@ public class RegistroHospedaje {
     }
     public void setPersona(Persona persona){
         this.listaPersonas.add(persona);
+    }
+    public int getNroNoches(){
+        return new Fecha(this.fechaSalida).restarDias(new Fecha());
     }
     @Override
     public String toString() {

@@ -230,6 +230,7 @@ public class IURegistroHospedaje extends IUVentanaT{
     }
     public RegistroHospedaje getRegistroHospedaje(){
         RegistroHospedaje registro = new RegistroHospedaje(0);
+        registro.setNroRegistro(String.valueOf(Asistente.getPostId("idregistroHospedaje", "select idregistroHospedaje from registroHospedaje ORDER by idregistroHospedaje DESC LIMIT 1")));
         registro.setFechaLlegada(fechaLlegada.getFecha());
         registro.setHoraLlegada(panelHoraIngreso.iuTexto.getText());
         registro.setFechaSalida(fechaSalida.getFecha());

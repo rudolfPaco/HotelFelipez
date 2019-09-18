@@ -5,6 +5,7 @@
  */
 package com.hotelfelipez.www.modulo.modelo;
 
+import com.aplicacionjava.www.recursos.Directorio;
 import com.aplicacionjava.www.recursos.Limitacion;
 import com.aplicacionjava.www.ventanas.IUVentanaM;
 import com.hotelfelipez.www.modulo.dao.Conexion;
@@ -16,6 +17,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 import javax.imageio.ImageIO;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -133,4 +135,19 @@ public class Asistente {
         conexion.cerrarConexion();
         return datos;
     }    
+    public static int getPostId(String columna, String sql){
+        int id = 0;
+        Conexion conexion = new Conexion();
+        id = conexion.getDato(columna, sql);
+        id++;
+        conexion.cerrarConexion();
+        return id;
+    }
+    public static Directorio getDirectorio(){
+        Directorio directorio = new Directorio("/src/fotos_usuarios/", "c:/imagenes/", "c:/imagenes/fotos/");
+        directorio.crearDirectorioOrigen();
+        
+        
+        return directorio;
+    }
 }

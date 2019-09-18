@@ -9,11 +9,13 @@ import com.hotelfelipez.www.modulo.dao.Conexion;
 import com.hotelfelipez.www.modulo.dao.FrigobarDao;
 import com.hotelfelipez.www.modulo.dao.HabitacionDao;
 import com.hotelfelipez.www.modulo.dao.MonedaDao;
+import com.hotelfelipez.www.modulo.dao.RegistroHospedajeDao;
 import com.hotelfelipez.www.modulo.dao.TemporadaDao;
 import com.hotelfelipez.www.modulo.habitaciones.IUVentanaHabitaciones;
 import com.hotelfelipez.www.modulo.modelo.Frigobar;
 import com.hotelfelipez.www.modulo.modelo.Habitacion;
 import com.hotelfelipez.www.modulo.modelo.Moneda;
+import com.hotelfelipez.www.modulo.modelo.RegistroHospedaje;
 import com.hotelfelipez.www.modulo.modelo.Temporada;
 import java.util.ArrayList;
 
@@ -64,5 +66,12 @@ public class CHabitaciones {
         if(habitacionDao.seGuardoHabitacion(habitacion)) 
             if(frigobarDao.seGuardoFrigobar(habitacion.getFrigobar()))
                 conexion.cerrarConexion();
+    }
+    public RegistroHospedaje getRegistroHospedaje(int idHabitacion){
+        Conexion conexion = new Conexion();
+        RegistroHospedajeDao registroDao = new RegistroHospedajeDao(conexion);
+        RegistroHospedaje registro = registroDao.getRegistroHospedaje(idHabitacion);        
+        conexion.cerrarConexion();
+        return registro;
     }
 }

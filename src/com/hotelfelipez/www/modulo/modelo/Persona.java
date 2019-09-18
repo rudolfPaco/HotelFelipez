@@ -5,7 +5,6 @@
  */
 package com.hotelfelipez.www.modulo.modelo;
 
-import com.aplicacionjava.www.recursos.Documento;
 import com.aplicacionjava.www.recursos.Fecha;
 import java.util.ArrayList;
 
@@ -193,9 +192,7 @@ public class Persona {
     public String getCaducidad(){
         String respuesta = "VALIDO";
         if(!fechaCaducidad.isEmpty()){
-            Fecha fecha = new Fecha(fechaCaducidad);
-            Fecha fechaHoy = new Fecha();
-            if(fecha.restarDias(fechaHoy) > 0)
+            if(new Fecha(fechaCaducidad).esMenor(new Fecha()))
                 respuesta = "INVALIDO";
         }else
             respuesta = "";

@@ -11,11 +11,14 @@ import com.aplicacionjava.www.paneles.IUPanelBD;
 import com.aplicacionjava.www.paneles.IUPanelCT;
 import com.aplicacionjava.www.recursos.Fecha;
 import com.aplicacionjava.www.recursos.Limitacion;
+import com.hotelfelipez.www.modulo.controlador.CHabitaciones;
 import com.hotelfelipez.www.modulo.modelo.Habitacion;
+import com.hotelfelipez.www.modulo.modelo.RegistroHospedaje;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import javax.swing.SwingConstants;
+import javax.swing.border.LineBorder;
 
 /**
  *
@@ -27,14 +30,17 @@ public class IUHabitacion extends IUPanelBD{
     private IUEtiqueta tituloHabitacion;
     private IUPanel segundoPanel;
     private IUEtiqueta estadoHabitacion;
+    private IUEtiqueta mensajeEstado;
     private IUPanelCT fechaSalida;
     private IUPanelCT nroNoches;
     
+    private CHabitaciones controlHabitaciones;
     private Habitacion habitacion;    
     
-    public IUHabitacion(Limitacion limitacion, Habitacion habitacion) {
+    public IUHabitacion(Limitacion limitacion, CHabitaciones controlHabitaciones, Habitacion habitacion) {
         super(limitacion);
-        this.habitacion = habitacion;
+        this.controlHabitaciones = controlHabitaciones;
+        this.habitacion = habitacion;        
         construirPaneles();
         actualizarEstado();
     }
@@ -55,12 +61,19 @@ public class IUHabitacion extends IUPanelBD{
     }
     private void construirSegundoPanel(Limitacion limite){
         
-        estadoHabitacion = new IUEtiqueta(habitacion.getEstado(), new Limitacion(limite.getAncho(), limite.getPorcentajeAlto(40)));
+        estadoHabitacion = new IUEtiqueta(habitacion.getEstado(), new Limitacion(0, limite.getPorcentajeAlto(10),limite.getAncho(), limite.getPorcentajeAlto(20)));
         estadoHabitacion.setHorizontalAlignment(SwingConstants.CENTER);
+        //estadoHabitacion.setBorder(new LineBorder(Color.yellow));
         estadoHabitacion.setFont(new Font("Verdana", Font.PLAIN, limite.getPorcentajeAlto(12)));        
         segundoPanel.add(estadoHabitacion);
         
-        fechaSalida = new IUPanelCT("salida", new Fecha().getFecha3().toUpperCase(), new Limitacion(0, limite.getPorcentajeAlto(70), limite.getPorcentajeAncho(70), limite.getPorcentajeAlto(30)), 40, 60);
+        mensajeEstado = new IUEtiqueta("", new Limitacion(0, limite.getPorcentajeAlto(35),limite.getAncho(), limite.getPorcentajeAlto(40)));
+        mensajeEstado.setHorizontalAlignment(SwingConstants.CENTER);
+        mensajeEstado.setFont(new Font("Verdana", Font.PLAIN, limite.getPorcentajeAlto(8)));
+        mensajeEstado.setVisible(false);
+        segundoPanel.add(mensajeEstado);
+        
+        fechaSalida = new IUPanelCT("salida", "", new Limitacion(0, limite.getPorcentajeAlto(70), limite.getPorcentajeAncho(70), limite.getPorcentajeAlto(30)), 40, 60);
         fechaSalida.iuTitulo.setHorizontalAlignment(SwingConstants.CENTER);
         fechaSalida.iuTexto.setHorizontalAlignment(SwingConstants.CENTER);
         fechaSalida.iuTexto.setFont(new Font("Verdana", Font.PLAIN, limite.getPorcentajeAlto(10)));
@@ -69,17 +82,35 @@ public class IUHabitacion extends IUPanelBD{
         segundoPanel.add(fechaSalida);
         fechaSalida.setVisible(false);
         
-        nroNoches = new IUPanelCT("noches", "2", new Limitacion(limite.getPorcentajeAncho(70), limite.getPorcentajeAlto(70), limite.getPorcentajeAncho(30), limite.getPorcentajeAlto(30)), 40, 60);
+        nroNoches = new IUPanelCT("noches", "", new Limitacion(limite.getPorcentajeAncho(70), limite.getPorcentajeAlto(70), limite.getPorcentajeAncho(30), limite.getPorcentajeAlto(30)), 40, 60);
         nroNoches.iuTexto.setHorizontalAlignment(SwingConstants.CENTER);
         nroNoches.iuTexto.setEditable(false);
         nroNoches.iuTexto.setFocusable(false);
         segundoPanel.add(nroNoches);
-        nroNoches.setVisible(false);
-        
+        nroNoches.setVisible(false);        
+    }
+    private void setDatosRegistroHospedaje(RegistroHospedaje registro){
+        fechaSalida.iuTexto.setText(new Fecha(registro.getFechaSalida()).getFecha3().toUpperCase());        
+        nroNoches.iuTexto.setText(String.valueOf(registro.getNroNoches()));
+        if(registro.getNroNoches() < 1){
+            mensajeEstado.setVisible(true);
+            mensajeEstado.setText("actualizar fecha de salida");
+            nroNoches.iuTexto.setForeground(new Color(190, 0, 0));
+            fechaSalida.iuTexto.setForeground(new Color(190, 0, 0));
+        }else{            
+            mensajeEstado.setVisible(false);
+            nroNoches.iuTexto.setForeground(new Color(2, 67, 109));
+            fechaSalida.iuTexto.setForeground(new Color(2, 67, 109));
+        }
+            
     }
     private void actualizarEstado(){
         switch(habitacion.getEstado()){
             case "OCUPADO":
+                RegistroHospedaje registro = controlHabitaciones.getRegistroHospedaje(habitacion.getId());
+                if(registro != null){
+                    setDatosRegistroHospedaje(registro);
+                }
                 estadoHabitacion.setForeground(new Color(120, 0, 0));
                 fechaSalida.setVisible(true);
                 nroNoches.setVisible(true);
@@ -98,6 +129,6 @@ public class IUHabitacion extends IUPanelBD{
         estadoHabitacion.addMouseListener(mouse);
         fechaSalida.setEventoRaton(mouse);
         nroNoches.setEventoRaton(mouse);
-        
+        mensajeEstado.addMouseListener(mouse);
     }
 }

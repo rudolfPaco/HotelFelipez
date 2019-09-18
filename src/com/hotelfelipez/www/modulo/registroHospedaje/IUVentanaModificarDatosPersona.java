@@ -16,7 +16,7 @@ import com.aplicacionjava.www.paneles.IUPanelTA;
 import com.aplicacionjava.www.paneles.IUPanelTCB;
 import com.aplicacionjava.www.recursos.Archivo;
 import com.aplicacionjava.www.recursos.Digitalizacion;
-import com.aplicacionjava.www.recursos.Documento;
+import com.hotelfelipez.www.modulo.modelo.Documento;
 import com.aplicacionjava.www.recursos.Fecha;
 import com.aplicacionjava.www.recursos.Limitacion;
 import com.aplicacionjava.www.ventanas.IUVentanaL;
@@ -190,23 +190,23 @@ public class IUVentanaModificarDatosPersona extends IUVentanaT{
             switch(doc.getTipo()){
                 case "carnetIdentidadC":
                     ciCara.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(ciCara.getWidth(), ciCara.getHeight(), Image.SCALE_DEFAULT)));
-                    ciCara.setDocumento(doc);
+                    ciCara.setBuffered(doc.getBuffer());
                 break;
                 case "carnetIdentidadE":
                     ciEspalda.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(ciEspalda.getWidth(), ciEspalda.getHeight(), Image.SCALE_DEFAULT)));
-                    ciEspalda.setDocumento(doc);
+                    ciEspalda.setBuffered(doc.getBuffer());
                 break;
                 case "passporte":
                     passporte.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(passporte.getWidth(), passporte.getHeight(), Image.SCALE_DEFAULT)));
-                    passporte.setDocumento(doc);
+                    passporte.setBuffered(doc.getBuffer());
                 break;
                 case "certificado":
                     certificado.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(certificado.getWidth(), certificado.getHeight(), Image.SCALE_DEFAULT)));
-                    certificado.setDocumento(doc);
+                    certificado.setBuffered(doc.getBuffer());
                 break;
                 case "foto":
                     etiquetaImagen.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(etiquetaImagen.getWidth(), etiquetaImagen.getHeight(), Image.SCALE_DEFAULT)));
-                    etiquetaImagen.setDocumento(doc);
+                    etiquetaImagen.setBuffered(doc.getBuffer());
                 break;
             }
         }
@@ -330,7 +330,7 @@ public class IUVentanaModificarDatosPersona extends IUVentanaT{
         botonEliminar.addEventoRaton(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                etiquetaImagen.setDocumento(null);
+                etiquetaImagen.setBuffered(null);
                 etiquetaImagen.setIcon(null);
                 etiquetaImagen.updateUI();
             }
@@ -353,7 +353,7 @@ public class IUVentanaModificarDatosPersona extends IUVentanaT{
                         break;
                         case "eliminar imagen":
                             ciCara.setIcon(null);
-                            ciCara.setDocumento(null);
+                            ciCara.setBuffered(null);
                         break;
                     }
                 }
@@ -378,7 +378,7 @@ public class IUVentanaModificarDatosPersona extends IUVentanaT{
                         break;
                         case "eliminar imagen":
                             ciEspalda.setIcon(null);
-                            ciEspalda.setDocumento(null);
+                            ciEspalda.setBuffered(null);
                         break;
                     }
                 }
@@ -403,7 +403,7 @@ public class IUVentanaModificarDatosPersona extends IUVentanaT{
                         break;
                         case "eliminar imagen":
                             passporte.setIcon(null);
-                            passporte.setDocumento(null);
+                            passporte.setBuffered(null);
                         break;
                     }
                 }
@@ -428,7 +428,7 @@ public class IUVentanaModificarDatosPersona extends IUVentanaT{
                         break;
                         case "eliminar imagen":
                             certificado.setIcon(null);
-                            certificado.setDocumento(null);
+                            certificado.setBuffered(null);
                         break;
                     }
                 }
@@ -500,13 +500,13 @@ public class IUVentanaModificarDatosPersona extends IUVentanaT{
     }
     private boolean estaValidado(){
         boolean verificador = false;
-        if(ciCara.getDocumento() != null && ciEspalda.getDocumento() != null)
+        if(ciCara.getBuffered() != null && ciEspalda.getBuffered() != null)
             verificador = true;
         else
-            if(passporte.getDocumento() != null)
+            if(passporte.getBuffered() != null)
                 verificador = true;
             else
-                if(certificado.getDocumento() != null)
+                if(certificado.getBuffered() != null)
                     verificador = true;
                 else
                     if(!panelNombres.iuTexto.getText().isEmpty() && !panelApellidos.iuTexto.getText().isEmpty())
@@ -534,13 +534,13 @@ public class IUVentanaModificarDatosPersona extends IUVentanaT{
                 if(opciones.getEstado()){
                     switch(opciones.getNombreBoton()){
                         case "desea recortar la imagen":
-                            IUVentanaRI ventanaEspalda = new IUVentanaRI(ventanaPrincipal, "Recortar Imagen", iuImagen, new Archivo(file.getName(), file.getAbsolutePath(), "", buffered), new Limitacion(Asistente.ANCHO - Asistente.ANCHO/3 - Asistente.ANCHO/10, Asistente.ALTO), 4);
+                            IUVentanaRI ventanaEspalda = new IUVentanaRI(ventanaPrincipal, "Recortar Imagen", iuImagen, buffered, new Limitacion(Asistente.ANCHO - Asistente.ANCHO/3 - Asistente.ANCHO/10, Asistente.ALTO), 4);
                             ventanaEspalda.mostrarVentana();
                         break;
                         case "desea aceptar la imagen":
                             if(buffered != null){
                                 iuImagen.setIcon(new ImageIcon(new ImageIcon(buffered.getScaledInstance(iuImagen.getWidth(), iuImagen.getHeight(), Image.SCALE_AREA_AVERAGING)).getImage()));
-                                iuImagen.setDocumento(new Documento(buffered));
+                                iuImagen.setBuffered(buffered);
                             }                            
                         break;
                     }
@@ -554,35 +554,35 @@ public class IUVentanaModificarDatosPersona extends IUVentanaT{
     public Persona getPersona(){
         Persona persona = new Persona(0);
         
-        if(ciCara.getDocumento() != null && ciEspalda.getDocumento() != null){
-            Documento docCara = ciCara.getDocumento();
-            docCara.setTipo("carnetIdentidad");
+        if(ciCara.getBuffered() != null && ciEspalda.getBuffered() != null){
+            Documento docCara = new Documento(ciCara.getBuffered());
+            docCara.setTipo("carnetIdentidadC");
                         
-            Documento docEspalda = ciEspalda.getDocumento();
-            docEspalda.setTipo("carnetIdentidad");
+            Documento docEspalda = new Documento(ciEspalda.getBuffered());
+            docEspalda.setTipo("carnetIdentidadE");
             
             persona.setDocumento(docCara);
             persona.setDocumento(docEspalda);            
             persona.setEstadoDocumentos("SI");
         }            
         else
-            if(passporte.getDocumento() != null){
-                Documento docPassporte = passporte.getDocumento();
+            if(passporte.getBuffered() != null){
+                Documento docPassporte = new Documento(passporte.getBuffered());
                 docPassporte.setTipo("passporte");
                 
                 persona.setDocumento(docPassporte);
                 persona.setEstadoDocumentos("SI");
             }                
             else
-                if(certificado.getDocumento() != null){
-                    Documento docCertificado = certificado.getDocumento();
+                if(certificado.getBuffered() != null){
+                    Documento docCertificado = new Documento(certificado.getBuffered());
                     docCertificado.setTipo("certificado");
                     
                     persona.setDocumento(docCertificado);
                     persona.setEstadoDocumentos("SI");
                 }else{
-                    if(etiquetaImagen.getDocumento() != null){
-                        Documento docFoto = etiquetaImagen.getDocumento();
+                    if(etiquetaImagen.getBuffered() != null){
+                        Documento docFoto = new Documento(etiquetaImagen.getBuffered());
                         docFoto.setTipo("foto");
                         
                         persona.setDocumento(docFoto);
