@@ -25,8 +25,9 @@ import com.hotelfelipez.www.modulo.principal.IUVentanaHotel;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.SwingConstants;
-import javax.swing.border.LineBorder;
 
 /**
  *
@@ -66,7 +67,12 @@ public class IUVentanaRegistroHospedajeOcupado extends IUVentanaT{
     private IUBoton botonEstadoCuentas;
     private IUBoton botonEstadoReserva;
     private CardLayout administrador;
-    private IUPanelBD cuartoPanel;
+    
+    private IUPanel cuartoPanel;
+    private IUPanelRegistroPersonalOcupado iuRegistroDatos;
+    private IUPanelBD iuServicios;
+    private IUPanelBD iuEstadoCuentas;
+    private IUPanelBD iuEstadoReserva;
     
     public IUVentanaRegistroHospedajeOcupado(IUVentanaHotel ventanaPrincipal, CHabitaciones controlHabitaciones, Habitacion habitacion, String titulo, Limitacion limitacion) {
         super(ventanaPrincipal, titulo, limitacion, 4);
@@ -75,6 +81,7 @@ public class IUVentanaRegistroHospedajeOcupado extends IUVentanaT{
         this.registro = null;
         construirPaneles(panelFondo.getLimitacion());
         setDatosCorrespondiente();
+        escucharEventos();
     }
     private void construirPaneles(Limitacion limite){
         primerPanel = new IUPanel(new Limitacion(limite.getAncho(), limite.getPorcentajeAlto(7)));
@@ -90,9 +97,12 @@ public class IUVentanaRegistroHospedajeOcupado extends IUVentanaT{
         panelFondo.add(tercerPanel);
         construirTercerPanel(tercerPanel.getLimitacion());
         
-        cuartoPanel = new IUPanelBD(new Limitacion(0, limite.getPorcentajeAlto(33), limite.getAncho(), limite.getPorcentajeAlto(67)));
-        cuartoPanel.setArco(10);
+        administrador = new CardLayout();
+        cuartoPanel = new IUPanel(new Limitacion(limite.getPorcentajeAncho(1), limite.getPorcentajeAlto(33), limite.getPorcentajeAncho(98), limite.getPorcentajeAlto(66)));
+        cuartoPanel.setLayout(administrador);
         panelFondo.add(cuartoPanel);
+        construirCuartoPanel(cuartoPanel.getLimitacion());
+        
     }
     private void construirPrimerPanel(Limitacion limite){
         tituloFecha = new IUEtiqueta("Cochabamba, "+new Fecha().getFecha1(), new Limitacion(limite.getPorcentajeAncho(1), limite.getPorcentajeAlto(1), limite.getPorcentajeAncho(65), limite.getPorcentajeAlto(98)));
@@ -133,6 +143,7 @@ public class IUVentanaRegistroHospedajeOcupado extends IUVentanaT{
     }
     private void construirTercerPanel(Limitacion limite){
         botonDatosPersonales = new IUBoton("datos personales", new Limitacion(limite.getPorcentajeAncho(1), limite.getPorcentajeAlto(16), limite.getPorcentajeAncho(15), limite.getPorcentajeAlto(70)));
+        botonDatosPersonales.setSubrayado(true);
         tercerPanel.add(botonDatosPersonales);
         
         botonServicios = new IUBoton("servicios de hospedaje", new Limitacion(limite.getPorcentajeAncho(17), limite.getPorcentajeAlto(16), limite.getPorcentajeAncho(15), limite.getPorcentajeAlto(70)));
@@ -143,16 +154,16 @@ public class IUVentanaRegistroHospedajeOcupado extends IUVentanaT{
         
         botonEstadoReserva = new IUBoton("estado de reserva", new Limitacion(limite.getPorcentajeAncho(49), limite.getPorcentajeAlto(16), limite.getPorcentajeAncho(15), limite.getPorcentajeAlto(70)));
         tercerPanel.add(botonEstadoReserva);
-    }
+    }    
     private void construirPanelFechaLlegada(Limitacion limite){
-        iuFechaLlegada = new IUPanelCT("fecha de llegada", new Fecha().getFecha6(), new Limitacion(limite.getPorcentajeAncho(2), limite.getPorcentajeAlto(6), limite.getPorcentajeAncho(96), limite.getPorcentajeAlto(41)), 40, 60);
+        iuFechaLlegada = new IUPanelCT("fecha de llegada", "", new Limitacion(limite.getPorcentajeAncho(2), limite.getPorcentajeAlto(6), limite.getPorcentajeAncho(96), limite.getPorcentajeAlto(41)), 40, 60);
         iuFechaLlegada.iuTexto.setHorizontalAlignment(SwingConstants.CENTER);
         iuFechaLlegada.iuTitulo.setHorizontalAlignment(SwingConstants.CENTER);
         iuFechaLlegada.iuTexto.setEditable(false);
         iuFechaLlegada.iuTexto.setFocusable(false);
         panelFechaLlegada.add(iuFechaLlegada);
         
-        iuHoraLlegada = new IUPanelCT("hora de llegada", new Hora().getHora()+"   "+new Hora().getFormato(), new Limitacion(limite.getPorcentajeAncho(2), limite.getPorcentajeAlto(52), limite.getPorcentajeAncho(96), limite.getPorcentajeAlto(41)), 40, 60);
+        iuHoraLlegada = new IUPanelCT("hora de llegada", "", new Limitacion(limite.getPorcentajeAncho(2), limite.getPorcentajeAlto(52), limite.getPorcentajeAncho(96), limite.getPorcentajeAlto(41)), 40, 60);
         iuHoraLlegada.iuTexto.setHorizontalAlignment(SwingConstants.CENTER);
         iuHoraLlegada.iuTitulo.setHorizontalAlignment(SwingConstants.CENTER);
         iuHoraLlegada.iuTexto.setEditable(false);
@@ -160,7 +171,7 @@ public class IUVentanaRegistroHospedajeOcupado extends IUVentanaT{
         panelFechaLlegada.add(iuHoraLlegada);
     }
     private void construirPanelFechaSalida(Limitacion limite){
-        iuFechaSalida = new IUPanelCT("fecha de salida", new Fecha().getFecha6(), new Limitacion(limite.getPorcentajeAncho(2), limite.getPorcentajeAlto(6), limite.getPorcentajeAncho(96), limite.getPorcentajeAlto(41)), 40, 60);
+        iuFechaSalida = new IUPanelCT("fecha de salida", "", new Limitacion(limite.getPorcentajeAncho(2), limite.getPorcentajeAlto(6), limite.getPorcentajeAncho(96), limite.getPorcentajeAlto(41)), 40, 60);
         iuFechaSalida.iuTexto.setHorizontalAlignment(SwingConstants.CENTER);
         iuFechaSalida.iuTitulo.setHorizontalAlignment(SwingConstants.CENTER);
         iuFechaSalida.iuTexto.setEditable(false);
@@ -168,7 +179,7 @@ public class IUVentanaRegistroHospedajeOcupado extends IUVentanaT{
         //iuFechaSalida.iuTitulo.setForeground(new Color(185, 142, 13));
         panelFechaSalida.add(iuFechaSalida);
         
-        iuHoraSalida = new IUPanelCT("hora de salida", new Hora().getHora()+"   "+new Hora().getFormato(), new Limitacion(limite.getPorcentajeAncho(2), limite.getPorcentajeAlto(52), limite.getPorcentajeAncho(96), limite.getPorcentajeAlto(41)), 40, 60);
+        iuHoraSalida = new IUPanelCT("hora de salida", "", new Limitacion(limite.getPorcentajeAncho(2), limite.getPorcentajeAlto(52), limite.getPorcentajeAncho(96), limite.getPorcentajeAlto(41)), 40, 60);
         iuHoraSalida.iuTexto.setHorizontalAlignment(SwingConstants.CENTER);
         iuHoraSalida.iuTitulo.setHorizontalAlignment(SwingConstants.CENTER);
         iuHoraSalida.iuTexto.setEditable(false);
@@ -184,18 +195,18 @@ public class IUVentanaRegistroHospedajeOcupado extends IUVentanaT{
         //tituloNroNoches.setBorder(new LineBorder(Color.yellow));
         panelNroNoches.add(tituloNroNoches);
         
-        iuNroNoches = new IUEtiqueta("74", new Limitacion(limite.getPorcentajeAncho(1), limite.getPorcentajeAlto(27), limite.getPorcentajeAncho(98), limite.getPorcentajeAlto(72)));
+        iuNroNoches = new IUEtiqueta("", new Limitacion(limite.getPorcentajeAncho(1), limite.getPorcentajeAlto(27), limite.getPorcentajeAncho(98), limite.getPorcentajeAlto(72)));
         iuNroNoches.setHorizontalAlignment(SwingConstants.CENTER);
         iuNroNoches.setFont(new Font("Verdana", Font.PLAIN, limite.getPorcentajeAlto(60)));
         panelNroNoches.add(iuNroNoches);
     }
     private void construirPanelesHabitacion(Limitacion limite){
-        iuHabitacion = new IUPanelCT("habitacion", "204 TM (TRIPLE MATRIMONIAL)", new Limitacion(limite.getPorcentajeAncho(1), limite.getPorcentajeAlto(6), limite.getPorcentajeAncho(98), limite.getPorcentajeAlto(41)), 40, 60);
+        iuHabitacion = new IUPanelCT("habitacion", "", new Limitacion(limite.getPorcentajeAncho(1), limite.getPorcentajeAlto(6), limite.getPorcentajeAncho(98), limite.getPorcentajeAlto(41)), 40, 60);
         iuHabitacion.iuTexto.setEditable(false);
         iuHabitacion.iuTexto.setFocusable(false);
         panelHabitacion.add(iuHabitacion);
         
-        iuPrecio = new IUPanelCTU("precio x noche", "280.0", "BOB.-", new Limitacion(limite.getPorcentajeAncho(2), limite.getPorcentajeAlto(52), limite.getPorcentajeAncho(30), limite.getPorcentajeAlto(41)), 40, 60, 50);
+        iuPrecio = new IUPanelCTU("precio x noche", "", "", new Limitacion(limite.getPorcentajeAncho(2), limite.getPorcentajeAlto(52), limite.getPorcentajeAncho(30), limite.getPorcentajeAlto(41)), 40, 60, 50);
         iuPrecio.iuTexto.setEditable(false);
         iuPrecio.iuTexto.setFocusable(false);        
         panelHabitacion.add(iuPrecio);
@@ -203,6 +214,21 @@ public class IUVentanaRegistroHospedajeOcupado extends IUVentanaT{
         botonCambiarPrecio = new IUBoton("cambiar precio", new Limitacion(limite.getPorcentajeAncho(32), limite.getPorcentajeAlto(68), limite.getPorcentajeAncho(25), limite.getPorcentajeAlto(24)));
         panelHabitacion.add(botonCambiarPrecio);
     }
+    private void construirCuartoPanel(Limitacion limite){
+        iuRegistroDatos = new IUPanelRegistroPersonalOcupado(limite);
+        cuartoPanel.add(iuRegistroDatos);
+        
+        iuServicios = new IUPanelBD(limite);
+        cuartoPanel.add(iuServicios);
+        
+        iuEstadoCuentas = new IUPanelBD(limite);
+        cuartoPanel.add(iuEstadoCuentas);
+        
+        iuEstadoReserva = new IUPanelBD(limite);
+        cuartoPanel.add(iuEstadoReserva);
+    }
+    
+    
     private void setDatosCorrespondiente(){
         this.registro = controlHabitaciones.getRegistroHospedaje(habitacion.getId());
         iuNroRegistro.iuTexto.setText(registro.getNroRegistro());
@@ -214,5 +240,69 @@ public class IUVentanaRegistroHospedajeOcupado extends IUVentanaT{
         iuHabitacion.iuTexto.setText(habitacion.getNombreHabitacion());
         iuPrecio.iuTexto.setText(String.valueOf(Asistente.acotarNumero(habitacion.getTemporada().getPrecio(), 2)));
         iuPrecio.iuTexto.iuUnidad.setText(habitacion.getTemporada().getUnidadMoneda().getUnidad());
+    }
+    private void escucharEventos(){
+        botonDatosPersonales.addEventoRaton(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                estadoSubrayado(botonDatosPersonales.getTexto());
+                administrador.first(cuartoPanel);
+            }
+        });
+        botonServicios.addEventoRaton(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                estadoSubrayado(botonServicios.getTexto());                
+                administrador.first(cuartoPanel);
+                administrador.next(cuartoPanel);
+            }
+        });
+        botonEstadoCuentas.addEventoRaton(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                estadoSubrayado(botonEstadoCuentas.getTexto());                
+                administrador.last(cuartoPanel);
+                administrador.previous(cuartoPanel);
+            }
+        });
+        botonEstadoReserva.addEventoRaton(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                estadoSubrayado(botonEstadoReserva.getTexto());
+                administrador.last(cuartoPanel);
+            }
+        });
+    }
+    private void estadoSubrayado(String nombreBoton){
+        switch(nombreBoton){
+            case "datos personales":
+                botonDatosPersonales.setSubrayado(true);
+                botonServicios.setSubrayado(false);
+                botonEstadoCuentas.setSubrayado(false);
+                botonEstadoReserva.setSubrayado(false);
+            break;
+            case "servicios de hospedaje":
+                botonDatosPersonales.setSubrayado(false);
+                botonServicios.setSubrayado(true);
+                botonEstadoCuentas.setSubrayado(false);
+                botonEstadoReserva.setSubrayado(false);
+            break;
+            case "estado de cuentas":
+                botonDatosPersonales.setSubrayado(false);
+                botonServicios.setSubrayado(false);
+                botonEstadoCuentas.setSubrayado(true);
+                botonEstadoReserva.setSubrayado(false);
+            break;
+            case "estado de reserva":
+                botonDatosPersonales.setSubrayado(false);
+                botonServicios.setSubrayado(false);
+                botonEstadoCuentas.setSubrayado(false);
+                botonEstadoReserva.setSubrayado(true);
+            break;
+        }
     }
 }

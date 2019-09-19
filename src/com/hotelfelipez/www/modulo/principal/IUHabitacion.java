@@ -30,6 +30,7 @@ public class IUHabitacion extends IUPanelBD{
     private IUEtiqueta tituloHabitacion;
     private IUPanel segundoPanel;
     private IUEtiqueta estadoHabitacion;
+    private IUEtiqueta mensajeHuesped;
     private IUEtiqueta mensajeEstado;
     private IUPanelCT fechaSalida;
     private IUPanelCT nroNoches;
@@ -67,9 +68,17 @@ public class IUHabitacion extends IUPanelBD{
         estadoHabitacion.setFont(new Font("Verdana", Font.PLAIN, limite.getPorcentajeAlto(12)));        
         segundoPanel.add(estadoHabitacion);
         
-        mensajeEstado = new IUEtiqueta("", new Limitacion(0, limite.getPorcentajeAlto(35),limite.getAncho(), limite.getPorcentajeAlto(40)));
+        mensajeHuesped = new IUEtiqueta("mensaje URGENTE...!", new Limitacion(0, limite.getPorcentajeAlto(35),limite.getAncho(), limite.getPorcentajeAlto(13)));
+        mensajeHuesped.setHorizontalAlignment(SwingConstants.CENTER);
+        mensajeHuesped.setFont(new Font("Verdana", Font.PLAIN, limite.getPorcentajeAlto(10)));
+        mensajeHuesped.setForeground(new Color(204, 0, 102));
+        mensajeHuesped.setVisible(false);
+        segundoPanel.add(mensajeHuesped);
+        
+        mensajeEstado = new IUEtiqueta("", new Limitacion(0, limite.getPorcentajeAlto(55),limite.getAncho(), limite.getPorcentajeAlto(10)));
         mensajeEstado.setHorizontalAlignment(SwingConstants.CENTER);
         mensajeEstado.setFont(new Font("Verdana", Font.PLAIN, limite.getPorcentajeAlto(8)));
+        mensajeEstado.setForeground(new Color(255, 0, 0));
         mensajeEstado.setVisible(false);
         segundoPanel.add(mensajeEstado);
         
@@ -94,9 +103,9 @@ public class IUHabitacion extends IUPanelBD{
         nroNoches.iuTexto.setText(String.valueOf(registro.getNroNoches()));
         if(registro.getNroNoches() < 1){
             mensajeEstado.setVisible(true);
-            mensajeEstado.setText("actualizar fecha de salida");
-            nroNoches.iuTexto.setForeground(new Color(190, 0, 0));
-            fechaSalida.iuTexto.setForeground(new Color(190, 0, 0));
+            mensajeEstado.setText("actualizar FECHA SALIDA...!");
+            nroNoches.iuTexto.setForeground(new Color(120, 0, 0));
+            fechaSalida.iuTexto.setForeground(new Color(120, 0, 0));
         }else{            
             mensajeEstado.setVisible(false);
             nroNoches.iuTexto.setForeground(new Color(2, 67, 109));
