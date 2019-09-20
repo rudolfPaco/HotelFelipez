@@ -178,6 +178,30 @@ public class Persona {
         this.documentos.add(documento);
     }
     public String getEstadoDocumentos() {
+        int cantCI = 0;
+        int cantCer = 0;
+        int cantPass = 0;
+        for (int i = 0; i < documentos.size(); i++) {
+            Documento doc = documentos.get(i);
+            if(doc.getTipo().equalsIgnoreCase("carnetIdentidadC"))
+                cantCI++;
+            else
+                if(doc.getTipo().equalsIgnoreCase("carnetIdentidadE"))
+                    cantCI++;
+                else
+                    if(doc.getTipo().equalsIgnoreCase("passporte"))
+                        cantPass++;
+                    else
+                        if(doc.getTipo().equalsIgnoreCase("certificado"))
+                            cantCer++;
+        }
+        if(cantCI == 2)
+            estadoDocumentos = "SI";
+        if(cantCer == 1)
+            estadoDocumentos = "SI";
+        if(cantPass == 1)
+            estadoDocumentos = "SI";
+        
         return estadoDocumentos;
     }
     public void setEstadoDocumentos(String estadoDocumentos) {

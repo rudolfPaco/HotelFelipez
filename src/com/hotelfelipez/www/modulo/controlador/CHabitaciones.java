@@ -6,15 +6,18 @@
 package com.hotelfelipez.www.modulo.controlador;
 
 import com.hotelfelipez.www.modulo.dao.Conexion;
+import com.hotelfelipez.www.modulo.dao.DocumentoDao;
 import com.hotelfelipez.www.modulo.dao.FrigobarDao;
 import com.hotelfelipez.www.modulo.dao.HabitacionDao;
 import com.hotelfelipez.www.modulo.dao.MonedaDao;
+import com.hotelfelipez.www.modulo.dao.PersonaDao;
 import com.hotelfelipez.www.modulo.dao.RegistroHospedajeDao;
 import com.hotelfelipez.www.modulo.dao.TemporadaDao;
 import com.hotelfelipez.www.modulo.habitaciones.IUVentanaHabitaciones;
 import com.hotelfelipez.www.modulo.modelo.Frigobar;
 import com.hotelfelipez.www.modulo.modelo.Habitacion;
 import com.hotelfelipez.www.modulo.modelo.Moneda;
+import com.hotelfelipez.www.modulo.modelo.Persona;
 import com.hotelfelipez.www.modulo.modelo.RegistroHospedaje;
 import com.hotelfelipez.www.modulo.modelo.Temporada;
 import java.util.ArrayList;
@@ -69,8 +72,12 @@ public class CHabitaciones {
     }
     public RegistroHospedaje getRegistroHospedaje(int idHabitacion){
         Conexion conexion = new Conexion();
+        
         RegistroHospedajeDao registroDao = new RegistroHospedajeDao(conexion);
+        PersonaDao personaDao = new PersonaDao(conexion);
         RegistroHospedaje registro = registroDao.getRegistroHospedaje(idHabitacion);        
+        registro.setListaPersonas(personaDao.getListaPersonas(registro.getId()));
+        
         conexion.cerrarConexion();
         return registro;
     }

@@ -5,9 +5,13 @@
  */
 package com.hotelfelipez.www.modulo.dao;
 
+import com.hotelfelipez.www.modulo.modelo.Documento;
+import com.hotelfelipez.www.modulo.modelo.Habitacion;
 import com.hotelfelipez.www.modulo.modelo.Persona;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -75,4 +79,45 @@ public class PersonaDao {
         }
         return verificador;
     }
+    public ArrayList<Persona> getListaPersonas(int idregistro){
+        
+        ArrayList<Persona> lista = new ArrayList<>();
+        try {
+            String sql = "select * from persona where idpersona = (select idpersona from persona_registroHospedaje where idregistroHospedaje = "+idregistro+")";
+            PreparedStatement ps = conexion.getConexion().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next()){
+                Persona p = new Persona(rs.getInt("idpersona"));
+                p.setNombres(rs.getString("nombres"));
+                p.setApellidos(rs.getString("apellidos"));
+                p.setFechaNacimiento(rs.getString("fechaNacimiento"));
+                p.setTipoDocumento(rs.getString("tipoDocumento"));
+                p.setCarnetIdentidad(rs.getString("numeroIdentidad"));
+                p.setOrigen(rs.getString("origen"));
+                p.setFechaCaducidad(rs.getString("fechaCaducidad"));
+                p.setCiudad(rs.getString("ciudad"));
+                p.setPais(rs.getString("pais"));
+                p.setEstadoCivil(rs.getString("estadoCivil"));
+                p.setProfesion(rs.getString("profesion"));
+                p.setDireccion(rs.getString("direccion"));
+                p.setProcedencia(rs.getString("procedencia"));
+                p.setDestino(rs.getString("destino"));
+                p.setTelefono(rs.getString("telefono"));
+                p.setEmail(rs.getString("email"));
+                p.setTipoPersona(rs.getString("tipoPersona"));
+                p.setObservacion(rs.getString("observacion"));
+                p.setDocumentos(getListaDocumentos(p.getId()));
+                lista.add(p);
+            }
+            
+        } catch (SQLException e) {
+            System.out.println("Error... PersonaDao.getlistaPersonas(): "+e.getMessage());
+        }
+        return lista;
+    }
+    private ArrayList<Documento> getListaDocumentos(int idpersona){
+        return new DocumentoDao(conexion).getListaDocumento(idpersona);
+    }
+    
 }

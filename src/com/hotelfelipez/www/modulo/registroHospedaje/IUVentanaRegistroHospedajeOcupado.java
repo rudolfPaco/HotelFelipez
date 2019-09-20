@@ -18,6 +18,8 @@ import com.aplicacionjava.www.recursos.Hora;
 import com.aplicacionjava.www.recursos.Limitacion;
 import com.aplicacionjava.www.ventanas.IUVentanaT;
 import com.hotelfelipez.www.modulo.controlador.CHabitaciones;
+import com.hotelfelipez.www.modulo.controlador.CRegistroHospedaje;
+import com.hotelfelipez.www.modulo.controlador.CRegistroPersona;
 import com.hotelfelipez.www.modulo.modelo.Asistente;
 import com.hotelfelipez.www.modulo.modelo.Habitacion;
 import com.hotelfelipez.www.modulo.modelo.RegistroHospedaje;
@@ -61,7 +63,7 @@ public class IUVentanaRegistroHospedajeOcupado extends IUVentanaT{
     private IUPanelCTU iuPrecio;
     private IUBoton botonCambiarPrecio;
     
-    private IUPanelBD tercerPanel;
+    private IUPanel tercerPanel;
     private IUBoton botonDatosPersonales;
     private IUBoton botonServicios;
     private IUBoton botonEstadoCuentas;
@@ -76,6 +78,7 @@ public class IUVentanaRegistroHospedajeOcupado extends IUVentanaT{
     
     public IUVentanaRegistroHospedajeOcupado(IUVentanaHotel ventanaPrincipal, CHabitaciones controlHabitaciones, Habitacion habitacion, String titulo, Limitacion limitacion) {
         super(ventanaPrincipal, titulo, limitacion, 4);
+        this.ventanaPrincipal = ventanaPrincipal;
         this.controlHabitaciones = controlHabitaciones;
         this.habitacion = habitacion;
         this.registro = null;
@@ -92,8 +95,8 @@ public class IUVentanaRegistroHospedajeOcupado extends IUVentanaT{
         panelFondo.add(segundoPanel);
         construirSegundoPanel(segundoPanel.getLimitacion());
         
-        tercerPanel = new IUPanelBD(new Limitacion(limite.getPorcentajeAncho(1), limite.getPorcentajeAlto(25), limite.getPorcentajeAncho(98), limite.getPorcentajeAlto(7)));
-        tercerPanel.setArco(10);
+        tercerPanel = new IUPanel(new Limitacion(limite.getPorcentajeAncho(1), limite.getPorcentajeAlto(25), limite.getPorcentajeAncho(98), limite.getPorcentajeAlto(7)));
+        //tercerPanel.setArco(10);
         panelFondo.add(tercerPanel);
         construirTercerPanel(tercerPanel.getLimitacion());
         
@@ -215,7 +218,8 @@ public class IUVentanaRegistroHospedajeOcupado extends IUVentanaT{
         panelHabitacion.add(botonCambiarPrecio);
     }
     private void construirCuartoPanel(Limitacion limite){
-        iuRegistroDatos = new IUPanelRegistroPersonalOcupado(limite);
+        CRegistroPersona control = new CRegistroPersona();
+        iuRegistroDatos = new IUPanelRegistroPersonalOcupado(ventanaPrincipal, control, controlHabitaciones.getRegistroHospedaje(habitacion.getId()), this, limite);        
         cuartoPanel.add(iuRegistroDatos);
         
         iuServicios = new IUPanelBD(limite);
@@ -227,11 +231,9 @@ public class IUVentanaRegistroHospedajeOcupado extends IUVentanaT{
         iuEstadoReserva = new IUPanelBD(limite);
         cuartoPanel.add(iuEstadoReserva);
     }
-    
-    
     private void setDatosCorrespondiente(){
         this.registro = controlHabitaciones.getRegistroHospedaje(habitacion.getId());
-        iuNroRegistro.iuTexto.setText(registro.getNroRegistro());
+        iuNroRegistro.iuTexto.setText(String.valueOf(registro.getId()));
         iuFechaLlegada.iuTexto.setText(new Fecha(registro.getFechaLlegada()).getFecha6());
         iuHoraLlegada.iuTexto.setText(new Hora(registro.getHoraLlegada()).getHora()+"   "+new Hora(registro.getHoraSalida()).getFormato());        
         iuFechaSalida.iuTexto.setText(new Fecha(registro.getFechaSalida()).getFecha6());
@@ -240,6 +242,7 @@ public class IUVentanaRegistroHospedajeOcupado extends IUVentanaT{
         iuHabitacion.iuTexto.setText(habitacion.getNombreHabitacion());
         iuPrecio.iuTexto.setText(String.valueOf(Asistente.acotarNumero(habitacion.getTemporada().getPrecio(), 2)));
         iuPrecio.iuTexto.iuUnidad.setText(habitacion.getTemporada().getUnidadMoneda().getUnidad());
+        iuRegistroDatos.agregarPersonas(registro.getListaPersonas());
     }
     private void escucharEventos(){
         botonDatosPersonales.addEventoRaton(new MouseAdapter() {

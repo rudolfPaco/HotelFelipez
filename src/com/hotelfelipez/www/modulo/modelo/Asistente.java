@@ -143,8 +143,15 @@ public class Asistente {
         conexion.cerrarConexion();
         return id;
     }
+    public static int getId(String columna, String sql){
+        int id = 0;
+        Conexion conexion = new Conexion();
+        id = conexion.getDato(columna, sql);
+        conexion.cerrarConexion();
+        return id;
+    }
     public static Directorio getDirectorio(){
-        Directorio directorio = new Directorio("/src/fotos_usuarios/", "c:/imagenes/", "c:/imagenes/fotos/");
+        Directorio directorio = new Directorio("/src/imagenes/", "c:/imagenes/", "c:/imagenes/fotos/");
         directorio.crearDirectorioOrigen();
         
         
