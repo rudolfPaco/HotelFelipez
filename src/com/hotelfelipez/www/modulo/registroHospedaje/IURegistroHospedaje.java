@@ -153,7 +153,7 @@ public class IURegistroHospedaje extends IUVentanaT{
         panelFechaSalida.iuTexto.setBorder(null);
         tercerPanel.add(panelFechaSalida);
         
-        panelHoraSalida = new IUPanelCTU("hora salida", "12:00:00", new Hora().getFormato(), new Limitacion(limite.getPorcentajeAncho(36), limite.getPorcentajeAlto(52), limite.getPorcentajeAncho(18), limite.getPorcentajeAlto(42)), 40, 60, 40);
+        panelHoraSalida = new IUPanelCTU("hora salida", "12:00:00", new Hora("12:00:00").getFormato(), new Limitacion(limite.getPorcentajeAncho(36), limite.getPorcentajeAlto(52), limite.getPorcentajeAncho(18), limite.getPorcentajeAlto(42)), 40, 60, 40);
         panelHoraSalida.iuTexto.setEditable(false);
         panelHoraSalida.iuTexto.setFocusable(false);
         panelHoraSalida.iuTexto.setBorder(null);

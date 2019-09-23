@@ -8,6 +8,7 @@ package com.hotelfelipez.www.modulo.registroHospedaje;
 import com.aplicacionjava.www.botones.IUBoton;
 import com.aplicacionjava.www.paneles.IUPanel;
 import com.aplicacionjava.www.recursos.Limitacion;
+import com.hotelfelipez.www.modulo.controlador.CRegistroPersona;
 import com.hotelfelipez.www.modulo.modelo.Asistente;
 import com.hotelfelipez.www.modulo.modelo.Persona;
 import com.hotelfelipez.www.modulo.principal.IUVentanaHotel;
@@ -38,7 +39,7 @@ public class IUPanelRegistroPersonal extends IUPanel{
         escucharEventos();
     }
     private void construirPaneles(){
-        tablaPersonas = new IUTablaPersonas(new Limitacion(limitacion.getPorcentajeAncho(1), limitacion.getPorcentajeAlto(1), limitacion.getPorcentajeAncho(98), limitacion.getPorcentajeAlto(28)));
+        tablaPersonas = new IUTablaPersonas(null, new Limitacion(limitacion.getPorcentajeAncho(1), limitacion.getPorcentajeAlto(1), limitacion.getPorcentajeAncho(98), limitacion.getPorcentajeAlto(28)));
         add(tablaPersonas.tabla.deslizador);
         
         botonBuscarPersonas = new IUBoton("buscar personas", new Limitacion(limitacion.getPorcentajeAncho(76), limitacion.getPorcentajeAlto(31), limitacion.getPorcentajeAncho(23), limitacion.getPorcentajeAlto(7)));
@@ -81,6 +82,20 @@ public class IUPanelRegistroPersonal extends IUPanel{
                         tablaPersonas.reemplazarPersona(iuModificarDatos.getPersona());
                     
                 }               
+                
+                iuRegistroHospedaje.setOpacity(1f);
+            }
+        });
+        botonBuscarPersonas.addEventoRaton(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                iuRegistroHospedaje.setOpacity(0.3f);
+                
+                IUBuscarPesonas iuBuscar = new IUBuscarPesonas(ventanaPrincipal, new CRegistroPersona(null), tablaPersonas, "buscar personas", new Limitacion(Asistente.ANCHO - Asistente.ANCHO/7, Asistente.ALTO));
+                iuBuscar.mostrarVentana();
+                if(iuBuscar.getEstado())
+                    tablaPersonas.setFila(iuBuscar.getPersona());
                 
                 iuRegistroHospedaje.setOpacity(1f);
             }

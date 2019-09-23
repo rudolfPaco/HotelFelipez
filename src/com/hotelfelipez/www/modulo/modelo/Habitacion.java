@@ -188,6 +188,9 @@ public class Habitacion {
     public String getNombreHabitacion(){
         return numero+" "+simbolo+" ("+tipo+") "+estilo;
     }
+    public String getNombreHabitacionCorto(){
+        return numero+" "+simbolo;
+    }
     @Override
     public String toString() {
         return "Habitacion{" + "id=" + id + ", numero=" + numero + ", simbolo=" + simbolo + ", tipo=" + tipo + ", nombre=" + estilo + ", estado=" + estado + ", numeroPiso=" + numeroPiso + ", capacidad=" + capacidad + ", numeroTelefono=" + numeroTelefono + ", detalle=" + detalle + ", descripcion=" + descripcion + ", sofaCama=" + sofaCama + ", costoSofaCama=" + costoSofaCama + ", disponible=" + disponible + ", promocionFrigobar=" + promocionFrigobar + ", tipoVenta=" + tipoVenta + ", tipoTemporada=" + tipoTemporada + ", idtemporada=" + idtemporada + ", idmoneda=" + idmoneda + ", idprestacion=" + idprestacion + ", temporada=" + temporada + ", prestacion=" + prestacion + ", frigobar=" + frigobar + ", check=" + check + '}';

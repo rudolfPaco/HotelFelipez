@@ -98,7 +98,7 @@ public class IUNuevaHabitacion extends IUVentanaT{
         panelTipo = new IUPanelTCB("habitacion", Asistente.getColumnas("tipo", "select distinct tipo from habitacion"), new Limitacion(limite.getPorcentajeAncho(23), limite.getPorcentajeAlto(1), limite.getPorcentajeAncho(40), limite.getPorcentajeAlto(7)), 40, 60);
         primerPanel.add(panelTipo);        
                 
-        panelNombre = new IUPanelTCB("nombre habitacion", Asistente.getColumnas("nombre", "select distinct nombre from habitacion"), new Limitacion(limite.getPorcentajeAncho(65), limite.getPorcentajeAlto(1), limite.getPorcentajeAncho(33), limite.getPorcentajeAlto(7)), 40, 60);        
+        panelNombre = new IUPanelTCB("nombre habitacion", Asistente.getColumnas("estilo", "select distinct estilo from habitacion"), new Limitacion(limite.getPorcentajeAncho(65), limite.getPorcentajeAlto(1), limite.getPorcentajeAncho(33), limite.getPorcentajeAlto(7)), 40, 60);        
         panelNombre.iuTexto.setRestriccionLetrasMayusculas();
         primerPanel.add(panelNombre);
         

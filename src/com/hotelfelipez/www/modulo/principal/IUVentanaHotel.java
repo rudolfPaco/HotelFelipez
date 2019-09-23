@@ -149,10 +149,10 @@ public class IUVentanaHotel extends IUVentanaP{
     private void ventanaVacante(Habitacion hab){
         setOpacity(0.5f);
         String[] nombres = {"FUERA DE SERVICIO", "HISTORIAL DE HABITACIONES", "VER DISPONIBILIDAD"};
-        IUVentanaVacante iuVacante = new IUVentanaVacante(this, "hab: "+hab.getNumero().toUpperCase()+" "+hab.getSimbolo().toUpperCase()+"      "+hab.getEstado(), new Limitacion(Asistente.ANCHO/2 - Asistente.ANCHO/10, Asistente.ALTO - Asistente.ALTO/3), nombres);
+        IUVentanaOpciones iuVacante = new IUVentanaOpciones(this, "hab: "+hab.getNumero().toUpperCase()+" "+hab.getSimbolo().toUpperCase()+"      "+hab.getEstado(), new Limitacion(Asistente.ANCHO/2 - Asistente.ANCHO/10, Asistente.ALTO - Asistente.ALTO/3), nombres);
         iuVacante.mostrarVentana();
         if(iuVacante.getEstado()){            
-            switch(iuVacante.getNombreBoton()){
+            switch(iuVacante.getOpcion()){
                 case "FUERA DE SERVICIO":
                     
                 break;

@@ -188,43 +188,58 @@ public class IUModificarPersona extends IUVentanaT{
             Documento doc = persona.getDocumentos().get(i);            
             switch(doc.getTipo()){
                 case "carnetIdentidadC":
-                    if(doc.getBuffer() != null)
+                    if(doc.getBuffer() != null){
                         ciCara.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(ciCara.getWidth(), ciCara.getHeight(), Image.SCALE_DEFAULT)));
-                    else
-                        ciCara.setUrlImagen(doc.getUrl());//ciCara.setIcon(new ImageIcon(new ImageIcon(doc.getUrl()).getImage().getScaledInstance(ciCara.getWidth(), ciCara.getHeight(), Image.SCALE_DEFAULT)));
-                    ciCara.setBuffered(doc.getBuffer());
+                        ciCara.setBuffered(doc.getBuffer());
+                    }                        
+                    else{
+                        ciCara.setUrlImagen(doc.getUrl());
+                        ciCara.setIcon(new ImageIcon(new ImageIcon(doc.getUrl()).getImage().getScaledInstance(ciCara.getWidth(), ciCara.getHeight(), Image.SCALE_DEFAULT)));
+                    }                        
                     ciCara.setObjeto(doc);
                 break;
                 case "carnetIdentidadE":
-                    if(doc.getBuffer() != null)
+                    if(doc.getBuffer() != null){
                         ciEspalda.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(ciEspalda.getWidth(), ciEspalda.getHeight(), Image.SCALE_DEFAULT)));
-                    else
-                        ciEspalda.setUrlImagen(doc.getUrl());//ciEspalda.setIcon(new ImageIcon(new ImageIcon(doc.getUrl()).getImage().getScaledInstance(ciEspalda.getWidth(), ciEspalda.getHeight(), Image.SCALE_DEFAULT)));
-                    ciEspalda.setBuffered(doc.getBuffer());
+                        ciEspalda.setBuffered(doc.getBuffer());
+                    }                        
+                    else{
+                        ciEspalda.setUrlImagen(doc.getUrl());
+                        ciEspalda.setIcon(new ImageIcon(new ImageIcon(doc.getUrl()).getImage().getScaledInstance(ciEspalda.getWidth(), ciEspalda.getHeight(), Image.SCALE_DEFAULT)));                    
+                    }                        
                     ciEspalda.setObjeto(doc);
                 break;
                 case "passporte":
-                    if(doc.getBuffer() != null)
+                    if(doc.getBuffer() != null){
                         passporte.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(passporte.getWidth(), passporte.getHeight(), Image.SCALE_DEFAULT)));
-                    else
-                        passporte.setUrlImagen(doc.getUrl());//passporte.setIcon(new ImageIcon(new ImageIcon(doc.getUrl()).getImage().getScaledInstance(passporte.getWidth(), passporte.getHeight(), Image.SCALE_DEFAULT)));
-                    passporte.setBuffered(doc.getBuffer());
+                        passporte.setBuffered(doc.getBuffer());
+                    }                        
+                    else{
+                        passporte.setUrlImagen(doc.getUrl());
+                        passporte.setIcon(new ImageIcon(new ImageIcon(doc.getUrl()).getImage().getScaledInstance(passporte.getWidth(), passporte.getHeight(), Image.SCALE_DEFAULT)));                    
+                    }                        
                     passporte.setObjeto(doc);
                 break;
                 case "certificado":
-                    if(doc.getBuffer() != null)
+                    if(doc.getBuffer() != null){
                         certificado.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(certificado.getWidth(), certificado.getHeight(), Image.SCALE_DEFAULT)));
-                    else
-                        certificado.setUrlImagen(doc.getUrl());//certificado.setIcon(new ImageIcon(new ImageIcon(doc.getUrl()).getImage().getScaledInstance(certificado.getWidth(), certificado.getHeight(), Image.SCALE_DEFAULT)));
-                    certificado.setBuffered(doc.getBuffer());
+                        certificado.setBuffered(doc.getBuffer());
+                    }                        
+                    else{
+                        certificado.setUrlImagen(doc.getUrl());
+                        certificado.setIcon(new ImageIcon(new ImageIcon(doc.getUrl()).getImage().getScaledInstance(certificado.getWidth(), certificado.getHeight(), Image.SCALE_DEFAULT)));                    
+                    }
                     certificado.setObjeto(doc);
                 break;
                 case "foto":
-                    if(doc.getBuffer() != null)
+                    if(doc.getBuffer() != null){
+                        etiquetaImagen.setBuffered(doc.getBuffer());
                         etiquetaImagen.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(etiquetaImagen.getWidth(), etiquetaImagen.getHeight(), Image.SCALE_DEFAULT)));
-                    else
-                        etiquetaImagen.setUrlImagen(doc.getUrl());//etiquetaImagen.setIcon(new ImageIcon(new ImageIcon(doc.getUrl()).getImage().getScaledInstance(etiquetaImagen.getWidth(), etiquetaImagen.getHeight(), Image.SCALE_DEFAULT)));
-                    etiquetaImagen.setBuffered(doc.getBuffer());
+                    }                        
+                    else{
+                        etiquetaImagen.setUrlImagen(doc.getUrl());
+                        etiquetaImagen.setIcon(new ImageIcon(new ImageIcon(doc.getUrl()).getImage().getScaledInstance(etiquetaImagen.getWidth(), etiquetaImagen.getHeight(), Image.SCALE_DEFAULT)));                    
+                    }
                     etiquetaImagen.setObjeto(doc);
                 break;
             }

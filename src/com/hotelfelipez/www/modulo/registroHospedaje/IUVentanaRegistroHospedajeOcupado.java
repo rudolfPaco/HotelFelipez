@@ -30,6 +30,7 @@ import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.SwingConstants;
+import javax.swing.border.LineBorder;
 
 /**
  *
@@ -72,7 +73,7 @@ public class IUVentanaRegistroHospedajeOcupado extends IUVentanaT{
     
     private IUPanel cuartoPanel;
     private IUPanelDatosPersonales iuRegistroDatos;
-    private IUPanelBD iuServicios;
+    private IUPanelServicio iuServicios;
     private IUPanelBD iuEstadoCuentas;
     private IUPanelBD iuEstadoReserva;
     
@@ -125,21 +126,77 @@ public class IUVentanaRegistroHospedajeOcupado extends IUVentanaT{
         primerPanel.add(iuNroRegistro);
     }
     private void construirSegundoPanel(Limitacion limite){
-        panelFechaLlegada = new IUPanel(new Limitacion(limite.getPorcentajeAncho(1), limite.getPorcentajeAlto(2), limite.getPorcentajeAncho(15), limite.getPorcentajeAlto(96)));
-        segundoPanel.add(panelFechaLlegada);
-        construirPanelFechaLlegada(panelFechaLlegada.getLimitacion());
+        iuFechaLlegada = new IUPanelCT("fecha de llegada", "", new Limitacion(limite.getPorcentajeAncho(1), limite.getPorcentajeAlto(6), limite.getPorcentajeAncho(15), limite.getPorcentajeAlto(41)), 30, 70);
+        iuFechaLlegada.iuTexto.setHorizontalAlignment(SwingConstants.CENTER);
+        iuFechaLlegada.iuTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+        iuFechaLlegada.setBorder(new LineBorder(new Color(190, 146, 12)));
+        iuFechaLlegada.iuTexto.setBorder(null);
+        iuFechaLlegada.iuTexto.setEditable(false);
+        iuFechaLlegada.iuTexto.setFocusable(false);
+        segundoPanel.add(iuFechaLlegada);
         
-        panelFechaSalida = new IUPanel(new Limitacion(limite.getPorcentajeAncho(17), limite.getPorcentajeAlto(2), limite.getPorcentajeAncho(15), limite.getPorcentajeAlto(96)));
-        segundoPanel.add(panelFechaSalida);
-        construirPanelFechaSalida(panelFechaSalida.getLimitacion());
+        iuHoraLlegada = new IUPanelCT("hora de llegada", "", new Limitacion(limite.getPorcentajeAncho(1), limite.getPorcentajeAlto(52), limite.getPorcentajeAncho(15), limite.getPorcentajeAlto(41)), 30, 70);
+        iuHoraLlegada.iuTexto.setHorizontalAlignment(SwingConstants.CENTER);
+        iuHoraLlegada.iuTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+        iuHoraLlegada.setBorder(new LineBorder(new Color(190, 146, 12)));
+        iuHoraLlegada.iuTexto.setBorder(null);
+        iuHoraLlegada.iuTexto.setEditable(false);
+        iuHoraLlegada.iuTexto.setFocusable(false);
+        segundoPanel.add(iuHoraLlegada);        
         
-        panelNroNoches = new IUPanel(new Limitacion(limite.getPorcentajeAncho(33), limite.getPorcentajeAlto(2), limite.getPorcentajeAncho(10), limite.getPorcentajeAlto(96)));
-        segundoPanel.add(panelNroNoches);
-        construirPanelNroNoches(panelNroNoches.getLimitacion());
+        iuFechaSalida = new IUPanelCT("fecha de salida", "", new Limitacion(limite.getPorcentajeAncho(17), limite.getPorcentajeAlto(6), limite.getPorcentajeAncho(15), limite.getPorcentajeAlto(41)), 30, 70);
+        iuFechaSalida.iuTexto.setHorizontalAlignment(SwingConstants.CENTER);
+        iuFechaSalida.iuTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+        iuFechaSalida.setBorder(new LineBorder(new Color(190, 146, 12)));
+        iuFechaSalida.iuTexto.setBorder(null);
+        iuFechaSalida.iuTexto.setEditable(false);
+        iuFechaSalida.iuTexto.setFocusable(false);
+        //iuFechaSalida.iuTitulo.setForeground(new Color(185, 142, 13));
+        segundoPanel.add(iuFechaSalida);
         
-        panelHabitacion = new IUPanel(new Limitacion(limite.getPorcentajeAncho(69), limite.getPorcentajeAlto(2), limite.getPorcentajeAncho(30), limite.getPorcentajeAlto(96)));
-        segundoPanel.add(panelHabitacion);
-        construirPanelesHabitacion(panelHabitacion.getLimitacion());
+        iuHoraSalida = new IUPanelCT("hora de salida", "", new Limitacion(limite.getPorcentajeAncho(17), limite.getPorcentajeAlto(52), limite.getPorcentajeAncho(15), limite.getPorcentajeAlto(41)), 30, 70);
+        iuHoraSalida.iuTexto.setHorizontalAlignment(SwingConstants.CENTER);
+        iuHoraSalida.iuTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+        iuHoraSalida.setBorder(new LineBorder(new Color(190, 146, 12)));
+        iuHoraSalida.iuTexto.setBorder(null);
+        iuHoraSalida.iuTexto.setEditable(false);
+        iuHoraSalida.iuTexto.setFocusable(false);
+        //iuHoraSalida.iuTitulo.setForeground(new Color(185, 142, 13));
+        segundoPanel.add(iuHoraSalida);        
+        
+        tituloNroNoches = new IUEtiqueta("nro de noches", new Limitacion(limite.getPorcentajeAncho(33), limite.getPorcentajeAlto(7), limite.getPorcentajeAncho(12), limite.getPorcentajeAlto(15)));
+        tituloNroNoches.setHorizontalAlignment(SwingConstants.CENTER);
+        //tituloNroNoches.setForeground(new Color(185, 142, 13));
+        tituloNroNoches.setFont(new Font("Verdana", Font.PLAIN, 19));
+        //tituloNroNoches.setBorder(new LineBorder(Color.yellow));
+        segundoPanel.add(tituloNroNoches);
+        
+        iuNroNoches = new IUEtiqueta("", new Limitacion(limite.getPorcentajeAncho(33), limite.getPorcentajeAlto(22), limite.getPorcentajeAncho(12), limite.getPorcentajeAlto(71)));
+        iuNroNoches.setHorizontalAlignment(SwingConstants.CENTER);
+        iuNroNoches.setFont(new Font("Verdana", Font.PLAIN, limite.getPorcentajeAlto(60)));
+        iuNroNoches.setBorder(new LineBorder(new Color(190, 146, 12)));
+        segundoPanel.add(iuNroNoches);
+                
+        iuHabitacion = new IUPanelCT("habitacion", "", new Limitacion(limite.getPorcentajeAncho(46), limite.getPorcentajeAlto(26), limite.getPorcentajeAncho(25), limite.getPorcentajeAlto(68)), 23, 77);
+        iuHabitacion.iuTexto.setEditable(false);
+        iuHabitacion.iuTexto.setFocusable(false);
+        iuHabitacion.iuTexto.setFont(new Font("Verdana", Font.PLAIN, limite.getPorcentajeAlto(40)));
+        iuHabitacion.setBorder(new LineBorder(new Color(190, 146, 12)));        
+        iuHabitacion.iuTexto.setBorder(null);
+        iuHabitacion.iuTexto.setBorder(null);
+        segundoPanel.add(iuHabitacion);
+        
+        iuPrecio = new IUPanelCTU("precio x noche", "", "", new Limitacion(limite.getPorcentajeAncho(72), limite.getPorcentajeAlto(26), limite.getPorcentajeAncho(26), limite.getPorcentajeAlto(68)), 23, 77, 50);
+        iuPrecio.iuTexto.setEditable(false);
+        iuPrecio.iuTexto.setFocusable(false);
+        iuPrecio.iuTexto.setFont(new Font("Verdana", Font.PLAIN, limite.getPorcentajeAlto(40)));
+        iuPrecio.iuTexto.iuUnidad.setFont(new Font("Verdana", Font.PLAIN, limite.getPorcentajeAlto(40)));
+        iuPrecio.setBorder(new LineBorder(new Color(190, 146, 12)));        
+        iuPrecio.iuTexto.setBorder(null);
+        segundoPanel.add(iuPrecio);
+         
+        botonCambiarPrecio = new IUBoton("cambiar precio", new Limitacion(limite.getPorcentajeAncho(91), limite.getPorcentajeAlto(68), limite.getPorcentajeAncho(8), limite.getPorcentajeAlto(24)));
+        //segundoPanel.add(botonCambiarPrecio);
         
         panelPrecio = new IUPanelBD(new Limitacion(limite.getPorcentajeAncho(85), limite.getPorcentajeAlto(2), limite.getPorcentajeAncho(14), limite.getPorcentajeAlto(96)));
         //segundoPanel.add(panelPrecio);
@@ -157,73 +214,12 @@ public class IUVentanaRegistroHospedajeOcupado extends IUVentanaT{
         
         botonEstadoReserva = new IUBoton("estado de reserva", new Limitacion(limite.getPorcentajeAncho(49), limite.getPorcentajeAlto(16), limite.getPorcentajeAncho(15), limite.getPorcentajeAlto(70)));
         tercerPanel.add(botonEstadoReserva);
-    }    
-    private void construirPanelFechaLlegada(Limitacion limite){
-        iuFechaLlegada = new IUPanelCT("fecha de llegada", "", new Limitacion(limite.getPorcentajeAncho(2), limite.getPorcentajeAlto(6), limite.getPorcentajeAncho(96), limite.getPorcentajeAlto(41)), 40, 60);
-        iuFechaLlegada.iuTexto.setHorizontalAlignment(SwingConstants.CENTER);
-        iuFechaLlegada.iuTitulo.setHorizontalAlignment(SwingConstants.CENTER);
-        iuFechaLlegada.iuTexto.setEditable(false);
-        iuFechaLlegada.iuTexto.setFocusable(false);
-        panelFechaLlegada.add(iuFechaLlegada);
-        
-        iuHoraLlegada = new IUPanelCT("hora de llegada", "", new Limitacion(limite.getPorcentajeAncho(2), limite.getPorcentajeAlto(52), limite.getPorcentajeAncho(96), limite.getPorcentajeAlto(41)), 40, 60);
-        iuHoraLlegada.iuTexto.setHorizontalAlignment(SwingConstants.CENTER);
-        iuHoraLlegada.iuTitulo.setHorizontalAlignment(SwingConstants.CENTER);
-        iuHoraLlegada.iuTexto.setEditable(false);
-        iuHoraLlegada.iuTexto.setFocusable(false);
-        panelFechaLlegada.add(iuHoraLlegada);
-    }
-    private void construirPanelFechaSalida(Limitacion limite){
-        iuFechaSalida = new IUPanelCT("fecha de salida", "", new Limitacion(limite.getPorcentajeAncho(2), limite.getPorcentajeAlto(6), limite.getPorcentajeAncho(96), limite.getPorcentajeAlto(41)), 40, 60);
-        iuFechaSalida.iuTexto.setHorizontalAlignment(SwingConstants.CENTER);
-        iuFechaSalida.iuTitulo.setHorizontalAlignment(SwingConstants.CENTER);
-        iuFechaSalida.iuTexto.setEditable(false);
-        iuFechaSalida.iuTexto.setFocusable(false);
-        //iuFechaSalida.iuTitulo.setForeground(new Color(185, 142, 13));
-        panelFechaSalida.add(iuFechaSalida);
-        
-        iuHoraSalida = new IUPanelCT("hora de salida", "", new Limitacion(limite.getPorcentajeAncho(2), limite.getPorcentajeAlto(52), limite.getPorcentajeAncho(96), limite.getPorcentajeAlto(41)), 40, 60);
-        iuHoraSalida.iuTexto.setHorizontalAlignment(SwingConstants.CENTER);
-        iuHoraSalida.iuTitulo.setHorizontalAlignment(SwingConstants.CENTER);
-        iuHoraSalida.iuTexto.setEditable(false);
-        iuHoraSalida.iuTexto.setFocusable(false);
-        //iuHoraSalida.iuTitulo.setForeground(new Color(185, 142, 13));
-        panelFechaSalida.add(iuHoraSalida);
-    }
-    private void construirPanelNroNoches(Limitacion limite){
-        tituloNroNoches = new IUEtiqueta("nro de noches", new Limitacion(limite.getPorcentajeAncho(1), limite.getPorcentajeAlto(7), limite.getPorcentajeAncho(98), limite.getPorcentajeAlto(20)));
-        tituloNroNoches.setHorizontalAlignment(SwingConstants.CENTER);
-        //tituloNroNoches.setForeground(new Color(185, 142, 13));
-        tituloNroNoches.setFont(new Font("Verdana", Font.PLAIN, 19));
-        //tituloNroNoches.setBorder(new LineBorder(Color.yellow));
-        panelNroNoches.add(tituloNroNoches);
-        
-        iuNroNoches = new IUEtiqueta("", new Limitacion(limite.getPorcentajeAncho(1), limite.getPorcentajeAlto(27), limite.getPorcentajeAncho(98), limite.getPorcentajeAlto(72)));
-        iuNroNoches.setHorizontalAlignment(SwingConstants.CENTER);
-        iuNroNoches.setFont(new Font("Verdana", Font.PLAIN, limite.getPorcentajeAlto(60)));
-        panelNroNoches.add(iuNroNoches);
-    }
-    private void construirPanelesHabitacion(Limitacion limite){
-        iuHabitacion = new IUPanelCT("habitacion", "", new Limitacion(limite.getPorcentajeAncho(1), limite.getPorcentajeAlto(6), limite.getPorcentajeAncho(98), limite.getPorcentajeAlto(41)), 40, 60);
-        iuHabitacion.iuTexto.setEditable(false);
-        iuHabitacion.iuTexto.setFocusable(false);
-        iuHabitacion.iuTexto.setBorder(null);
-        panelHabitacion.add(iuHabitacion);
-        
-        iuPrecio = new IUPanelCTU("precio x noche", "", "", new Limitacion(limite.getPorcentajeAncho(2), limite.getPorcentajeAlto(52), limite.getPorcentajeAncho(30), limite.getPorcentajeAlto(41)), 40, 60, 50);
-        iuPrecio.iuTexto.setEditable(false);
-        iuPrecio.iuTexto.setFocusable(false);
-        iuPrecio.iuTexto.setBorder(null);
-        panelHabitacion.add(iuPrecio);
-         
-        botonCambiarPrecio = new IUBoton("cambiar precio", new Limitacion(limite.getPorcentajeAncho(32), limite.getPorcentajeAlto(68), limite.getPorcentajeAncho(25), limite.getPorcentajeAlto(24)));
-        panelHabitacion.add(botonCambiarPrecio);
     }
     private void construirCuartoPanel(Limitacion limite){
         iuRegistroDatos = new IUPanelDatosPersonales(ventanaPrincipal, new CRegistroPersona(registro), this, limite);
         cuartoPanel.add(iuRegistroDatos);
         
-        iuServicios = new IUPanelBD(limite);
+        iuServicios = new IUPanelServicio(ventanaPrincipal, this, controlHabitaciones, habitacion, limite);
         cuartoPanel.add(iuServicios);
         
         iuEstadoCuentas = new IUPanelBD(limite);
@@ -235,11 +231,12 @@ public class IUVentanaRegistroHospedajeOcupado extends IUVentanaT{
     private void setDatosCorrespondiente(){
         iuNroRegistro.iuTexto.setText(String.valueOf(registro.getId()));
         iuFechaLlegada.iuTexto.setText(new Fecha(registro.getFechaLlegada()).getFecha6());
-        iuHoraLlegada.iuTexto.setText(new Hora(registro.getHoraLlegada()).getHora()+"   "+new Hora(registro.getHoraSalida()).getFormato());        
+        iuHoraLlegada.iuTexto.setText(new Hora(registro.getHoraLlegada()).getHora()+"   "+new Hora(registro.getHoraLlegada()).getFormato());        
         iuFechaSalida.iuTexto.setText(new Fecha(registro.getFechaSalida()).getFecha6());
         iuHoraSalida.iuTexto.setText(new Hora(registro.getHoraSalida()).getHora()+"   "+new Hora(registro.getHoraSalida()).getFormato());
         iuNroNoches.setText(String.valueOf(registro.getNroNoches()));
-        iuHabitacion.iuTexto.setText(habitacion.getNombreHabitacion());
+        iuHabitacion.iuTexto.setText(habitacion.getNombreHabitacionCorto());
+        iuHabitacion.iuTitulo.setText("habitacion ("+habitacion.getTipo()+" - "+habitacion.getEstilo()+")");
         iuPrecio.iuTexto.setText(String.valueOf(Asistente.acotarNumero(habitacion.getTemporada().getPrecio(), 2)));
         iuPrecio.iuTexto.iuUnidad.setText(habitacion.getTemporada().getUnidadMoneda().getUnidad());
     }

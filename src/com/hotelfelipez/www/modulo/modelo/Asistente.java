@@ -6,10 +6,12 @@
 package com.hotelfelipez.www.modulo.modelo;
 
 import com.aplicacionjava.www.recursos.Directorio;
+import com.aplicacionjava.www.recursos.ImageTransform;
 import com.aplicacionjava.www.recursos.Limitacion;
 import com.aplicacionjava.www.ventanas.IUVentanaM;
 import com.hotelfelipez.www.modulo.dao.Conexion;
 import java.awt.Toolkit;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -160,5 +162,34 @@ public class Asistente {
         
         
         return directorio;
+    }
+    
+    /**
+     *
+     * @param cm convierte el valor de centimetros a pixeles
+     * @return un valor en pixeles
+     */
+    public static double fromCMToPPI(double cm) {
+        return toPPI(cm * 0.393700787);
+    }
+    private static double toPPI(double inch) {
+        return inch * 72d;
+    }
+    public static BufferedImage getJPGImage(String ruta) throws IOException {
+        BufferedImage imagen = ImageIO.read(new File(ruta));
+
+        BufferedImage source = new BufferedImage(imagen.getWidth(),
+                imagen.getHeight(), BufferedImage.TYPE_INT_RGB);
+        source.getGraphics().drawImage(imagen, 0, 0, null);
+        return source;
+    }
+    public static BufferedImage rotacionImagen(BufferedImage origen, double grados) {
+        BufferedImage destinationImage;
+        ImageTransform imTransform = new ImageTransform(origen.getHeight(), origen.getWidth());
+        imTransform.rotate(grados);
+        imTransform.findTranslation();
+        AffineTransformOp ato = new AffineTransformOp(imTransform.getTransform(), AffineTransformOp.TYPE_BILINEAR);
+        destinationImage = ato.createCompatibleDestImage(origen, origen.getColorModel());
+        return ato.filter(origen, destinationImage);
     }
 }

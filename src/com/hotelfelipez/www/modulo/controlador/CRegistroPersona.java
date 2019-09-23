@@ -13,6 +13,7 @@ import com.hotelfelipez.www.modulo.modelo.Documento;
 import com.hotelfelipez.www.modulo.modelo.Persona;
 import com.hotelfelipez.www.modulo.modelo.RegistroHospedaje;
 import com.hotelfelipez.www.modulo.registroHospedaje.IUNuevaPersona;
+import com.hotelfelipez.www.modulo.registroHospedaje.IUTablaPersonas;
 import java.util.ArrayList;
 
 /**
@@ -107,6 +108,15 @@ public class CRegistroPersona {
         
         return verificador;
     }
+    public boolean eliminarPersonaRegistro(int idpersona){
+        boolean verificador = false;
+        Conexion conexion = new Conexion();
+        PersonaDao personaDao = new PersonaDao(conexion);
+        if(personaDao.seEliminoPersona_RegistroHospedaje(idpersona, registroHospedaje.getId()))
+            verificador = true;
+        conexion.cerrarConexion();
+        return verificador;
+    }
     public boolean guardarPersonaRegistroHospedaje(int idpersona){
         boolean verificador = false;
         Conexion conexion = new Conexion();
@@ -123,4 +133,28 @@ public class CRegistroPersona {
         conexion.cerrarConexion();
         return listaPersonas;
     }    
+    public ArrayList<Persona> getListaPersonas(IUTablaPersonas iuTablaPersonas){
+        Conexion conexion = new Conexion();
+        PersonaDao personaDao = new PersonaDao(conexion);     
+        String sql = "select * from persona";
+        if(iuTablaPersonas.getRowCount() > 0)
+            sql = sql+" where";
+        for (int i = 0; i < iuTablaPersonas.getRowCount(); i++) {
+            Persona p = iuTablaPersonas.getFila(i);
+            if(p.getId() > 0 && i < (iuTablaPersonas.getRowCount()-1))
+                sql = sql+" idpersona != "+p.getId()+" and";
+            else
+                sql = sql+" idpersona != "+p.getId();
+        }
+        ArrayList<Persona> listaPersonas = personaDao.getListaPersonas(sql);
+        conexion.cerrarConexion();
+        return listaPersonas;
+    }
+    public ArrayList<Documento> getDocumentosPersona(int idPersona){
+        Conexion conexion = new Conexion();
+        PersonaDao personaDao = new PersonaDao(conexion);     
+        ArrayList<Documento> listaDocumentos = personaDao.getListaDocumentos(idPersona);        
+        conexion.cerrarConexion();
+        return listaDocumentos;
+    }
 }

@@ -89,11 +89,49 @@ public class PersonaDao {
         }
         return verificador;
     }
+    public boolean seEliminoPersona_RegistroHospedaje(int idPersona, int idRegistro){
+        boolean verificador = false;
+        String sql = "delete from persona_registroHospedaje where idpersona = "+idPersona+" and idregistroHospedaje = "+idRegistro;
+        try {
+            PreparedStatement ps = conexion.getConexion().prepareStatement(sql);
+            int estado = ps.executeUpdate();
+            if(estado > 0)
+                verificador = true;
+            
+        } catch (SQLException e) {
+            System.out.println("Error PersonaDao.seEliminoPersona_RegistroHospedaje(): "+e.getMessage());
+        }
+        return verificador;
+    }
+    public boolean existePersona(int idPersona){
+        boolean verificador = false;
+        String sql = "select * from persona where idpersona = "+idPersona;
+        try {
+            PreparedStatement ps = conexion.getConexion().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                int estado = rs.getInt("idpersona");
+                if(estado > 0)
+                    verificador = true;
+            }
+            
+            
+        } catch (SQLException e) {
+            System.out.println("Error PersonaDao.existePersona(): "+e.getMessage());
+        }
+        return verificador;
+    }
+    public ArrayList<Persona> getListaPersonas(String sql){        
+        return getListaPersonas(sql, false);
+    }
     public ArrayList<Persona> getListaPersonas(int idregistro){
+        String sql = "select * from persona where idpersona in (select idpersona from persona_registroHospedaje where idregistroHospedaje = "+idregistro+")";
+        return getListaPersonas(sql, true);
+    }
+    public ArrayList<Persona> getListaPersonas(String sql, boolean siDocumentos){
         
         ArrayList<Persona> lista = new ArrayList<>();
-        try {
-            String sql = "select * from persona where idpersona in (select idpersona from persona_registroHospedaje where idregistroHospedaje = "+idregistro+")";
+        try {            
             PreparedStatement ps = conexion.getConexion().prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             
@@ -117,7 +155,8 @@ public class PersonaDao {
                 p.setEmail(rs.getString("email"));
                 p.setTipoPersona(rs.getString("tipoPersona"));
                 p.setObservacion(rs.getString("observacion"));
-                p.setDocumentos(getListaDocumentos(p.getId()));
+                if(siDocumentos)
+                    p.setDocumentos(getListaDocumentos(p.getId()));
                 lista.add(p);
             }
             
@@ -159,7 +198,7 @@ public class PersonaDao {
         }
         return verificador;
     }    
-    private ArrayList<Documento> getListaDocumentos(int idpersona){        
+    public ArrayList<Documento> getListaDocumentos(int idpersona){        
         return new DocumentoDao(conexion).getListaDocumento(idpersona);
     }
     
