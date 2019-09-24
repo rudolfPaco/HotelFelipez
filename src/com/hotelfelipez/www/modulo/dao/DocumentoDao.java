@@ -59,6 +59,26 @@ public class DocumentoDao {
         }
         return verificador;
     }
+    public boolean seModificoDocumento(Documento d){
+        boolean verificador = false;
+        String sql = "UPDATE producto SET tipo=?, imagen=?, url=? WHERE iddocumento="+d.getId();
+        try {
+            PreparedStatement ps = conexion.getConexion().prepareStatement(sql);
+            File file = new File(d.getUrl());
+            FileInputStream archivo = new FileInputStream(file);
+            
+            ps.setString(1, d.getTipo());            
+            ps.setBinaryStream(2, archivo, file.length());
+            ps.setString(3, d.getUrl());
+            int estado = ps.executeUpdate();
+            if(estado > 0)
+                verificador = true;
+        } catch (SQLException | FileNotFoundException e) {
+            System.out.println("Error... DocumentoDao.seModificoDocumento(): "+e.getMessage());
+        }
+        return verificador;
+    }
+    
     public ArrayList<Documento> getListaDocumento(int idpersona){
         ArrayList<Documento> lista = new ArrayList<>();        
         try {

@@ -40,15 +40,14 @@ import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
- * @author hotel-felipez
+ * @author rudolf
  */
-public class IUVentanaModificarDatosPersona extends IUVentanaT{
+public class IUNuevaPersona extends IUVentanaT{
     
     private IUVentanaHotel ventanaPrincipal;
     
@@ -98,15 +97,13 @@ public class IUVentanaModificarDatosPersona extends IUVentanaT{
     private IUBoton botonGuardarRegistro;
     
     private Digitalizacion digitalizacion; 
-    private int id;
     private boolean estado;
     
-    public IUVentanaModificarDatosPersona(IUVentanaHotel ventanaPrincipal, String titulo, Limitacion limitacion) {
+    public IUNuevaPersona(IUVentanaHotel ventanaPrincipal, String titulo, Limitacion limitacion) {
         super(ventanaPrincipal, titulo, limitacion, 4);
         this.ventanaPrincipal = ventanaPrincipal;
         this.estado = false;
         this.digitalizacion = null;
-        this.id = 0;
         construirPaneles(panelFondo.getLimitacion());
         escucharEvento();
     }
@@ -163,54 +160,6 @@ public class IUVentanaModificarDatosPersona extends IUVentanaT{
         certificado.setCursor(new Cursor(Cursor.HAND_CURSOR));
         panelCertificado.add(certificado);
     }
-    public void setPersona(Persona p){
-        id = p.getId();
-        panelNombres.iuTexto.setText(p.getNombres());
-        panelApellidos.iuTexto.setText(p.getApellidos());
-        panelFechaNacimiento.iuTexto.setText(p.getFechaNacimiento());
-        panelTipoDocumento.iuTexto.setSelectedItem(p.getTipoDocumento());
-        panelNumeroIdentidad.iuTexto.setText(p.getCarnetIdentidad());
-        panelOrigen.iuTexto.setSelectedItem(p.getOrigen());
-        panelFechaCaducidad.iuTexto.setText(p.getFechaCaducidad());
-        panelEstadoCaducidad.iuTexto.setText(p.getCaducidad());
-        panelCiudad.iuTexto.setSelectedItem(p.getCiudad());
-        panelPais.iuTexto.setSelectedItem(p.getPais());
-        panelEstadoCivil.iuTexto.setSelectedItem(p.getEstadoCivil());
-        panelProfesion.iuTexto.setSelectedItem(p.getProfesion());
-        panelDireccion.iuTexto.setText(p.getDireccion());
-        panelprocedencia.iuTexto.setSelectedItem(p.getProcedencia());
-        panelDestino.iuTexto.setSelectedItem(p.getDestino());
-        panelTelefonos.iuTexto.setText(p.getTelefono());
-        panelEmail.iuTexto.setText(p.getEmail());
-        panelTipoPersona.iuTexto.setSelectedItem(p.getTipoPersona());
-        panelObservacion.iuAreaTexto.setText(p.getObservacion());
-        
-        for (int i = 0; i < p.getDocumentos().size(); i++) {
-            Documento doc = p.getDocumentos().get(i);
-            switch(doc.getTipo()){
-                case "carnetIdentidadC":
-                    ciCara.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(ciCara.getWidth(), ciCara.getHeight(), Image.SCALE_DEFAULT)));
-                    ciCara.setBuffered(doc.getBuffer());
-                break;
-                case "carnetIdentidadE":
-                    ciEspalda.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(ciEspalda.getWidth(), ciEspalda.getHeight(), Image.SCALE_DEFAULT)));
-                    ciEspalda.setBuffered(doc.getBuffer());
-                break;
-                case "passporte":
-                    passporte.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(passporte.getWidth(), passporte.getHeight(), Image.SCALE_DEFAULT)));
-                    passporte.setBuffered(doc.getBuffer());
-                break;
-                case "certificado":
-                    certificado.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(certificado.getWidth(), certificado.getHeight(), Image.SCALE_DEFAULT)));
-                    certificado.setBuffered(doc.getBuffer());
-                break;
-                case "foto":
-                    etiquetaImagen.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(etiquetaImagen.getWidth(), etiquetaImagen.getHeight(), Image.SCALE_DEFAULT)));
-                    etiquetaImagen.setBuffered(doc.getBuffer());
-                break;
-            }
-        }
-    }
     private void construirSegundoPanel(Limitacion limite){
         panelNombres = new IUPanelCT("nombres (*)", "", new Limitacion(limite.getPorcentajeAncho(1), limite.getPorcentajeAlto(1), limite.getPorcentajeAncho(60), limite.getPorcentajeAlto(6)), 40, 60);
         segundoPanel.add(panelNombres);
@@ -220,13 +169,13 @@ public class IUVentanaModificarDatosPersona extends IUVentanaT{
         
         etiquetaImagen = new IUEtiquetaI("", new Limitacion(limite.getPorcentajeAncho(65), limite.getPorcentajeAlto(2), limite.getPorcentajeAncho(30), limite.getPorcentajeAlto(26)));
         etiquetaImagen.setBorder(new LineBorder(Color.LIGHT_GRAY));
-        segundoPanel.add(etiquetaImagen);
+        //segundoPanel.add(etiquetaImagen);
         
         botonEliminar = new IUBoton("eliminar", new Limitacion(limite.getPorcentajeAncho(66), limite.getPorcentajeAlto(29), limite.getPorcentajeAncho(12), limite.getPorcentajeAlto(3)));
-        segundoPanel.add(botonEliminar);
+        //segundoPanel.add(botonEliminar);
         
         botonFoto = new IUBoton("foto", new Limitacion(limite.getPorcentajeAncho(82), limite.getPorcentajeAlto(29), limite.getPorcentajeAncho(12), limite.getPorcentajeAlto(3)));
-        segundoPanel.add(botonFoto);
+        //segundoPanel.add(botonFoto);
         
         panelFechaNacimiento = new IUPanelCT("fecha nacimiento (*)", "", new Limitacion(limite.getPorcentajeAncho(1), limite.getPorcentajeAlto(15), limite.getPorcentajeAncho(30), limite.getPorcentajeAlto(6)), 40, 60);
         panelFechaNacimiento.iuTexto.setEditable(false);
@@ -284,14 +233,7 @@ public class IUVentanaModificarDatosPersona extends IUVentanaT{
         
         panelEmail = new IUPanelCT("correo electronico", "", new Limitacion(limite.getPorcentajeAncho(37), limite.getPorcentajeAlto(71), limite.getPorcentajeAncho(62), limite.getPorcentajeAlto(6)), 40, 60);
         segundoPanel.add(panelEmail);        
-        
-        panelTipoPersona = new IUPanelTCB("tipo de persona", Asistente.getColumnas("tipoPersona", "select distinct tipoPersona from persona"), new Limitacion(limite.getPorcentajeAncho(1), limite.getPorcentajeAlto(78), limite.getPorcentajeAncho(40), limite.getPorcentajeAlto(6)), 40, 60);
-        segundoPanel.add(panelTipoPersona);
-        
-        panelObservacion = new IUPanelTA("observacion", "", new Limitacion(limite.getPorcentajeAncho(42), limite.getPorcentajeAlto(78), limite.getPorcentajeAncho(56), limite.getPorcentajeAlto(20)), 12, 88);
-        panelObservacion.iuAreaTexto.setFont(new Font("Verdana", Font.PLAIN, 16));
-        segundoPanel.add(panelObservacion);
-    }    
+    }
     private void construirPrimerPanel(Limitacion limite){
         grupo = new ButtonGroup();
         
@@ -435,7 +377,7 @@ public class IUVentanaModificarDatosPersona extends IUVentanaT{
                 setOpacity(1f);
             }
         });
-        botonFoto.addEventoRaton(new MouseAdapter() {
+        /*botonFoto.addEventoRaton(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 setOpacity(0.3f);
@@ -458,7 +400,7 @@ public class IUVentanaModificarDatosPersona extends IUVentanaT{
                 }
                 setOpacity(1f);
             }
-        });
+        });*/
         botonFechaNacimiento.addEventoRaton(new MouseAdapter() {
 
             @Override
@@ -526,7 +468,6 @@ public class IUVentanaModificarDatosPersona extends IUVentanaT{
         if ( result == JFileChooser.APPROVE_OPTION ){
             try {
                 BufferedImage buffered = ImageIO.read(fileChooser.getSelectedFile());
-                File file = fileChooser.getSelectedFile();                
                 
                 String[] nombres = {"desea recortar la imagen", "desea aceptar la imagen"};
                 IUVentanaL opciones = new IUVentanaL(ventanaPrincipal, "elija una opcion", new Limitacion(Asistente.ANCHO/3, Asistente.ALTO/2), nombres);
@@ -580,22 +521,14 @@ public class IUVentanaModificarDatosPersona extends IUVentanaT{
                     
                     persona.setDocumento(docCertificado);
                     persona.setEstadoDocumentos("SI");
-                }else{
-                    if(etiquetaImagen.getBuffered() != null){
-                        Documento docFoto = new Documento(etiquetaImagen.getBuffered());
-                        docFoto.setTipo("foto");
-                        
-                        persona.setDocumento(docFoto);
-                        persona.setEstadoDocumentos("SI");
-                    }
-                }
+                }   
         persona.setNombres(panelNombres.iuTexto.getText());
         persona.setApellidos(panelApellidos.iuTexto.getText());
         persona.setFechaNacimiento(panelFechaNacimiento.iuTexto.getText());
         persona.setTipoDocumento(panelTipoDocumento.iuTexto.getTexto());
         persona.setCarnetIdentidad(panelNumeroIdentidad.iuTexto.getText());
         persona.setOrigen(panelOrigen.iuTexto.getTexto());
-        persona.setFechaCaducidad(panelFechaCaducidad.iuTexto.getText());
+        persona.setFechaCaducidad(panelFechaCaducidad.iuTexto.getText());        
         persona.setCiudad(panelCiudad.iuTexto.getTexto());
         persona.setPais(panelPais.iuTexto.getTexto());
         persona.setEstadoCivil(panelEstadoCivil.iuTexto.getTexto());
@@ -613,5 +546,4 @@ public class IUVentanaModificarDatosPersona extends IUVentanaT{
     public boolean getEstado(){
         return estado;
     }
-    
 }

@@ -83,7 +83,7 @@ public class PersonaDao {
         
         ArrayList<Persona> lista = new ArrayList<>();
         try {
-            String sql = "select * from persona where idpersona = (select idpersona from persona_registroHospedaje where idregistroHospedaje = "+idregistro+")";
+            String sql = "select * from persona where idpersona in (select idpersona from persona_registroHospedaje where idregistroHospedaje = "+idregistro+")";
             PreparedStatement ps = conexion.getConexion().prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             
@@ -115,6 +115,39 @@ public class PersonaDao {
             System.out.println("Error... PersonaDao.getlistaPersonas(): "+e.getMessage());
         }
         return lista;
+    }
+    public boolean seModificoDatosPersona(Persona p){
+        boolean verificador = false;
+        String sql = "UPDATE persona SET nombres = ?, apellidos = ?, fechaNacimiento = ?, tipoDocumento = ?, numeroIdentidad = ?, origen = ?, fechaCaducidad = ?, ciudad = ?, pais = ?, estadoCivil = ?, profesion = ?, direccion = ?, procedencia = ?, destino = ?, telefono = ?, email = ?, tipoPersona = ?, observacion = ? WHERE `idpersona`='"+p.getId()+"';";
+        try {
+            PreparedStatement ps = conexion.getConexion().prepareStatement(sql);
+            
+            ps.setString(1, p.getNombres());
+            ps.setString(2, p.getApellidos());
+            ps.setString(3, p.getFechaNacimiento());
+            ps.setString(4, p.getTipoDocumento());
+            ps.setString(5, p.getCarnetIdentidad());
+            ps.setString(6, p.getOrigen());
+            ps.setString(7, p.getFechaCaducidad());
+            ps.setString(8, p.getCiudad());
+            ps.setString(9, p.getPais());
+            ps.setString(10, p.getEstadoCivil());
+            ps.setString(11, p.getProfesion());
+            ps.setString(12, p.getDireccion());
+            ps.setString(13, p.getProcedencia());
+            ps.setString(14, p.getDestino());
+            ps.setString(15, p.getTelefono());
+            ps.setString(16, p.getEmail());
+            ps.setString(17, p.getTipoPersona());
+            ps.setString(18, p.getObservacion());
+            
+            int estado = ps.executeUpdate();
+            if(estado > 0)
+                verificador = true;
+        } catch (SQLException e) {
+            System.out.println("Error PersonaDao.seModificoPersona(): "+e.getMessage());
+        }
+        return verificador;
     }
     private ArrayList<Documento> getListaDocumentos(int idpersona){
         return new DocumentoDao(conexion).getListaDocumento(idpersona);

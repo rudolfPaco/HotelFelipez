@@ -81,7 +81,7 @@ public class IUVentanaRegistroHospedajeOcupado extends IUVentanaT{
         this.ventanaPrincipal = ventanaPrincipal;
         this.controlHabitaciones = controlHabitaciones;
         this.habitacion = habitacion;
-        this.registro = null;
+        this.registro = controlHabitaciones.getRegistroHospedaje(habitacion.getId());
         construirPaneles(panelFondo.getLimitacion());
         setDatosCorrespondiente();
         escucharEventos();
@@ -219,7 +219,7 @@ public class IUVentanaRegistroHospedajeOcupado extends IUVentanaT{
     }
     private void construirCuartoPanel(Limitacion limite){
         CRegistroPersona control = new CRegistroPersona();
-        iuRegistroDatos = new IUPanelRegistroPersonalOcupado(ventanaPrincipal, control, controlHabitaciones.getRegistroHospedaje(habitacion.getId()), this, limite);        
+        iuRegistroDatos = new IUPanelRegistroPersonalOcupado(ventanaPrincipal, control, registro, this, limite);        
         cuartoPanel.add(iuRegistroDatos);
         
         iuServicios = new IUPanelBD(limite);
@@ -232,7 +232,6 @@ public class IUVentanaRegistroHospedajeOcupado extends IUVentanaT{
         cuartoPanel.add(iuEstadoReserva);
     }
     private void setDatosCorrespondiente(){
-        this.registro = controlHabitaciones.getRegistroHospedaje(habitacion.getId());
         iuNroRegistro.iuTexto.setText(String.valueOf(registro.getId()));
         iuFechaLlegada.iuTexto.setText(new Fecha(registro.getFechaLlegada()).getFecha6());
         iuHoraLlegada.iuTexto.setText(new Hora(registro.getHoraLlegada()).getHora()+"   "+new Hora(registro.getHoraSalida()).getFormato());        
@@ -242,7 +241,6 @@ public class IUVentanaRegistroHospedajeOcupado extends IUVentanaT{
         iuHabitacion.iuTexto.setText(habitacion.getNombreHabitacion());
         iuPrecio.iuTexto.setText(String.valueOf(Asistente.acotarNumero(habitacion.getTemporada().getPrecio(), 2)));
         iuPrecio.iuTexto.iuUnidad.setText(habitacion.getTemporada().getUnidadMoneda().getUnidad());
-        iuRegistroDatos.agregarPersonas(registro.getListaPersonas());
     }
     private void escucharEventos(){
         botonDatosPersonales.addEventoRaton(new MouseAdapter() {

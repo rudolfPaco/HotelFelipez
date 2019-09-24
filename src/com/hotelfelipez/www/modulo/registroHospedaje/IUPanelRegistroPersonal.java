@@ -7,12 +7,9 @@ package com.hotelfelipez.www.modulo.registroHospedaje;
 
 import com.aplicacionjava.www.botones.IUBoton;
 import com.aplicacionjava.www.paneles.IUPanel;
-import com.aplicacionjava.www.paneles.IUPanelBD;
 import com.aplicacionjava.www.recursos.Limitacion;
-import com.hotelfelipez.www.modulo.controlador.CRegistroPersona;
 import com.hotelfelipez.www.modulo.modelo.Asistente;
 import com.hotelfelipez.www.modulo.modelo.Persona;
-import com.hotelfelipez.www.modulo.prestacion.IUNuevaPrestacion;
 import com.hotelfelipez.www.modulo.principal.IUVentanaHotel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -62,7 +59,8 @@ public class IUPanelRegistroPersonal extends IUPanel{
             public void mousePressed(MouseEvent e) {
                 iuRegistroHospedaje.setOpacity(0.3f);                
                 
-                IUVentanaRegistroNuevaPersona iuRegistroPersona = new IUVentanaRegistroNuevaPersona(ventanaPrincipal, "registro de nueva persona al hotel", new Limitacion(Asistente.ANCHO - Asistente.ANCHO/3, Asistente.ALTO));
+                //tarea ---> validar su numero de C.I. para no duplicar la persona en la base de datos.
+                IUNuevaPersona iuRegistroPersona = new IUNuevaPersona(ventanaPrincipal, "registro de nueva persona al hotel", new Limitacion(Asistente.ANCHO - Asistente.ANCHO/3, Asistente.ALTO));
                 iuRegistroPersona.mostrarVentana();
                 if(iuRegistroPersona.getEstado())
                     tablaPersonas.setFila(iuRegistroPersona.getPersona());
@@ -77,8 +75,7 @@ public class IUPanelRegistroPersonal extends IUPanel{
                 
                 if(tablaPersonas.estaSeleccionado()){
                     Persona p = tablaPersonas.getPersona();
-                    IUVentanaModificarDatosPersona iuModificarDatos = new IUVentanaModificarDatosPersona(ventanaPrincipal, "registro de nueva persona al hotel", new Limitacion(Asistente.ANCHO - Asistente.ANCHO/3, Asistente.ALTO));
-                    iuModificarDatos.setPersona(p);
+                    IUModificarPersona iuModificarDatos = new IUModificarPersona(ventanaPrincipal, null, "registro de nueva persona al hotel", new Limitacion(Asistente.ANCHO - Asistente.ANCHO/3, Asistente.ALTO));
                     iuModificarDatos.mostrarVentana();
                     if(iuModificarDatos.getEstado())
                         tablaPersonas.setFila(iuModificarDatos.getPersona());

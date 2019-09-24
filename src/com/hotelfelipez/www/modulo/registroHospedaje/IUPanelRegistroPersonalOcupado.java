@@ -61,6 +61,7 @@ public class IUPanelRegistroPersonalOcupado extends IUPanel{
         this.registro = registro;
         this.iuRegistroOcupado = iuRegistroOcupado;
         construirPaneles(getLimitacion());
+        actualizarTablaPersonas();
         escucharEvento();
     }
     private void construirPaneles(Limitacion limite){
@@ -142,7 +143,7 @@ public class IUPanelRegistroPersonalOcupado extends IUPanel{
             public void mousePressed(MouseEvent e) {
                 iuRegistroOcupado.setOpacity(0.3f);
 
-                IUVentanaRegistroNuevaPersona iuRegistroPersona = new IUVentanaRegistroNuevaPersona(ventanaPrincipal, "registro de nueva persona al hotel", new Limitacion(Asistente.ANCHO - Asistente.ANCHO/3, Asistente.ALTO));
+                IUNuevaPersona iuRegistroPersona = new IUNuevaPersona(ventanaPrincipal, "registro de nueva persona al hotel", new Limitacion(Asistente.ANCHO - Asistente.ANCHO/3, Asistente.ALTO));
                 iuRegistroPersona.mostrarVentana();
                 if(iuRegistroPersona.getEstado()){                        
                     Persona persona = iuRegistroPersona.getPersona();
@@ -154,8 +155,30 @@ public class IUPanelRegistroPersonalOcupado extends IUPanel{
                 iuRegistroOcupado.setOpacity(1f);
             }
         });
+        botonModificarPersona.addEventoRaton(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if(iuTablaPersonas.estaSeleccionado()){
+                    Persona persona = iuTablaPersonas.getPersona();
+                    iuRegistroOcupado.setOpacity(0.3f);
+                    
+                    IUModificarPersona iuModificarPersona = new IUModificarPersona(ventanaPrincipal, persona, "modificar los datos de la Persona", new Limitacion(Asistente.ANCHO - Asistente.ANCHO/3, Asistente.ALTO));
+                    iuModificarPersona.mostrarVentana();
+                    if(iuModificarPersona.getEstado()){                        
+                        if(control.modificarDatosPersona(iuModificarPersona.getPersona())){
+                            Asistente.mensajeVerificacion(ventanaPrincipal, "aviso", "En buena hora...! se modifico los datos de la persona correctamente...!", "advertencia");
+                            actualizarTablaPersonas();                                    
+                        }
+                    }
+                    
+                    iuRegistroOcupado.setOpacity(1f);
+                }
+            }
+        });
     }
-    public void agregarPersonas(ArrayList<Persona> lista){
+    private void actualizarTablaPersonas(){
+        ArrayList<Persona> lista = registro.getListaPersonas();
         iuTablaPersonas.limpiarTabla();
         for (int i = 0; i < lista.size(); i++) {
             Persona persona = lista.get(i);
