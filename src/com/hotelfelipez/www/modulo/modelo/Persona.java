@@ -216,7 +216,7 @@ public class Persona {
     public String getCaducidad(){
         String respuesta = "VALIDO";
         if(!fechaCaducidad.isEmpty()){
-            if(new Fecha(fechaCaducidad).esMenor(new Fecha()))
+            if(new Fecha().esMenor(new Fecha(fechaCaducidad)))
                 respuesta = "INVALIDO";
         }else
             respuesta = "";

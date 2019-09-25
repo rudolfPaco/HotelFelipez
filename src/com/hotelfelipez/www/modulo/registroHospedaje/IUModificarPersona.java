@@ -14,7 +14,6 @@ import com.aplicacionjava.www.paneles.IUPanelBD;
 import com.aplicacionjava.www.paneles.IUPanelCT;
 import com.aplicacionjava.www.paneles.IUPanelTA;
 import com.aplicacionjava.www.paneles.IUPanelTCB;
-import com.aplicacionjava.www.recursos.Archivo;
 import com.aplicacionjava.www.recursos.Digitalizacion;
 import com.hotelfelipez.www.modulo.modelo.Documento;
 import com.aplicacionjava.www.recursos.Fecha;
@@ -22,7 +21,6 @@ import com.aplicacionjava.www.recursos.Limitacion;
 import com.aplicacionjava.www.ventanas.IUVentanaL;
 import com.aplicacionjava.www.ventanas.IUVentanaRI;
 import com.aplicacionjava.www.ventanas.IUVentanaT;
-import com.hotelfelipez.www.modulo.controlador.CRegistroPersona;
 import com.hotelfelipez.www.modulo.modelo.Asistente;
 import com.hotelfelipez.www.modulo.modelo.Persona;
 import com.hotelfelipez.www.modulo.principal.IUVentanaHotel;
@@ -42,7 +40,6 @@ import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -570,25 +567,22 @@ public class IUModificarPersona extends IUVentanaT{
             
             listaDocumentos.add(docCara);
             listaDocumentos.add(docEspalda);
-        }            
-        else
-            if(passporte.getBuffered() != null){
-                Documento docPassporte = new Documento(passporte.getBuffered());
-                docPassporte.setTipo("passporte");
-                listaDocumentos.add(docPassporte);
-            }                
-            else
-                if(certificado.getBuffered() != null){
-                    Documento docCertificado = new Documento(certificado.getBuffered());
-                    docCertificado.setTipo("certificado");
-                    listaDocumentos.add(docCertificado);
-                }else{
-                    if(etiquetaImagen.getBuffered() != null){
-                        Documento docFoto = new Documento(etiquetaImagen.getBuffered());
-                        docFoto.setTipo("foto");
-                        listaDocumentos.add(docFoto);
-                    }
-                }
+        }   
+        if(passporte.getBuffered() != null){
+            Documento docPassporte = new Documento(passporte.getBuffered());
+            docPassporte.setTipo("passporte");
+            listaDocumentos.add(docPassporte);
+        }
+        if(certificado.getBuffered() != null){
+            Documento docCertificado = new Documento(certificado.getBuffered());
+            docCertificado.setTipo("certificado");
+            listaDocumentos.add(docCertificado);
+        }
+        if(etiquetaImagen.getBuffered() != null){
+            Documento docFoto = new Documento(etiquetaImagen.getBuffered());
+            docFoto.setTipo("foto");
+            listaDocumentos.add(docFoto);
+        }   
         for (int i = 0; i < listaDocumentos.size(); i++) {
             Documento doc = listaDocumentos.get(i);
             int contador = 0;
@@ -602,11 +596,10 @@ public class IUModificarPersona extends IUVentanaT{
                 }
                 contador++;
             }
-            if(!encontrado){
+            if(!encontrado)
                 persona.setDocumento(doc);
-            }            
+                
         }        
-        
         persona.setNombres(panelNombres.iuTexto.getText());
         persona.setApellidos(panelApellidos.iuTexto.getText());
         persona.setFechaNacimiento(panelFechaNacimiento.iuTexto.getText());

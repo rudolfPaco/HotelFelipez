@@ -207,11 +207,13 @@ public class IUVentanaRegistroHospedajeOcupado extends IUVentanaT{
         iuHabitacion = new IUPanelCT("habitacion", "", new Limitacion(limite.getPorcentajeAncho(1), limite.getPorcentajeAlto(6), limite.getPorcentajeAncho(98), limite.getPorcentajeAlto(41)), 40, 60);
         iuHabitacion.iuTexto.setEditable(false);
         iuHabitacion.iuTexto.setFocusable(false);
+        iuHabitacion.iuTexto.setBorder(null);
         panelHabitacion.add(iuHabitacion);
         
         iuPrecio = new IUPanelCTU("precio x noche", "", "", new Limitacion(limite.getPorcentajeAncho(2), limite.getPorcentajeAlto(52), limite.getPorcentajeAncho(30), limite.getPorcentajeAlto(41)), 40, 60, 50);
         iuPrecio.iuTexto.setEditable(false);
-        iuPrecio.iuTexto.setFocusable(false);        
+        iuPrecio.iuTexto.setFocusable(false);
+        iuPrecio.iuTexto.setBorder(null);
         panelHabitacion.add(iuPrecio);
          
         botonCambiarPrecio = new IUBoton("cambiar precio", new Limitacion(limite.getPorcentajeAncho(32), limite.getPorcentajeAlto(68), limite.getPorcentajeAncho(25), limite.getPorcentajeAlto(24)));

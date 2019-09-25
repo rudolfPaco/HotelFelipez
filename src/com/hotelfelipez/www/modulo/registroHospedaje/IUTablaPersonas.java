@@ -76,6 +76,18 @@ public class IUTablaPersonas extends ModeloTabla<Persona>{
     public Persona getPersona(){
         return persona;
     }
+    public void reemplazarPersona(Persona personaReemplazar){
+        int contador = 0;
+        boolean estado = false;
+        while(contador < lista.size() && !estado){
+            Persona personaLista = lista.get(contador);
+            if(personaLista.equals(personaReemplazar)){
+                lista.set(contador, personaReemplazar);
+                estado = true;
+            }
+            contador++;
+        }
+    }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
