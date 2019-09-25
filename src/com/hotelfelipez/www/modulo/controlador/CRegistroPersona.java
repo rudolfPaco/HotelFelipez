@@ -8,6 +8,7 @@ package com.hotelfelipez.www.modulo.controlador;
 import com.hotelfelipez.www.modulo.dao.Conexion;
 import com.hotelfelipez.www.modulo.dao.DocumentoDao;
 import com.hotelfelipez.www.modulo.dao.PersonaDao;
+import com.hotelfelipez.www.modulo.modelo.Asistente;
 import com.hotelfelipez.www.modulo.modelo.Documento;
 import com.hotelfelipez.www.modulo.modelo.Persona;
 import com.hotelfelipez.www.modulo.modelo.RegistroHospedaje;
@@ -69,12 +70,17 @@ public class CRegistroPersona {
                 Documento doc = persona.getDocumentos().get(i);
                 if(conexion.getDato("iddocumento", "select iddocumento from documento where iddocumento = "+doc.getId()) > 0)
                     documentoDao.seModificoDocumento(doc);                
-                else
-                    documentoDao.seGuardoDocumento(doc);                    
+                else{
+                    if(doc.getTipo().equalsIgnoreCase("foto"))
+                        doc.setUrl(Asistente.getDirectorio().getDireccionFoto()+Asistente.getPostId("iddocumento", "select iddocumento from documento ORDER by iddocumento DESC LIMIT 1")+".png");
+                    else
+                        doc.setUrl(Asistente.getDirectorio().getDireccionDestino()+Asistente.getPostId("iddocumento", "select iddocumento from documento ORDER by iddocumento DESC LIMIT 1")+".png");
+                    doc.setIdPersona(persona.getId());
+                    documentoDao.seGuardoDocumento(doc);
+                }
             }
         }
-            
-            
+        
         conexion.cerrarConexion();
         
         return verificador;

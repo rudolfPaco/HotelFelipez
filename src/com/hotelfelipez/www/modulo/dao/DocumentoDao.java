@@ -61,7 +61,7 @@ public class DocumentoDao {
     }
     public boolean seModificoDocumento(Documento d){
         boolean verificador = false;
-        String sql = "UPDATE producto SET tipo=?, imagen=?, url=? WHERE iddocumento="+d.getId();
+        String sql = "UPDATE documento SET tipo=?, imagen=?, url=? WHERE iddocumento="+d.getId();
         try {
             PreparedStatement ps = conexion.getConexion().prepareStatement(sql);
             File file = new File(d.getUrl());
@@ -112,5 +112,10 @@ public class DocumentoDao {
             System.out.println("Error...DocumentoDao.getListaDocumento(): "+e.getMessage());
         }
         return lista;
+    }
+    public boolean seEliminoDocumento(int idDocumento){
+        boolean verificador = false;
+        
+        return verificador;
     }
 }

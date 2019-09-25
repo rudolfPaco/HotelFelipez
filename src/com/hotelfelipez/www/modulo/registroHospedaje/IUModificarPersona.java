@@ -355,9 +355,14 @@ public class IUModificarPersona extends IUVentanaT{
                         case "examinar imagen":
                             examinarImagen(ciCara);
                         break;
-                        case "eliminar imagen":
-                            ciCara.setIcon(null);
-                            ciCara.setBuffered(null);
+                        case "eliminar imagen":                            
+                            if(Asistente.mensajeVerificacion(ventanaPrincipal, "aviso", "esta seguro de querer eliminiar el documento...?", "advertencia")){
+                                if(ciCara.getObjeto() != null){
+                                    persona.eliminarDocumento((Documento) ciCara.getObjeto());
+                                }
+                                ciCara.setIcon(null);
+                                ciCara.setBuffered(null);
+                            }
                         break;
                     }
                 }

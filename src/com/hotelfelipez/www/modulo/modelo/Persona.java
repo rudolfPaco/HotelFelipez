@@ -6,6 +6,8 @@
 package com.hotelfelipez.www.modulo.modelo;
 
 import com.aplicacionjava.www.recursos.Fecha;
+import com.hotelfelipez.www.modulo.dao.Conexion;
+import com.hotelfelipez.www.modulo.dao.DocumentoDao;
 import java.util.ArrayList;
 
 /**
@@ -225,5 +227,18 @@ public class Persona {
     @Override
     public String toString() {
         return "Persona{" + "id=" + id + ", nombres=" + nombres + ", apellidos=" + apellidos + ", tipoDocumento=" + tipoDocumento + ", carnetIdentidad=" + carnetIdentidad + ", origen=" + origen + ", fechaCaducidad=" + fechaCaducidad + ", fechaNacimiento=" + fechaNacimiento + ", ciudad=" + ciudad + ", pais=" + pais + ", estadoCivil=" + estadoCivil + ", profesion=" + profesion + ", direccion=" + direccion + ", procedencia=" + procedencia + ", destino=" + destino + ", telefono=" + telefono + ", email=" + email + ", tipoPersona=" + tipoPersona + ", observacion=" + observacion + ", estado=" + estado + ", estadoDocumentos=" + estadoDocumentos + ", documentos=" + documentos + '}';
+    }
+    public boolean eliminarDocumento(Documento doc){
+        int contador = 0;
+        boolean encontrado = false;        
+        while(contador < documentos.size() && !encontrado){
+            if(doc.equals(documentos.get(contador))){
+                Conexion conexion = new Conexion();
+                DocumentoDao documentoDao = new DocumentoDao(conexion);
+                
+            }
+            contador++;
+        }
+        return encontrado;
     }
 }
