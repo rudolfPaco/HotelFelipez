@@ -29,13 +29,12 @@ import javax.swing.border.LineBorder;
  *
  * @author rudolf
  */
-public class IUPanelRegistroPersonalOcupado extends IUPanel{
+public class IUPanelDatosPersonales extends IUPanel{
 
     private IUVentanaHotel ventanaPrincipal;
     
     private IUVentanaRegistroHospedajeOcupado iuRegistroOcupado;
-    private CRegistroPersona control;
-    private RegistroHospedaje registro;
+    private CRegistroPersona controlRegistroPersonas;
     
     private IUPanelBD primerPanel;
     private IUEtiquetaI iuFoto;
@@ -54,11 +53,10 @@ public class IUPanelRegistroPersonalOcupado extends IUPanel{
     private IUBoton botonModificarMensaje;
     private IUBoton botonEliminarMensaje;
     
-    public IUPanelRegistroPersonalOcupado(IUVentanaHotel ventanaPrincipal, CRegistroPersona control, RegistroHospedaje registro, IUVentanaRegistroHospedajeOcupado iuRegistroOcupado, Limitacion limitacion) {
+    public IUPanelDatosPersonales(IUVentanaHotel ventanaPrincipal, CRegistroPersona control, IUVentanaRegistroHospedajeOcupado iuRegistroOcupado, Limitacion limitacion) {
         super(limitacion);
         this.ventanaPrincipal = ventanaPrincipal;
-        this.control = control;        
-        this.registro = registro;
+        this.controlRegistroPersonas = control;        
         this.iuRegistroOcupado = iuRegistroOcupado;
         construirPaneles(getLimitacion());
         actualizarTablaPersonas();
@@ -147,8 +145,8 @@ public class IUPanelRegistroPersonalOcupado extends IUPanel{
                 iuRegistroPersona.mostrarVentana();
                 if(iuRegistroPersona.getEstado()){                        
                     Persona persona = iuRegistroPersona.getPersona();
-                    if(control.guardarNuevaPersona(persona))
-                        if(control.guardarPersonaRegistroHospedaje(Asistente.getId("idpersona", "select idpersona from persona ORDER by idpersona DESC LIMIT 1"), registro.getId()))
+                    if(controlRegistroPersonas.guardarNuevaPersona(persona))
+                        if(controlRegistroPersonas.guardarPersonaRegistroHospedaje(Asistente.getId("idpersona", "select idpersona from persona ORDER by idpersona DESC LIMIT 1")))
                             iuTablaPersonas.setFila(persona);
                 }                        
 
@@ -166,7 +164,7 @@ public class IUPanelRegistroPersonalOcupado extends IUPanel{
                     IUModificarPersona iuModificarPersona = new IUModificarPersona(ventanaPrincipal, persona, "modificar los datos de la Persona", new Limitacion(Asistente.ANCHO - Asistente.ANCHO/3, Asistente.ALTO));
                     iuModificarPersona.mostrarVentana();
                     if(iuModificarPersona.getEstado()){                        
-                        if(control.modificarDatosPersona(iuModificarPersona.getPersona())){
+                        if(controlRegistroPersonas.modificarDatosPersona(iuModificarPersona.getPersona())){
                             Asistente.mensajeVerificacion(ventanaPrincipal, "aviso", "En buena hora...! se modifico los datos de la persona correctamente...!", "advertencia");
                             actualizarTablaPersonas();                                    
                         }
@@ -178,7 +176,7 @@ public class IUPanelRegistroPersonalOcupado extends IUPanel{
         });
     }
     private void actualizarTablaPersonas(){
-        ArrayList<Persona> lista = registro.getListaPersonas();
+        ArrayList<Persona> lista = controlRegistroPersonas.getPersonasRegistradas();
         iuTablaPersonas.limpiarTabla();
         for (int i = 0; i < lista.size(); i++) {
             Persona persona = lista.get(i);

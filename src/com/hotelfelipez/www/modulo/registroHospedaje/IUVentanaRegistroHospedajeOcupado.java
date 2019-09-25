@@ -71,7 +71,7 @@ public class IUVentanaRegistroHospedajeOcupado extends IUVentanaT{
     private CardLayout administrador;
     
     private IUPanel cuartoPanel;
-    private IUPanelRegistroPersonalOcupado iuRegistroDatos;
+    private IUPanelDatosPersonales iuRegistroDatos;
     private IUPanelBD iuServicios;
     private IUPanelBD iuEstadoCuentas;
     private IUPanelBD iuEstadoReserva;
@@ -220,8 +220,7 @@ public class IUVentanaRegistroHospedajeOcupado extends IUVentanaT{
         panelHabitacion.add(botonCambiarPrecio);
     }
     private void construirCuartoPanel(Limitacion limite){
-        CRegistroPersona control = new CRegistroPersona();
-        iuRegistroDatos = new IUPanelRegistroPersonalOcupado(ventanaPrincipal, control, registro, this, limite);        
+        iuRegistroDatos = new IUPanelDatosPersonales(ventanaPrincipal, new CRegistroPersona(registro), this, limite);
         cuartoPanel.add(iuRegistroDatos);
         
         iuServicios = new IUPanelBD(limite);

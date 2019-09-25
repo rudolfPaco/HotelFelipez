@@ -10,7 +10,9 @@ import com.hotelfelipez.www.modulo.dao.DocumentoDao;
 import com.hotelfelipez.www.modulo.dao.PersonaDao;
 import com.hotelfelipez.www.modulo.modelo.Documento;
 import com.hotelfelipez.www.modulo.modelo.Persona;
+import com.hotelfelipez.www.modulo.modelo.RegistroHospedaje;
 import com.hotelfelipez.www.modulo.registroHospedaje.IUNuevaPersona;
+import java.util.ArrayList;
 
 /**
  *
@@ -18,8 +20,10 @@ import com.hotelfelipez.www.modulo.registroHospedaje.IUNuevaPersona;
  */
 public class CRegistroPersona {
     private IUNuevaPersona iuRegistroPersona;
+    private RegistroHospedaje registroHospedaje;
 
-    public CRegistroPersona() {
+    public CRegistroPersona(RegistroHospedaje registroHospedaje) {
+        this.registroHospedaje = registroHospedaje;
     }
     
     public void controlarRegistroPersona(IUNuevaPersona iuRegistroPersona){
@@ -54,37 +58,37 @@ public class CRegistroPersona {
         conexion.cerrarConexion();
         return verificador;
     }
-    public boolean modificarDatosPersona(Persona p){
+    public boolean modificarDatosPersona(Persona persona){
         boolean verificador = false;
         Conexion conexion = new Conexion();
                 
         PersonaDao personsaDao = new PersonaDao(conexion);
         DocumentoDao documentoDao = new DocumentoDao(conexion);
-        if(personsaDao.seModificoDatosPersona(p))
-            for (int i = 0; i < p.getDocumentos().size(); i++) {
-                Documento doc = p.getDocumentos().get(i);
-                if(doc != null){
-                    System.out.println("el doc: "+doc.toString());
-                    //if(documentoDao.seModificoDocumento(doc)){
-                        verificador = true;        
-                        
-                    //}
-                }else
-                    System.out.println(" el doc es null");
-                    
-            }            
+        if(personsaDao.seModificoDatosPersona(persona)){
+            for (int i = 0; i < persona.getDocumentos().size(); i++) {
+                Documento doc = persona.getDocumentos().get(i);
+                if(conexion.getDato("iddocumento", "select iddocumento from documento where iddocumento = "+doc.getId()) > 0)
+                    documentoDao.seModificoDocumento(doc);                
+                else
+                    documentoDao.seGuardoDocumento(doc);                    
+            }
+        }
+            
             
         conexion.cerrarConexion();
         
         return verificador;
     }
-    public boolean guardarPersonaRegistroHospedaje(int idpersona, int idregistroHospedaje){
+    public boolean guardarPersonaRegistroHospedaje(int idpersona){
         boolean verificador = false;
         Conexion conexion = new Conexion();
         PersonaDao personaDao = new PersonaDao(conexion);     
-        if(personaDao.seGuardoPesona_RegistroHospedaje(idpersona, idregistroHospedaje))
+        if(personaDao.seGuardoPesona_RegistroHospedaje(idpersona, registroHospedaje.getId()))
             verificador = true;
         conexion.cerrarConexion();
         return verificador;
     }
+    public ArrayList<Persona> getPersonasRegistradas(){
+        return registroHospedaje.getListaPersonas();
+    }    
 }
