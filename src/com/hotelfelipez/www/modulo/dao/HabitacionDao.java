@@ -25,11 +25,18 @@ public class HabitacionDao {
     public HabitacionDao(Conexion conexion) {
         this.conexion = conexion;
     }
+    public ArrayList<Habitacion> getListaHabitaciones(){
+        String sql = "select * from habitacion";
+        return getHabitaciones(sql);
+    }
     public ArrayList<Habitacion> getListaHabitaciones(String simple, String matrimonial, String dobleSimple, String tripleMatrimonial, String familiar){
+        String sql = "select * from habitacion where tipo = '"+simple+"' or tipo = '"+matrimonial+"' or tipo = '"+dobleSimple+"' or tipo = '"+tripleMatrimonial+"' or tipo = '"+familiar+"'";
+        return getHabitaciones(sql);
+    }
+    private ArrayList<Habitacion> getHabitaciones(String sql){
         
         ArrayList<Habitacion> habitaciones = new ArrayList<>();
-        try {
-            String sql = "select * from habitacion where tipo = '"+simple+"' or tipo = '"+matrimonial+"' or tipo = '"+dobleSimple+"' or tipo = '"+tripleMatrimonial+"' or tipo = '"+familiar+"'";
+        try {            
             PreparedStatement ps = conexion.getConexion().prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             

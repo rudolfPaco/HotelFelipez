@@ -162,26 +162,22 @@ public class IUVentanaVerPersona extends IUVentanaT{
         
         for (int i = 0; i < p.getDocumentos().size(); i++) {
             Documento doc = p.getDocumentos().get(i);
+            System.out.println("el url es: "+doc.getUrl());
             switch(doc.getTipo()){
-                case "carnetIdentidadC":
-                    ciCara.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(ciCara.getWidth(), ciCara.getHeight(), Image.SCALE_DEFAULT)));
-                    ciCara.setBuffered(doc.getBuffer());
+                case "carnetIdentidadC":                    
+                    ciCara.setIcon(new ImageIcon(new ImageIcon(doc.getUrl()).getImage().getScaledInstance(ciCara.getWidth(), ciCara.getHeight(), Image.SCALE_DEFAULT)));
                 break;
                 case "carnetIdentidadE":
-                    ciEspalda.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(ciEspalda.getWidth(), ciEspalda.getHeight(), Image.SCALE_DEFAULT)));
-                    ciEspalda.setBuffered(doc.getBuffer());
+                    ciEspalda.setIcon(new ImageIcon(new ImageIcon(doc.getUrl()).getImage().getScaledInstance(ciEspalda.getWidth(), ciEspalda.getHeight(), Image.SCALE_DEFAULT)));
                 break;
                 case "passporte":
-                    passporte.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(passporte.getWidth(), passporte.getHeight(), Image.SCALE_DEFAULT)));
-                    passporte.setBuffered(doc.getBuffer());
+                    passporte.setIcon(new ImageIcon(new ImageIcon(doc.getUrl()).getImage().getScaledInstance(passporte.getWidth(), passporte.getHeight(), Image.SCALE_DEFAULT)));
                 break;
                 case "certificado":
-                    certificado.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(certificado.getWidth(), certificado.getHeight(), Image.SCALE_DEFAULT)));
-                    certificado.setBuffered(doc.getBuffer());
+                    certificado.setIcon(new ImageIcon(new ImageIcon(doc.getUrl()).getImage().getScaledInstance(certificado.getWidth(), certificado.getHeight(), Image.SCALE_DEFAULT)));
                 break;
                 case "foto":
-                    etiquetaImagen.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(etiquetaImagen.getWidth(), etiquetaImagen.getHeight(), Image.SCALE_DEFAULT)));
-                    etiquetaImagen.setBuffered(doc.getBuffer());
+                    etiquetaImagen.setIcon(new ImageIcon(new ImageIcon(doc.getUrl()).getImage().getScaledInstance(etiquetaImagen.getWidth(), etiquetaImagen.getHeight(), Image.SCALE_DEFAULT)));
                 break;
             }
         }

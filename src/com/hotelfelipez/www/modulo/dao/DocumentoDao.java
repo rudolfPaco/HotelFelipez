@@ -7,12 +7,19 @@ package com.hotelfelipez.www.modulo.dao;
 
 import com.hotelfelipez.www.modulo.modelo.Asistente;
 import com.hotelfelipez.www.modulo.modelo.Documento;
+import static com.oracle.jrockit.jfr.ContentType.Bytes;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.sql.Blob;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -86,27 +93,56 @@ public class DocumentoDao {
             PreparedStatement ps = conexion.getConexion().prepareStatement(sql);
             ResultSet rs = ps.executeQuery();            
             
-            while(rs.next()){                
-                try {        
-                    byte[] data = rs.getBytes("imagen");//blob.getBytes(1, (int)blob.length());                
-                    ByteArrayInputStream arregloData = new ByteArrayInputStream(data);                
-                    Iterator readers = ImageIO.getImageReadersByFormatName("png");
-                    ImageReader reader = (ImageReader) readers.next();
-                    Object source = arregloData; // File or InputStream            
-                    ImageInputStream iis = ImageIO.createImageInputStream(source);
-                    reader.setInput(iis, true);
-                    ImageReadParam param = reader.getDefaultReadParam();
-                    BufferedImage bufferedImagen = reader.read(0, param);//ImageIO.read(arregloData);
-
-                    Documento d = new Documento(bufferedImagen);
-                    d.setId(rs.getInt("iddocumento"));
-                    d.setTipo(rs.getString("tipo"));
-                    d.setUrl(rs.getString("url"));                
-                    d.setIdPersona(rs.getInt("idpersona"));
-                    lista.add(d);
-                } catch (IOException ex) {
-                    System.out.println("Error...DocumentoDao.getListaDocumento(): "+ex.getMessage());
+            while(rs.next()){               
+                /*byte[] data = rs.getBytes("imagen");//blob.getBytes(1, (int)blob.length());
+                ByteArrayInputStream arregloData = new ByteArrayInputStream(data);
+                Iterator readers = ImageIO.getImageReadersByFormatName("png");
+                ImageReader reader = (ImageReader) readers.next();
+                Object source = arregloData; // File or InputStream
+                ImageInputStream iis = ImageIO.createImageInputStream(source);
+                reader.setInput(iis, true);
+                ImageReadParam param = reader.getDefaultReadParam();
+                BufferedImage bufferedImagen = reader.read(0, param);//ImageIO.read(arregloData);
+                
+                File archivo = new File(rs.getString("url"));
+                //System.out.println("obteniendo los huespedes... = "+archivo.getAbsolutePath());
+                Blob campo = rs.getBlob("imagen");
+                InputStream flujoDatos = campo.getBinaryStream();
+                try (BufferedInputStream entrada = new BufferedInputStream(flujoDatos); BufferedOutputStream salida = new BufferedOutputStream(new FileOutputStream(archivo))) {
+                byte[] bytes = new byte[8096];
+                int len = 0;
+                
+                while ( (len = entrada.read( bytes ))> 0 ){
+                salida.write( bytes, 0, len );
                 }
+                
+                salida.flush();
+                } catch (IOException ex) {
+                Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+                }*/
+                File archivo = new File(rs.getString("url"));
+                if(!archivo.exists()){
+                    System.out.println("el archivo EXISTE...!");
+                    Blob campo = rs.getBlob("imagen");
+                    InputStream flujoDatos = campo.getBinaryStream();
+                    try (BufferedInputStream entrada = new BufferedInputStream(flujoDatos); BufferedOutputStream salida = new BufferedOutputStream(new FileOutputStream(archivo))) {
+                    byte[] bytes = new byte[8096];
+                    int len = 0;
+
+                    while ( (len = entrada.read( bytes ))> 0 ){
+                    salida.write( bytes, 0, len );
+                    }
+
+                    salida.flush();
+                    } catch (IOException ex) {
+                    Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                Documento d = new Documento(rs.getInt("iddocumento"));
+                d.setTipo(rs.getString("tipo"));
+                d.setUrl(rs.getString("url"));
+                d.setIdPersona(rs.getInt("idpersona"));
+                lista.add(d);                
             }            
         } catch (SQLException e) {
             System.out.println("Error...DocumentoDao.getListaDocumento(): "+e.getMessage());

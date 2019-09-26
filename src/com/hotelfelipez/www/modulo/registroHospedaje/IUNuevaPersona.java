@@ -496,32 +496,31 @@ public class IUNuevaPersona extends IUVentanaT{
         Persona persona = new Persona(0);
         
         if(ciCara.getBuffered() != null && ciEspalda.getBuffered() != null){
-            Documento docCara = new Documento(ciCara.getBuffered());
+            Documento docCara = new Documento(0);
+            docCara.setBuffer(ciCara.getBuffered());
             docCara.setTipo("carnetIdentidadC");
                         
-            Documento docEspalda = new Documento(ciEspalda.getBuffered());
+            Documento docEspalda = new Documento(0);
+            docEspalda.setBuffer(ciEspalda.getBuffered());
             docEspalda.setTipo("carnetIdentidadE");
             
             persona.setDocumento(docCara);
             persona.setDocumento(docEspalda);            
-            persona.setEstadoDocumentos("SI");
         }            
-        else
-            if(passporte.getBuffered() != null){
-                Documento docPassporte = new Documento(passporte.getBuffered());
-                docPassporte.setTipo("passporte");
-                
-                persona.setDocumento(docPassporte);
-                persona.setEstadoDocumentos("SI");
-            }                
-            else
-                if(certificado.getBuffered() != null){
-                    Documento docCertificado = new Documento(certificado.getBuffered());
-                    docCertificado.setTipo("certificado");
-                    
-                    persona.setDocumento(docCertificado);
-                    persona.setEstadoDocumentos("SI");
-                }   
+        if(passporte.getBuffered() != null){
+            Documento docPassporte = new Documento(0);
+            docPassporte.setBuffer(passporte.getBuffered());
+            docPassporte.setTipo("passporte");
+
+            persona.setDocumento(docPassporte);
+        }
+        if(certificado.getBuffered() != null){
+            Documento docCertificado = new Documento(0);
+            docCertificado.setBuffer(certificado.getBuffered());
+            docCertificado.setTipo("certificado");
+
+            persona.setDocumento(docCertificado);
+        }        
         persona.setNombres(panelNombres.iuTexto.getText());
         persona.setApellidos(panelApellidos.iuTexto.getText());
         persona.setFechaNacimiento(panelFechaNacimiento.iuTexto.getText());

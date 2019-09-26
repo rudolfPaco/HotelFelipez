@@ -30,25 +30,31 @@ public class CRegistroPersona {
     public void controlarRegistroPersona(IUNuevaPersona iuRegistroPersona){
         this.iuRegistroPersona = iuRegistroPersona;
     }
-    public boolean guardarNuevaPersona(Persona p){
+    public boolean guardarNuevaPersona(Persona persona){
         boolean verificador = false;
         Conexion conexion = new Conexion();
         PersonaDao personaDao = new PersonaDao(conexion);     
-        if(personaDao.seGuardoPersona(p))
+        DocumentoDao documentoDao = new DocumentoDao(conexion);
+        if(personaDao.seGuardoPersona(persona)){
+            for (int i = 0; i < persona.getDocumentos().size(); i++) {
+                Documento doc = persona.getDocumentos().get(i);
+                if(conexion.getDato("iddocumento", "select iddocumento from documento where iddocumento = "+doc.getId()) > 0)
+                    documentoDao.seModificoDocumento(doc);                
+                else{
+                    if(doc.getTipo().equalsIgnoreCase("foto"))
+                        doc.setUrl(Asistente.getDirectorio().getDireccionFoto()+Asistente.getPostId("iddocumento", "select iddocumento from documento ORDER by iddocumento DESC LIMIT 1")+".png");
+                    else
+                        doc.setUrl(Asistente.getDirectorio().getDireccionDestino()+Asistente.getPostId("iddocumento", "select iddocumento from documento ORDER by iddocumento DESC LIMIT 1")+".png");
+                    doc.setIdPersona(Asistente.getId("idpersona", "select idpersona from persona ORDER by idpersona DESC LIMIT 1"));
+                    documentoDao.seGuardoDocumento(doc);
+                }
+            }
             verificador = true;
+        }
+            
         conexion.cerrarConexion();
         
         return verificador;        
-    }
-    public boolean guardarNuevoDocumento(Documento d){
-        boolean verificador = false;
-        Conexion conexion = new Conexion();
-        DocumentoDao documentoDao = new DocumentoDao(conexion);
-        if(documentoDao.seGuardoDocumento(d)){
-            verificador = true;
-        }
-        conexion.cerrarConexion();
-        return verificador;                
     }
     public boolean modificarDocumento(Documento d){
         boolean verificador = false;

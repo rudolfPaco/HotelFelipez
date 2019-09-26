@@ -8,10 +8,20 @@ package com.hotelfelipez.www.modulo.dao;
 import com.hotelfelipez.www.modulo.modelo.Documento;
 import com.hotelfelipez.www.modulo.modelo.Habitacion;
 import com.hotelfelipez.www.modulo.modelo.Persona;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReadParam;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 
 /**
  *
@@ -148,8 +158,8 @@ public class PersonaDao {
             System.out.println("Error PersonaDao.seModificoPersona(): "+e.getMessage());
         }
         return verificador;
-    }
-    private ArrayList<Documento> getListaDocumentos(int idpersona){
+    }    
+    private ArrayList<Documento> getListaDocumentos(int idpersona){        
         return new DocumentoDao(conexion).getListaDocumento(idpersona);
     }
     

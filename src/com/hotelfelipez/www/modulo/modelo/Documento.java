@@ -25,16 +25,14 @@ public class Documento {
     private int idPersona;
     
     private BufferedImage buffer;
-    private Image imagen;
     
     /**
      * es una clase que guarda algunos atributos de un archivo tipo, referentemente una imagen.     
-     * @param buffer
+     * @param id
      */
-    public Documento(BufferedImage buffer){                
-        this.id = 0;
-        this.buffer = buffer;
-        this.imagen = null;
+    public Documento(int id){
+        this.id = id;
+        this.buffer = null;
     }
     public int getId() {
         return id;
@@ -58,7 +56,7 @@ public class Documento {
             try {
                 ImageIO.write(buffer, "png", file);
             } catch (IOException ex) {
-                    System.out.println("Error... Documento.setUrl(): "+ex.getMessage());;
+                System.out.println("Error... Documento.setUrl(): "+ex.getMessage());
             }
     }
     public String getTipo() {
@@ -73,12 +71,6 @@ public class Documento {
     public void setBuffer(BufferedImage buffer) {
         this.buffer = buffer;
     }
-    public Image getImagen() {
-        return imagen;
-    }
-    public void setImagen(Image imagen) {
-        this.imagen = imagen;
-    }
     public int getIdPersona() {
         return idPersona;
     }
@@ -87,6 +79,6 @@ public class Documento {
     }
     @Override
     public String toString() {
-        return "Documento{" + "id=" + id + ", nombre=" + nombre + ", url=" + url + ", tipo=" + tipo + ", idPersona=" + idPersona + ", buffer=" + buffer + ", imagen=" + imagen + '}';
+        return "Documento{" + "id=" + id + ", nombre=" + nombre + ", url=" + url + ", tipo=" + tipo + ", idPersona=" + idPersona + ", buffer=" + buffer + '}';
     }
 }
