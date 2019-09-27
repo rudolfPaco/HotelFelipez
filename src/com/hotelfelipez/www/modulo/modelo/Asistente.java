@@ -127,10 +127,14 @@ public class Asistente {
     public static String[] getColumnas(String columna, String sql){        
         Conexion conexion = new Conexion();
         ArrayList<String> columnas = conexion.getColumnaTabla(columna, sql);
-        String[] datos = new String[columnas.size()];
+        String[] datos = new String[columnas.size()+1];        
+        int indice = 0;
+        datos[indice] = "";
         for (int i = 0; i < columnas.size(); i++) {
+            indice++;
             String dato = columnas.get(i);
-            datos[i] = dato;
+            datos[indice] = dato;
+            
         }
         conexion.cerrarConexion();
         return datos;

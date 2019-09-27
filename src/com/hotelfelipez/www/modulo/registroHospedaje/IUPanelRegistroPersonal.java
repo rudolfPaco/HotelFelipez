@@ -74,8 +74,8 @@ public class IUPanelRegistroPersonal extends IUPanel{
                 iuRegistroHospedaje.setOpacity(0.3f);
                 
                 if(tablaPersonas.estaSeleccionado()){
-                    Persona p = tablaPersonas.getPersona();
-                    IUModificarPersona iuModificarDatos = new IUModificarPersona(ventanaPrincipal, p, "registro de nueva persona al hotel", new Limitacion(Asistente.ANCHO - Asistente.ANCHO/3, Asistente.ALTO));
+                    Persona persona = tablaPersonas.getPersona();
+                    IUModificarPersona iuModificarDatos = new IUModificarPersona(ventanaPrincipal, persona, "registro de nueva persona al hotel", new Limitacion(Asistente.ANCHO - Asistente.ANCHO/3, Asistente.ALTO));
                     iuModificarDatos.mostrarVentana();
                     if(iuModificarDatos.getEstado())
                         tablaPersonas.reemplazarPersona(iuModificarDatos.getPersona());

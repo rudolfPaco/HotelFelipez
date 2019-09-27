@@ -196,6 +196,20 @@ public class IURegistroHospedaje extends IUVentanaT{
         panelAdministrador.add(panelReservas);
     }
     private void escucharEventos(){
+        botonRegistroPersonas.addEventoRaton(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                administrador.first(panelAdministrador);
+            }
+        });
+        botonReservado.addEventoRaton(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                administrador.last(panelAdministrador);
+            }
+        });
         botonGuardarRegistro.addEventoRaton(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {

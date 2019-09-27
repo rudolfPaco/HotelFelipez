@@ -93,7 +93,7 @@ public class IUTablaPersonas extends ModeloTabla<Persona>{
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (columnIndex) {
             case 0:
-                return rowIndex+1;
+                return lista.get(rowIndex).getId();
             case 1:
                 return lista.get(rowIndex).getNombres()+" "+lista.get(rowIndex).getApellidos();                
             case 2:

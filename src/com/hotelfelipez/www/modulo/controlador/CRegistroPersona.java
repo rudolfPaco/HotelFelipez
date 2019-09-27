@@ -41,10 +41,11 @@ public class CRegistroPersona {
                 if(conexion.getDato("iddocumento", "select iddocumento from documento where iddocumento = "+doc.getId()) > 0)
                     documentoDao.seModificoDocumento(doc);                
                 else{
+                    doc.setId(Asistente.getPostId("iddocumento", "select iddocumento from documento ORDER by iddocumento DESC LIMIT 1"));
                     if(doc.getTipo().equalsIgnoreCase("foto"))
-                        doc.setUrl(Asistente.getDirectorio().getDireccionFoto()+Asistente.getPostId("iddocumento", "select iddocumento from documento ORDER by iddocumento DESC LIMIT 1")+".png");
+                        doc.setUrl(Asistente.getDirectorio().getDireccionFoto()+doc.getId()+".png");
                     else
-                        doc.setUrl(Asistente.getDirectorio().getDireccionDestino()+Asistente.getPostId("iddocumento", "select iddocumento from documento ORDER by iddocumento DESC LIMIT 1")+".png");
+                        doc.setUrl(Asistente.getDirectorio().getDireccionDestino()+doc.getId()+".png");
                     doc.setIdPersona(Asistente.getId("idpersona", "select idpersona from persona ORDER by idpersona DESC LIMIT 1"));
                     documentoDao.seGuardoDocumento(doc);
                 }
@@ -72,8 +73,10 @@ public class CRegistroPersona {
         PersonaDao personsaDao = new PersonaDao(conexion);
         DocumentoDao documentoDao = new DocumentoDao(conexion);
         if(personsaDao.seModificoDatosPersona(persona)){
-            for (int i = 0; i < persona.getDocumentos().size(); i++) {
+            System.out.println("ENTRO A LOS DOCUMENTOS....");
+            for (int i = 0; i < persona.getDocumentos().size(); i++) {                
                 Documento doc = persona.getDocumentos().get(i);
+                System.out.println("el doc es: "+doc.toString());
                 if(conexion.getDato("iddocumento", "select iddocumento from documento where iddocumento = "+doc.getId()) > 0)
                     documentoDao.seModificoDocumento(doc);                
                 else{
@@ -81,10 +84,12 @@ public class CRegistroPersona {
                         doc.setUrl(Asistente.getDirectorio().getDireccionFoto()+Asistente.getPostId("iddocumento", "select iddocumento from documento ORDER by iddocumento DESC LIMIT 1")+".png");
                     else
                         doc.setUrl(Asistente.getDirectorio().getDireccionDestino()+Asistente.getPostId("iddocumento", "select iddocumento from documento ORDER by iddocumento DESC LIMIT 1")+".png");
-                    doc.setIdPersona(persona.getId());
+                    doc.setIdPersona(persona.getId());                    
                     documentoDao.seGuardoDocumento(doc);
-                }
+                }                
             }
+            System.out.println("SALIO DE LOS DOCUMENTOS....");
+            verificador = true;
         }
         
         conexion.cerrarConexion();
@@ -101,6 +106,10 @@ public class CRegistroPersona {
         return verificador;
     }
     public ArrayList<Persona> getPersonasRegistradas(){
-        return registroHospedaje.getListaPersonas();
+        Conexion conexion = new Conexion();
+        PersonaDao personaDao = new PersonaDao(conexion);     
+        ArrayList<Persona> listaPersonas = personaDao.getListaPersonas(registroHospedaje.getId());
+        conexion.cerrarConexion();
+        return listaPersonas;
     }    
 }

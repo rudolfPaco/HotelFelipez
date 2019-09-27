@@ -94,7 +94,7 @@ public class IUModificarPersona extends IUVentanaT{
     private IUPanelTCB panelTipoPersona;
     private IUPanelTA panelObservacion;
     
-    private IUBoton botonGuardarRegistro;
+    private IUBoton botonModificarDatosPersona;
     
     private Digitalizacion digitalizacion; 
     private Persona persona;
@@ -125,8 +125,8 @@ public class IUModificarPersona extends IUVentanaT{
         panelFondo.add(segundoPanel);
         construirSegundoPanel(segundoPanel.getLimitacion());
         
-        botonGuardarRegistro = new IUBoton("guardar nuevo registro de persona", new Limitacion(limite.getPorcentajeAncho(55), limite.getPorcentajeAlto(95), limite.getPorcentajeAncho(28), limite.getPorcentajeAlto(4)));
-        panelFondo.add(botonGuardarRegistro);
+        botonModificarDatosPersona = new IUBoton("modificar los datos de la persona", new Limitacion(limite.getPorcentajeAncho(55), limite.getPorcentajeAlto(95), limite.getPorcentajeAncho(28), limite.getPorcentajeAlto(4)));
+        panelFondo.add(botonModificarDatosPersona);
     }    
     private void construirPanelAdministrador(Limitacion limite){
         panelCI = new IUPanel(new Limitacion(limite.getPorcentajeAncho(15), limite.getPorcentajeAlto(5), limite.getPorcentajeAncho(70), limite.getPorcentajeAlto(60)));
@@ -185,30 +185,30 @@ public class IUModificarPersona extends IUVentanaT{
         panelObservacion.iuAreaTexto.setText(persona.getObservacion());
         
         for (int i = 0; i < persona.getDocumentos().size(); i++) {
-            Documento doc = persona.getDocumentos().get(i);
+            Documento doc = persona.getDocumentos().get(i);            
             switch(doc.getTipo()){
                 case "carnetIdentidadC":
-                    ciCara.setIcon(new ImageIcon(new ImageIcon(doc.getUrl()).getImage().getScaledInstance(ciCara.getWidth(), ciCara.getHeight(), Image.SCALE_DEFAULT)));
+                    ciCara.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(ciCara.getWidth(), ciCara.getHeight(), Image.SCALE_DEFAULT)));
                     ciCara.setBuffered(doc.getBuffer());
                     ciCara.setObjeto(doc);
                 break;
                 case "carnetIdentidadE":
-                    ciEspalda.setIcon(new ImageIcon(new ImageIcon(doc.getUrl()).getImage().getScaledInstance(ciEspalda.getWidth(), ciEspalda.getHeight(), Image.SCALE_DEFAULT)));
+                    ciEspalda.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(ciEspalda.getWidth(), ciEspalda.getHeight(), Image.SCALE_DEFAULT)));
                     ciEspalda.setBuffered(doc.getBuffer());
                     ciEspalda.setObjeto(doc);
                 break;
                 case "passporte":
-                    passporte.setIcon(new ImageIcon(new ImageIcon(doc.getUrl()).getImage().getScaledInstance(passporte.getWidth(), passporte.getHeight(), Image.SCALE_DEFAULT)));
+                    passporte.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(passporte.getWidth(), passporte.getHeight(), Image.SCALE_DEFAULT)));
                     passporte.setBuffered(doc.getBuffer());
                     passporte.setObjeto(doc);
                 break;
                 case "certificado":
-                    certificado.setIcon(new ImageIcon(new ImageIcon(doc.getUrl()).getImage().getScaledInstance(certificado.getWidth(), certificado.getHeight(), Image.SCALE_DEFAULT)));
+                    certificado.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(certificado.getWidth(), certificado.getHeight(), Image.SCALE_DEFAULT)));
                     certificado.setBuffered(doc.getBuffer());
                     certificado.setObjeto(doc);
                 break;
                 case "foto":
-                    etiquetaImagen.setIcon(new ImageIcon(new ImageIcon(doc.getUrl()).getImage().getScaledInstance(etiquetaImagen.getWidth(), etiquetaImagen.getHeight(), Image.SCALE_DEFAULT)));
+                    etiquetaImagen.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(etiquetaImagen.getWidth(), etiquetaImagen.getHeight(), Image.SCALE_DEFAULT)));
                     etiquetaImagen.setBuffered(doc.getBuffer());
                     etiquetaImagen.setObjeto(doc);
                 break;
@@ -356,13 +356,8 @@ public class IUModificarPersona extends IUVentanaT{
                             examinarImagen(ciCara);
                         break;
                         case "eliminar imagen":                            
-                            if(Asistente.mensajeVerificacion(ventanaPrincipal, "aviso", "esta seguro de querer eliminiar el documento...?", "advertencia")){
-                                if(ciCara.getObjeto() != null){
-                                    persona.eliminarDocumento((Documento) ciCara.getObjeto());
-                                }
-                                ciCara.setIcon(null);
-                                ciCara.setBuffered(null);
-                            }
+                            ciCara.setIcon(null);
+                            ciCara.setBuffered(null);
                         break;
                     }
                 }
@@ -496,7 +491,7 @@ public class IUModificarPersona extends IUVentanaT{
                 }
             }
         });
-        botonGuardarRegistro.addEventoRaton(new MouseAdapter() {
+        botonModificarDatosPersona.addEventoRaton(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 if(estaValidado()){
@@ -608,8 +603,24 @@ public class IUModificarPersona extends IUVentanaT{
             }
             if(!encontrado)
                 persona.setDocumento(doc);
-                
-        }        
+        }
+        for (int i = persona.getDocumentos().size()-1; i >= 0; i--) {
+            Documento docPersona = persona.getDocumentos().get(i);
+            int contador = 0;
+            boolean encontrado = false;
+            
+            while(contador < listaDocumentos.size() && !encontrado){
+                Documento docLista = listaDocumentos.get(contador);
+                if(docPersona.getTipo().equalsIgnoreCase(docLista.getTipo())){
+                    docPersona.setBuffer(docLista.getBuffer());
+                    encontrado = true;
+                }
+                contador++;
+            }
+            if(!encontrado)
+                persona.getDocumentos().remove(i);
+        }
+        
         persona.setNombres(panelNombres.iuTexto.getText());
         persona.setApellidos(panelApellidos.iuTexto.getText());
         persona.setFechaNacimiento(panelFechaNacimiento.iuTexto.getText());
@@ -629,6 +640,7 @@ public class IUModificarPersona extends IUVentanaT{
         
         persona.setTipoPersona(panelTipoPersona.getTexto());
         persona.setObservacion(panelObservacion.iuAreaTexto.getText());
+        
         return persona;
     }
     public boolean getEstado(){
