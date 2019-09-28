@@ -125,6 +125,7 @@ public class IUPanelDatosPersonales extends IUPanel{
                 if(iuTablaPersonas.estaSeleccionado()){
                     
                     iuRegistroOcupado.setOpacity(0.3f);
+                    
                     Persona persona = iuTablaPersonas.getPersona();
                     IUVentanaVerPersona iuVerPersona = new IUVentanaVerPersona(ventanaPrincipal, "Datos de la Persona", new Limitacion(Asistente.ANCHO - Asistente.ANCHO/3, Asistente.ALTO));
                     iuVerPersona.setPersona(persona);
@@ -141,13 +142,13 @@ public class IUPanelDatosPersonales extends IUPanel{
             public void mousePressed(MouseEvent e) {
                 iuRegistroOcupado.setOpacity(0.3f);
 
-                IUNuevaPersona iuRegistroPersona = new IUNuevaPersona(ventanaPrincipal, "registro de nueva persona al hotel", new Limitacion(Asistente.ANCHO - Asistente.ANCHO/3, Asistente.ALTO));
-                iuRegistroPersona.mostrarVentana();
-                if(iuRegistroPersona.getEstado()){                        
-                    Persona persona = iuRegistroPersona.getPersona();
+                IUNuevaPersona iuNuevaPersona = new IUNuevaPersona(ventanaPrincipal, "registro de nueva persona al hotel", new Limitacion(Asistente.ANCHO - Asistente.ANCHO/3, Asistente.ALTO));
+                iuNuevaPersona.mostrarVentana();
+                if(iuNuevaPersona.getEstado()){                        
+                    Persona persona = iuNuevaPersona.getPersona();
                     if(controlRegistroPersonas.guardarNuevaPersona(persona))
                         if(controlRegistroPersonas.guardarPersonaRegistroHospedaje(Asistente.getId("idpersona", "select idpersona from persona ORDER by idpersona DESC LIMIT 1")))
-                            iuTablaPersonas.setFila(persona);
+                            actualizarTablaPersonas();
                 }                        
 
                 iuRegistroOcupado.setOpacity(1f);

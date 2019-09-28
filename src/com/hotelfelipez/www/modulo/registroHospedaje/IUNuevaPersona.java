@@ -499,7 +499,7 @@ public class IUNuevaPersona extends IUVentanaT{
             Documento docCara = new Documento(0);
             docCara.setBuffer(ciCara.getBuffered());
             docCara.setTipo("carnetIdentidadC");
-                        
+            
             Documento docEspalda = new Documento(0);
             docEspalda.setBuffer(ciEspalda.getBuffered());
             docEspalda.setTipo("carnetIdentidadE");
