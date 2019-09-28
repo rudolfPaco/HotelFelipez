@@ -73,20 +73,34 @@ public class CRegistroPersona {
         PersonaDao personsaDao = new PersonaDao(conexion);
         DocumentoDao documentoDao = new DocumentoDao(conexion);
         if(personsaDao.seModificoDatosPersona(persona)){
-            System.out.println("ENTRO A LOS DOCUMENTOS....");
-            for (int i = 0; i < persona.getDocumentos().size(); i++) {                
-                Documento doc = persona.getDocumentos().get(i);
-                System.out.println("el doc es: "+doc.toString());
-                if(conexion.getDato("iddocumento", "select iddocumento from documento where iddocumento = "+doc.getId()) > 0)
-                    documentoDao.seModificoDocumento(doc);                
+            System.out.println("ENTRO A LOS DOCUMENTOS....");            
+            for (int i = 0; i < persona.getDocumentos().size(); i++) {
+                Documento docPersona = persona.getDocumentos().get(i);
+                System.out.println("el doc es: "+docPersona.toString());
+                if(conexion.getDato("iddocumento", "select iddocumento from documento where iddocumento = "+docPersona.getId()) > 0)
+                    documentoDao.seModificoDocumento(docPersona);                
                 else{
-                    if(doc.getTipo().equalsIgnoreCase("foto"))
-                        doc.setUrl(Asistente.getDirectorio().getDireccionFoto()+Asistente.getPostId("iddocumento", "select iddocumento from documento ORDER by iddocumento DESC LIMIT 1")+".png");
+                    if(docPersona.getTipo().equalsIgnoreCase("foto"))
+                        docPersona.setUrl(Asistente.getDirectorio().getDireccionFoto()+Asistente.getPostId("iddocumento", "select iddocumento from documento ORDER by iddocumento DESC LIMIT 1")+".png");
                     else
-                        doc.setUrl(Asistente.getDirectorio().getDireccionDestino()+Asistente.getPostId("iddocumento", "select iddocumento from documento ORDER by iddocumento DESC LIMIT 1")+".png");
-                    doc.setIdPersona(persona.getId());                    
-                    documentoDao.seGuardoDocumento(doc);
+                        docPersona.setUrl(Asistente.getDirectorio().getDireccionDestino()+Asistente.getPostId("iddocumento", "select iddocumento from documento ORDER by iddocumento DESC LIMIT 1")+".png");
+                    docPersona.setIdPersona(persona.getId());                    
+                    documentoDao.seGuardoDocumento(docPersona);
                 }                
+            }
+            ArrayList<Documento> lista = documentoDao.getListaDocumento(persona.getId());
+            for (int i = 0; i < lista.size(); i++) {
+                Documento docLista = lista.get(i);
+                int indice = 0;
+                boolean estado = false;
+                while(indice < persona.getDocumentos().size() && !estado){
+                    Documento docPersona = persona.getDocumentos().get(indice);
+                    if(docPersona.getTipo().equalsIgnoreCase(docLista.getTipo()))
+                        estado = true;
+                    indice++;
+                }
+                if(!estado)
+                    documentoDao.seEliminoDocumento(docLista.getId());
             }
             System.out.println("SALIO DE LOS DOCUMENTOS....");
             verificador = true;

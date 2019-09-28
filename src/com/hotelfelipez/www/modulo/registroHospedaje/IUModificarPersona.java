@@ -188,27 +188,42 @@ public class IUModificarPersona extends IUVentanaT{
             Documento doc = persona.getDocumentos().get(i);            
             switch(doc.getTipo()){
                 case "carnetIdentidadC":
-                    ciCara.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(ciCara.getWidth(), ciCara.getHeight(), Image.SCALE_DEFAULT)));
+                    if(doc.getBuffer() != null)
+                        ciCara.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(ciCara.getWidth(), ciCara.getHeight(), Image.SCALE_DEFAULT)));
+                    else
+                        ciCara.setUrlImagen(doc.getUrl());//ciCara.setIcon(new ImageIcon(new ImageIcon(doc.getUrl()).getImage().getScaledInstance(ciCara.getWidth(), ciCara.getHeight(), Image.SCALE_DEFAULT)));
                     ciCara.setBuffered(doc.getBuffer());
                     ciCara.setObjeto(doc);
                 break;
                 case "carnetIdentidadE":
-                    ciEspalda.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(ciEspalda.getWidth(), ciEspalda.getHeight(), Image.SCALE_DEFAULT)));
+                    if(doc.getBuffer() != null)
+                        ciEspalda.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(ciEspalda.getWidth(), ciEspalda.getHeight(), Image.SCALE_DEFAULT)));
+                    else
+                        ciEspalda.setUrlImagen(doc.getUrl());//ciEspalda.setIcon(new ImageIcon(new ImageIcon(doc.getUrl()).getImage().getScaledInstance(ciEspalda.getWidth(), ciEspalda.getHeight(), Image.SCALE_DEFAULT)));
                     ciEspalda.setBuffered(doc.getBuffer());
                     ciEspalda.setObjeto(doc);
                 break;
                 case "passporte":
-                    passporte.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(passporte.getWidth(), passporte.getHeight(), Image.SCALE_DEFAULT)));
+                    if(doc.getBuffer() != null)
+                        passporte.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(passporte.getWidth(), passporte.getHeight(), Image.SCALE_DEFAULT)));
+                    else
+                        passporte.setUrlImagen(doc.getUrl());//passporte.setIcon(new ImageIcon(new ImageIcon(doc.getUrl()).getImage().getScaledInstance(passporte.getWidth(), passporte.getHeight(), Image.SCALE_DEFAULT)));
                     passporte.setBuffered(doc.getBuffer());
                     passporte.setObjeto(doc);
                 break;
                 case "certificado":
-                    certificado.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(certificado.getWidth(), certificado.getHeight(), Image.SCALE_DEFAULT)));
+                    if(doc.getBuffer() != null)
+                        certificado.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(certificado.getWidth(), certificado.getHeight(), Image.SCALE_DEFAULT)));
+                    else
+                        certificado.setUrlImagen(doc.getUrl());//certificado.setIcon(new ImageIcon(new ImageIcon(doc.getUrl()).getImage().getScaledInstance(certificado.getWidth(), certificado.getHeight(), Image.SCALE_DEFAULT)));
                     certificado.setBuffered(doc.getBuffer());
                     certificado.setObjeto(doc);
                 break;
                 case "foto":
-                    etiquetaImagen.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(etiquetaImagen.getWidth(), etiquetaImagen.getHeight(), Image.SCALE_DEFAULT)));
+                    if(doc.getBuffer() != null)
+                        etiquetaImagen.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(etiquetaImagen.getWidth(), etiquetaImagen.getHeight(), Image.SCALE_DEFAULT)));
+                    else
+                        etiquetaImagen.setUrlImagen(doc.getUrl());//etiquetaImagen.setIcon(new ImageIcon(new ImageIcon(doc.getUrl()).getImage().getScaledInstance(etiquetaImagen.getWidth(), etiquetaImagen.getHeight(), Image.SCALE_DEFAULT)));
                     etiquetaImagen.setBuffered(doc.getBuffer());
                     etiquetaImagen.setObjeto(doc);
                 break;
@@ -558,7 +573,7 @@ public class IUModificarPersona extends IUVentanaT{
     public Persona getPersona(){  
         ArrayList<Documento> listaDocumentos = new ArrayList<>();
         
-        if(ciCara.getBuffered() != null && ciEspalda.getBuffered() != null){
+        if(ciCara.getBuffered() != null && ciEspalda.getBuffered() != null || (!ciCara.getUrlImagen().isEmpty() && !ciEspalda.getUrlImagen().isEmpty())){
             Documento docCara = new Documento(0);
             docCara.setBuffer(ciCara.getBuffered());
             docCara.setTipo("carnetIdentidadC");
@@ -570,19 +585,19 @@ public class IUModificarPersona extends IUVentanaT{
             listaDocumentos.add(docCara);
             listaDocumentos.add(docEspalda);
         }   
-        if(passporte.getBuffered() != null){
+        if(passporte.getBuffered() != null || !passporte.getUrlImagen().isEmpty()){
             Documento docPassporte = new Documento(0);
             docPassporte.setBuffer(passporte.getBuffered());
             docPassporte.setTipo("passporte");
             listaDocumentos.add(docPassporte);
         }
-        if(certificado.getBuffered() != null){
+        if(certificado.getBuffered() != null || !certificado.getUrlImagen().isEmpty()){
             Documento docCertificado = new Documento(0);
             docCertificado.setBuffer(certificado.getBuffered());
             docCertificado.setTipo("certificado");
             listaDocumentos.add(docCertificado);
         }
-        if(etiquetaImagen.getBuffered() != null){
+        if(etiquetaImagen.getBuffered() != null || !etiquetaImagen.getUrlImagen().isEmpty()){
             Documento docFoto = new Documento(0);
             docFoto.setBuffer(etiquetaImagen.getBuffered());
             docFoto.setTipo("foto");

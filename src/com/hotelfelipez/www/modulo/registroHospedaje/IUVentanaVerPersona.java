@@ -162,7 +162,6 @@ public class IUVentanaVerPersona extends IUVentanaT{
         
         for (int i = 0; i < p.getDocumentos().size(); i++) {
             Documento doc = p.getDocumentos().get(i);
-            System.out.println("el url es: "+doc.getUrl());
             switch(doc.getTipo()){
                 case "carnetIdentidadC":                    
                     ciCara.setIcon(new ImageIcon(new ImageIcon(doc.getUrl()).getImage().getScaledInstance(ciCara.getWidth(), ciCara.getHeight(), Image.SCALE_DEFAULT)));
