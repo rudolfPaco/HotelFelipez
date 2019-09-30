@@ -149,7 +149,7 @@ public class IUPanelDatosPersonales extends IUPanel{
                     if(controlRegistroPersonas.guardarNuevaPersona(persona))
                         if(controlRegistroPersonas.guardarPersonaRegistroHospedaje(Asistente.getId("idpersona", "select idpersona from persona ORDER by idpersona DESC LIMIT 1")))
                             actualizarTablaPersonas();
-                }                        
+                }
 
                 iuRegistroOcupado.setOpacity(1f);
             }

@@ -151,7 +151,16 @@ public class DocumentoDao {
     }
     public boolean seEliminoDocumento(int idDocumento){
         boolean verificador = false;
-        
+        String sql = "delete from documento where iddocumento = "+idDocumento;
+        try {
+            PreparedStatement ps = conexion.getConexion().prepareStatement(sql);
+            int estado = ps.executeUpdate();
+            if(estado > 0)
+                verificador = true;
+            
+        } catch (SQLException e) {
+            System.out.println("Error DocumentoDao.seEliminoDocumento(): "+e.getMessage());
+        }
         return verificador;
     }
 }
