@@ -44,38 +44,40 @@ public class CRegistroHospedaje {
             
             for (int i = 0; i < registro.getListaPersonas().size(); i++) {                
                 Persona persona = registro.getListaPersonas().get(i);
-                
-                if(personaDao.seGuardoPersona(persona)){
-                    int idPersona = conexion.getDato("idpersona", "select idpersona from persona ORDER by idpersona DESC LIMIT 1");
-                    int idDocumento = Asistente.getPostId("iddocumento", "select iddocumento from documento ORDER by iddocumento DESC LIMIT 1");
-                    
-                    for (int j = 0; j < persona.getDocumentos().size(); j++) {
-                        Documento documento = persona.getDocumentos().get(j);
-                        documento.setIdPersona(idPersona);
-                        switch(documento.getTipo()){
-                            case "carnetIdentidadC":
-                                documento.setUrl(Asistente.getDirectorio().getDireccionDestino()+idDocumento+".png");                                
-                            break;
-                            case "carnetIdentidadE":
-                                documento.setUrl(Asistente.getDirectorio().getDireccionDestino()+idDocumento+".png");
-                            break;
-                            case "passporte":
-                                documento.setUrl(Asistente.getDirectorio().getDireccionDestino()+idDocumento+".png");
-                            break;
-                            case "certificado":
-                                documento.setUrl(Asistente.getDirectorio().getDireccionDestino()+idDocumento+".png");
-                            break;
-                            case "foto":
-                                documento.setUrl(Asistente.getDirectorio().getDireccionFoto()+idDocumento+".png");
-                            break;
+                if(personaDao.existePersona(persona.getId()))
+                    personaDao.seGuardoPesona_RegistroHospedaje(persona.getId(), idRegistro);
+                else
+                    if(personaDao.seGuardoPersona(persona)){
+                        int idPersona = conexion.getDato("idpersona", "select idpersona from persona ORDER by idpersona DESC LIMIT 1");
+                        int idDocumento = Asistente.getPostId("iddocumento", "select iddocumento from documento ORDER by iddocumento DESC LIMIT 1");
+
+                        for (int j = 0; j < persona.getDocumentos().size(); j++) {
+                            Documento documento = persona.getDocumentos().get(j);
+                            documento.setIdPersona(idPersona);
+                            switch(documento.getTipo()){
+                                case "carnetIdentidadC":
+                                    documento.setUrl(Asistente.getDirectorio().getDireccionDestino()+idDocumento+".png");                                
+                                break;
+                                case "carnetIdentidadE":
+                                    documento.setUrl(Asistente.getDirectorio().getDireccionDestino()+idDocumento+".png");
+                                break;
+                                case "passporte":
+                                    documento.setUrl(Asistente.getDirectorio().getDireccionDestino()+idDocumento+".png");
+                                break;
+                                case "certificado":
+                                    documento.setUrl(Asistente.getDirectorio().getDireccionDestino()+idDocumento+".png");
+                                break;
+                                case "foto":
+                                    documento.setUrl(Asistente.getDirectorio().getDireccionFoto()+idDocumento+".png");
+                                break;
+                            }
+                            System.out.println("documento es: "+documento.toString());
+                            if(documentoDao.seGuardoDocumento(documento)){
+                                idDocumento++;
+                            }                        
                         }
-                        System.out.println("documento es: "+documento.toString());
-                        if(documentoDao.seGuardoDocumento(documento)){
-                            idDocumento++;
-                        }                        
+                        personaDao.seGuardoPesona_RegistroHospedaje(idPersona, idRegistro);
                     }
-                    personaDao.seGuardoPesona_RegistroHospedaje(idPersona, idRegistro);
-                }
             }
             if(registroHospedajeDao.seGuardoHabitacion_RegistroHospedaje("activo", habitacion.getId(), idRegistro)){
                 habitacion.setEstado("OCUPADO");

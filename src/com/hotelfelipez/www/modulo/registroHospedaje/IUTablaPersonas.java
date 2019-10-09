@@ -8,12 +8,15 @@ package com.hotelfelipez.www.modulo.registroHospedaje;
 import com.aplicacionjava.www.recursos.Limitacion;
 import com.aplicacionjava.www.tablas.IUTabla;
 import com.aplicacionjava.www.tablas.ModeloTabla;
+import com.hotelfelipez.www.modulo.modelo.Documento;
 import com.hotelfelipez.www.modulo.modelo.Persona;
 import com.hotelfelipez.www.modulo.modelo.Producto;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 
@@ -23,14 +26,16 @@ import javax.swing.SwingConstants;
  */
 public class IUTablaPersonas extends ModeloTabla<Persona>{
     public IUTabla tabla;   
+    private IUPanelDatosPersonales iuDatosPersonales;
     private final String[] nombreCabecera = {"N°","nombre completo","edad","carnet identidad","caducidad", "doc.","datos"};
     private final ArrayList<Persona> lista = new ArrayList<>();
     private final Class[] columnas = {Integer.class, String.class, Integer.class, String.class, String.class, String.class, String.class};
-    private final int[] porcentajes = {5, 44, 9, 20, 10, 7, 15};
+    private final int[] porcentajes = {7, 42, 9, 20, 10, 7, 15};
     private final Limitacion limitacion;
     private Persona persona;
     
-    public IUTablaPersonas(Limitacion limitacion) {
+    public IUTablaPersonas(IUPanelDatosPersonales iuDatosPersonales, Limitacion limitacion) {
+        this.iuDatosPersonales = iuDatosPersonales;
         this.limitacion = limitacion;        
         this.persona = null;
         
@@ -42,7 +47,7 @@ public class IUTablaPersonas extends ModeloTabla<Persona>{
         
         tabla = new IUTabla(this, limitacion);
         tabla.agregarAnchoColumnas(porcentajes);
-        tabla.setPosicionTextoHorizontal(0, SwingConstants.LEFT);
+        tabla.setPosicionTextoHorizontal(0, SwingConstants.CENTER);
         tabla.setPosicionTextoHorizontal(1, SwingConstants.LEFT);
         tabla.setPosicionTextoHorizontal(2, SwingConstants.CENTER);
         tabla.setPosicionTextoHorizontal(3, SwingConstants.CENTER);
@@ -66,6 +71,32 @@ public class IUTablaPersonas extends ModeloTabla<Persona>{
                                 
                 if (row > -1) {
                     persona = getFila(tabla.getSelectedRow());                                        
+                    if(iuDatosPersonales != null){
+                        for (int i = 0; i < persona.getDocumentos().size(); i++) {
+                            Documento doc = persona.getDocumentos().get(i);
+                            if(doc.getTipo().equalsIgnoreCase("foto")){
+                                if(doc.getBuffer() != null){
+                                    iuDatosPersonales.iuFoto.setBuffered(doc.getBuffer());
+                                    iuDatosPersonales.iuFoto.setIcon(new ImageIcon(new ImageIcon(doc.getBuffer()).getImage().getScaledInstance(iuDatosPersonales.iuFoto.getWidth(), iuDatosPersonales.iuFoto.getHeight(), Image.SCALE_DEFAULT)));
+                                }                        
+                                else{
+                                    iuDatosPersonales.iuFoto.setUrlImagen(doc.getUrl());
+                                    iuDatosPersonales.iuFoto.setIcon(new ImageIcon(new ImageIcon(doc.getUrl()).getImage().getScaledInstance(iuDatosPersonales.iuFoto.getWidth(), iuDatosPersonales.iuFoto.getHeight(), Image.SCALE_DEFAULT)));                    
+                                }
+                            }else{
+                                if(doc.getUrl().isEmpty()){
+                                    iuDatosPersonales.iuFoto.setUrlImagen("");
+                                    iuDatosPersonales.iuFoto.setIcon(null);
+                                }                                
+                            }                                
+                        }
+                        if(persona.getDocumentos().isEmpty()){
+                            iuDatosPersonales.iuFoto.setUrlImagen("");
+                            iuDatosPersonales.iuFoto.setIcon(null);
+                        }
+                        iuDatosPersonales.iuTipoPersona.iuTexto.setText(persona.getTipoPersona().toUpperCase());
+                        iuDatosPersonales.iuObservacion.iuAreaTexto.setText(persona.getObservacion());
+                    }
                 }
             }
         });

@@ -206,6 +206,18 @@ public class Persona {
         
         return estadoDocumentos;
     }
+    public boolean tieneDocumentoCertificado(){
+        boolean verificador = false;
+        int indice = 0;
+        
+        while (indice < documentos.size() && !verificador) {
+            Documento doc = documentos.get(indice);
+            if(doc.getTipo().equalsIgnoreCase("certificado"))
+                verificador = true;
+            indice++;
+        }
+        return verificador;
+    }
     public void setEstadoDocumentos(String estadoDocumentos) {
         this.estadoDocumentos = estadoDocumentos;
     }
@@ -223,11 +235,26 @@ public class Persona {
         }else
             respuesta = "";
         return respuesta;
-    }    
+    }
+    public String getUrlFoto(){
+        String urlEncontrado = "";
+        int contador = 0;
+        boolean encontrado = false;
+        while(contador < documentos.size() && !encontrado){
+            Documento doc = documentos.get(contador);
+            if(doc.getTipo().equalsIgnoreCase("foto")){
+                urlEncontrado = doc.getUrl();
+                encontrado = true;
+            }
+            contador++;                
+        }
+        return urlEncontrado;
+    }
     @Override
     public String toString() {
         return "Persona{" + "id=" + id + ", nombres=" + nombres + ", apellidos=" + apellidos + ", tipoDocumento=" + tipoDocumento + ", carnetIdentidad=" + carnetIdentidad + ", origen=" + origen + ", fechaCaducidad=" + fechaCaducidad + ", fechaNacimiento=" + fechaNacimiento + ", ciudad=" + ciudad + ", pais=" + pais + ", estadoCivil=" + estadoCivil + ", profesion=" + profesion + ", direccion=" + direccion + ", procedencia=" + procedencia + ", destino=" + destino + ", telefono=" + telefono + ", email=" + email + ", tipoPersona=" + tipoPersona + ", observacion=" + observacion + ", estado=" + estado + ", estadoDocumentos=" + estadoDocumentos + ", documentos=" + documentos + '}';
     }
+    
     public boolean eliminarDocumento(Documento doc){
         int contador = 0;
         boolean encontrado = false;        

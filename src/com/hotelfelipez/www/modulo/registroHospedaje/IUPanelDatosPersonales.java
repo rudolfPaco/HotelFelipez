@@ -12,11 +12,9 @@ import com.aplicacionjava.www.paneles.IUPanelBD;
 import com.aplicacionjava.www.paneles.IUPanelCT;
 import com.aplicacionjava.www.paneles.IUPanelTA;
 import com.aplicacionjava.www.recursos.Limitacion;
-import com.hotelfelipez.www.modulo.controlador.CRegistroHospedaje;
 import com.hotelfelipez.www.modulo.controlador.CRegistroPersona;
 import com.hotelfelipez.www.modulo.modelo.Asistente;
 import com.hotelfelipez.www.modulo.modelo.Persona;
-import com.hotelfelipez.www.modulo.modelo.RegistroHospedaje;
 import com.hotelfelipez.www.modulo.principal.IUVentanaHotel;
 import java.awt.Color;
 import java.awt.Font;
@@ -37,14 +35,15 @@ public class IUPanelDatosPersonales extends IUPanel{
     private CRegistroPersona controlRegistroPersonas;
     
     private IUPanelBD primerPanel;
-    private IUEtiquetaI iuFoto;
-    private IUPanelCT iuTipoPersona;
+    public IUEtiquetaI iuFoto;
+    public IUPanelCT iuTipoPersona;
     private IUTablaPersonas iuTablaPersonas;
-    private IUPanelTA iuObservacion;
+    public IUPanelTA iuObservacion;
     private IUPanelTA iuMensaje;
     
     private IUPanelBD segundoPanel;
     private IUBoton botonVerDatos;
+    private IUBoton botonBuscarPersona;
     private IUBoton botonNuevoPersona;
     private IUBoton botonModificarPersona;
     private IUBoton botonQuitarPersona;
@@ -77,38 +76,48 @@ public class IUPanelDatosPersonales extends IUPanel{
         iuFoto.setBorder(new LineBorder(Color.LIGHT_GRAY));
         primerPanel.add(iuFoto);
         
-        iuTipoPersona = new IUPanelCT("tipo persona", "huesped", new Limitacion(limite.getPorcentajeAncho(2), limite.getPorcentajeAlto(42), limite.getPorcentajeAncho(14), limite.getPorcentajeAlto(8)), 44, 56);
+        iuTipoPersona = new IUPanelCT("tipo persona", "", new Limitacion(limite.getPorcentajeAncho(2), limite.getPorcentajeAlto(42), limite.getPorcentajeAncho(14), limite.getPorcentajeAlto(8)), 44, 56);
+        iuTipoPersona.iuTexto.setEditable(false);
+        iuTipoPersona.iuTexto.setFocusable(false);        
+        iuTipoPersona.iuTexto.setForeground(new Color(120, 0, 0));
         primerPanel.add(iuTipoPersona);
         
-        iuTablaPersonas = new IUTablaPersonas(new Limitacion(limite.getPorcentajeAncho(17), limite.getPorcentajeAlto(3), limite.getPorcentajeAncho(81), limite.getPorcentajeAlto(47)));
+        iuTablaPersonas = new IUTablaPersonas(this, new Limitacion(limite.getPorcentajeAncho(17), limite.getPorcentajeAlto(3), limite.getPorcentajeAncho(81), limite.getPorcentajeAlto(47)));
         primerPanel.add(iuTablaPersonas.tabla.deslizador);
         
-        iuObservacion = new IUPanelTA("observacion", "hola eeste es el mensaje...!", new Limitacion(limite.getPorcentajeAncho(1), limite.getPorcentajeAlto(52), limite.getPorcentajeAncho(30), limite.getPorcentajeAlto(45)), 7, 93);
+        iuObservacion = new IUPanelTA("observacion", "", new Limitacion(limite.getPorcentajeAncho(1), limite.getPorcentajeAlto(52), limite.getPorcentajeAncho(30), limite.getPorcentajeAlto(45)), 7, 93);
         iuObservacion.iuAreaTexto.setFont(new Font("Verdana", Font.PLAIN, 15));
+        iuObservacion.iuAreaTexto.setEditable(false);
+        iuObservacion.iuAreaTexto.setFocusable(false);
         primerPanel.add(iuObservacion);
         
-        iuMensaje = new IUPanelTA("mensaje del huesped", "hola eeste es el mensaje...!", new Limitacion(limite.getPorcentajeAncho(31), limite.getPorcentajeAlto(52), limite.getPorcentajeAncho(68), limite.getPorcentajeAlto(45)), 7, 93);
+        iuMensaje = new IUPanelTA("mensaje del huesped", "", new Limitacion(limite.getPorcentajeAncho(31), limite.getPorcentajeAlto(52), limite.getPorcentajeAncho(68), limite.getPorcentajeAlto(45)), 7, 93);
         iuMensaje.iuAreaTexto.setFont(new Font("Verdana", Font.PLAIN, 15));
+        iuMensaje.iuAreaTexto.setEditable(false);
+        iuMensaje.iuAreaTexto.setFocusable(false);
         iuMensaje.iuAreaTexto.setForeground(new Color(230, 0, 115));
         primerPanel.add(iuMensaje);
     }
     private void construirSegundoPanel(Limitacion limite){
         botonVerDatos = new IUBoton("ver datos personales", new Limitacion(limite.getPorcentajeAncho(5), limite.getPorcentajeAlto(3), limite.getPorcentajeAncho(90), limite.getPorcentajeAlto(6)));
         segundoPanel.add(botonVerDatos);
+                
+        botonBuscarPersona = new IUBoton("buscar persona", new Limitacion(limite.getPorcentajeAncho(5), limite.getPorcentajeAlto(12), limite.getPorcentajeAncho(90), limite.getPorcentajeAlto(6)));
+        segundoPanel.add(botonBuscarPersona);
         
-        botonNuevoPersona = new IUBoton("registrar nueva persona", new Limitacion(limite.getPorcentajeAncho(5), limite.getPorcentajeAlto(12), limite.getPorcentajeAncho(90), limite.getPorcentajeAlto(6)));
+        botonNuevoPersona = new IUBoton("registrar nueva persona", new Limitacion(limite.getPorcentajeAncho(5), limite.getPorcentajeAlto(21), limite.getPorcentajeAncho(90), limite.getPorcentajeAlto(6)));
         segundoPanel.add(botonNuevoPersona);
         
-        botonModificarPersona = new IUBoton("modificar datos persona", new Limitacion(limite.getPorcentajeAncho(5), limite.getPorcentajeAlto(21), limite.getPorcentajeAncho(90), limite.getPorcentajeAlto(6)));
+        botonModificarPersona = new IUBoton("modificar datos persona", new Limitacion(limite.getPorcentajeAncho(5), limite.getPorcentajeAlto(30), limite.getPorcentajeAncho(90), limite.getPorcentajeAlto(6)));
         segundoPanel.add(botonModificarPersona);
         
-        botonQuitarPersona = new IUBoton("quitar persona de tabla", new Limitacion(limite.getPorcentajeAncho(5), limite.getPorcentajeAlto(30), limite.getPorcentajeAncho(90), limite.getPorcentajeAlto(6)));
+        botonQuitarPersona = new IUBoton("quitar persona de tabla", new Limitacion(limite.getPorcentajeAncho(5), limite.getPorcentajeAlto(39), limite.getPorcentajeAncho(90), limite.getPorcentajeAlto(6)));
         segundoPanel.add(botonQuitarPersona);
         
-        botonImprimirPersona = new IUBoton("imprimir datos persona", new Limitacion(limite.getPorcentajeAncho(5), limite.getPorcentajeAlto(39), limite.getPorcentajeAncho(90), limite.getPorcentajeAlto(6)));
+        botonImprimirPersona = new IUBoton("imprimir datos persona", new Limitacion(limite.getPorcentajeAncho(5), limite.getPorcentajeAlto(48), limite.getPorcentajeAncho(90), limite.getPorcentajeAlto(6)));
         segundoPanel.add(botonImprimirPersona);
         
-        botonImprimirRegistros = new IUBoton("imprimir todos registros", new Limitacion(limite.getPorcentajeAncho(5), limite.getPorcentajeAlto(48), limite.getPorcentajeAncho(90), limite.getPorcentajeAlto(6)));
+        botonImprimirRegistros = new IUBoton("imprimir todos registros", new Limitacion(limite.getPorcentajeAncho(5), limite.getPorcentajeAlto(57), limite.getPorcentajeAncho(90), limite.getPorcentajeAlto(6)));
         segundoPanel.add(botonImprimirRegistros);
                 
         botonModificarMensaje = new IUBoton("modificar mensaje", new Limitacion(limite.getPorcentajeAncho(5), limite.getPorcentajeAlto(82), limite.getPorcentajeAncho(90), limite.getPorcentajeAlto(6)));
@@ -127,13 +136,32 @@ public class IUPanelDatosPersonales extends IUPanel{
                     iuRegistroOcupado.setOpacity(0.3f);
                     
                     Persona persona = iuTablaPersonas.getPersona();
-                    IUVentanaVerPersona iuVerPersona = new IUVentanaVerPersona(ventanaPrincipal, "Datos de la Persona", new Limitacion(Asistente.ANCHO - Asistente.ANCHO/3, Asistente.ALTO));
+                    IUMostrarPersona iuVerPersona = new IUMostrarPersona(ventanaPrincipal, "Datos de la Persona", new Limitacion(Asistente.ANCHO - Asistente.ANCHO/3, Asistente.ALTO));
                     iuVerPersona.setPersona(persona);
                     iuVerPersona.mostrarVentana();
 
-                    iuRegistroOcupado.setOpacity(1f);                
+                    iuRegistroOcupado.setOpacity(1f);
                 }
                 
+            }
+        });
+        botonBuscarPersona.addEventoRaton(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                iuRegistroOcupado.setOpacity(0.3f);
+                
+                IUBuscarPesonas iuBuscar = new IUBuscarPesonas(ventanaPrincipal, controlRegistroPersonas, iuTablaPersonas, "buscar personas", new Limitacion(Asistente.ANCHO - Asistente.ANCHO/7, Asistente.ALTO));
+                iuBuscar.mostrarVentana();
+                if(iuBuscar.getEstado()){
+                    if(controlRegistroPersonas.guardarPersonaRegistroHospedaje(iuBuscar.getPersona().getId())){
+                        Asistente.mensajeVerificacion(ventanaPrincipal, "aviso", "En buena hora...! se AGREGO otra persona al registro de datos correctamente...!", "advertencia");
+                        actualizarTablaPersonas();
+                    }
+                }
+                    //iuTablaPersonas.setFila(iuBuscar.getPersona());
+                
+                iuRegistroOcupado.setOpacity(1f);
             }
         });
         botonNuevoPersona.addEventoRaton(new MouseAdapter() {
@@ -147,8 +175,10 @@ public class IUPanelDatosPersonales extends IUPanel{
                 if(iuNuevaPersona.getEstado()){                        
                     Persona persona = iuNuevaPersona.getPersona();
                     if(controlRegistroPersonas.guardarNuevaPersona(persona))
-                        if(controlRegistroPersonas.guardarPersonaRegistroHospedaje(Asistente.getId("idpersona", "select idpersona from persona ORDER by idpersona DESC LIMIT 1")))
+                        if(controlRegistroPersonas.guardarPersonaRegistroHospedaje(Asistente.getId("idpersona", "select idpersona from persona ORDER by idpersona DESC LIMIT 1"))){
+                            Asistente.mensajeVerificacion(ventanaPrincipal, "aviso", "En buena hora...! se guardo los datos de la NUEVA persona correctamente...!", "advertencia");
                             actualizarTablaPersonas();
+                        }                            
                 }
 
                 iuRegistroOcupado.setOpacity(1f);
@@ -175,6 +205,38 @@ public class IUPanelDatosPersonales extends IUPanel{
                 }
             }
         });
+        botonQuitarPersona.addEventoRaton(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if(iuTablaPersonas.estaSeleccionado()){
+                    if(iuTablaPersonas.getRowCount() > 1){
+                        Persona persona = iuTablaPersonas.getPersona();
+                        if(Asistente.mensajeVerificacion(ventanaPrincipal, "peligro", "...Esta seguro que quiere eliminar de la tabla la persona "+persona.getNombres().toUpperCase()+" "+persona.getApellidos().toUpperCase()+"...?", "advertencia")){
+                            if(controlRegistroPersonas.eliminarPersonaRegistro(persona.getId()))
+                                if(Asistente.mensajeVerificacion(ventanaPrincipal, "aviso", "...se elimino de la tabla de persona CORRECTAMENTE...!", "aviso"))
+                                    actualizarTablaPersonas();
+                        }                        
+                    }else
+                        Asistente.mensajeVerificacion(ventanaPrincipal, "aviso", "lo siento... pero la persona NO PUEDE SER ELIMINADA por que solo existe una persona en el registro...! ", "advertencia");
+                }
+            }
+        });
+        botonImprimirPersona.addEventoRaton(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if(iuTablaPersonas.estaSeleccionado()){
+                    Persona persona = iuTablaPersonas.getPersona();
+                    
+                    iuRegistroOcupado.setOpacity(0.3f);
+                    
+                    IUImprimirDatosPersona iuImprimirDatosPersona = new IUImprimirDatosPersona(ventanaPrincipal, persona, "Imprimir Hoja de Registro Personal", new Limitacion(Asistente.ANCHO - Asistente.ANCHO/2 + Asistente.ANCHO/10, Asistente.ALTO));
+                    iuImprimirDatosPersona.mostrarVentana();
+                    
+                    iuRegistroOcupado.setOpacity(1f);
+                }
+            }
+        });
     }
     private void actualizarTablaPersonas(){
         ArrayList<Persona> lista = controlRegistroPersonas.getPersonasRegistradas();
@@ -182,6 +244,7 @@ public class IUPanelDatosPersonales extends IUPanel{
         for (int i = 0; i < lista.size(); i++) {
             Persona persona = lista.get(i);
             iuTablaPersonas.setFila(persona);
+            
         }
     }    
 }
