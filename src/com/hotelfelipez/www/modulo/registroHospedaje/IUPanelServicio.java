@@ -10,6 +10,7 @@ import com.aplicacionjava.www.etiquetas.IUEtiqueta;
 import com.aplicacionjava.www.paneles.IUPanel;
 import com.aplicacionjava.www.paneles.IUPanelBD;
 import com.aplicacionjava.www.recursos.Limitacion;
+import com.hotelfelipez.www.modulo.controlador.CComanda;
 import com.hotelfelipez.www.modulo.controlador.CFrigobar;
 import com.hotelfelipez.www.modulo.controlador.CHabitaciones;
 import com.hotelfelipez.www.modulo.controlador.CRegistroPersona;
@@ -18,13 +19,16 @@ import com.hotelfelipez.www.modulo.frigobar.IUNuevaComanda;
 import com.hotelfelipez.www.modulo.frigobar.IUPanelComanda;
 import com.hotelfelipez.www.modulo.frigobar.IUTablaComanda;
 import com.hotelfelipez.www.modulo.modelo.Asistente;
+import com.hotelfelipez.www.modulo.modelo.Comanda;
 import com.hotelfelipez.www.modulo.modelo.Habitacion;
+import com.hotelfelipez.www.modulo.modelo.Producto;
 import com.hotelfelipez.www.modulo.principal.IUVentanaHotel;
 import com.hotelfelipez.www.modulo.principal.IUVentanaOpciones;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
@@ -35,7 +39,6 @@ import javax.swing.border.LineBorder;
 public class IUPanelServicio extends IUPanel{
 
     private IUVentanaHotel ventanaPrincipal;
-    private CHabitaciones controlHabitaciones;
     private Habitacion habitacion;
     private IUVentanaRegistroHospedajeOcupado iuRegistro;
     private IUPanelBD primerPanel;
@@ -52,14 +55,14 @@ public class IUPanelServicio extends IUPanel{
     private IUBoton botonSalir;
     private IUBoton botonPagarComanda;
     
-    public IUPanelServicio(IUVentanaHotel ventanaPrincipal, IUVentanaRegistroHospedajeOcupado iuRegistro, CHabitaciones controlHabitaciones, Habitacion habitacion, Limitacion limitacion) {
+    public IUPanelServicio(IUVentanaHotel ventanaPrincipal, IUVentanaRegistroHospedajeOcupado iuRegistro, Habitacion habitacion, Limitacion limitacion) {
         super(limitacion);
         this.ventanaPrincipal = ventanaPrincipal;        
         this.iuRegistro = iuRegistro;
-        this.controlHabitaciones = controlHabitaciones;
         this.habitacion = habitacion;
         construirPaneles(getLimitacion());
         escucharEvento();
+        actualizarTablaComandas();
     }
     private void construirPaneles(Limitacion limite){
         primerPanel = new IUPanelBD(new Limitacion(limite.getPorcentajeAncho(85), limite.getAlto()));
@@ -78,7 +81,7 @@ public class IUPanelServicio extends IUPanel{
         iuTitulo.setFont(new Font("Verdana", Font.PLAIN, limite.getPorcentajeAlto(3)));
         primerPanel.add(iuTitulo);
         
-        iuComanda = new IUPanelComanda(new Limitacion(limite.getPorcentajeAncho(1), limite.getPorcentajeAlto(7), limite.getPorcentajeAncho(40), limite.getPorcentajeAlto(91)));                
+        iuComanda = new IUPanelComanda(new Limitacion(limite.getPorcentajeAncho(1), limite.getPorcentajeAlto(7), limite.getPorcentajeAncho(40), limite.getPorcentajeAlto(91)), iuRegistro.getRegistroHospedaje().getId());
         primerPanel.add(iuComanda);
         
         iuTituloTabla = new IUEtiqueta("Lista de Comandas", new Limitacion(limite.getPorcentajeAncho(42), limite.getPorcentajeAlto(1), limite.getPorcentajeAncho(57), limite.getPorcentajeAlto(4)));
@@ -109,6 +112,16 @@ public class IUPanelServicio extends IUPanel{
         botonSalir = new IUBoton("salir del registro", new Limitacion(limite.getPorcentajeAncho(5), limite.getPorcentajeAlto(66), limite.getPorcentajeAncho(90), limite.getPorcentajeAlto(13)));
         segundoPanel.add(botonSalir);
     }
+    private void actualizarTablaComandas(){
+        CComanda control = new CComanda();
+        ArrayList<Comanda> lista = control.getListaComandas(iuRegistro.getRegistroHospedaje().getId());
+        
+        iuTablaComanda.limpiarTabla();
+        for (int i = 0; i < lista.size(); i++) {
+            Comanda comanda = lista.get(i);
+            iuTablaComanda.setFila(comanda);
+        }
+    }
     private void escucharEvento(){
         botonNuevaComanda.addEventoRaton(new MouseAdapter() {
 
@@ -122,8 +135,16 @@ public class IUPanelServicio extends IUPanel{
                 if(iuOpciones.getEstado()){
                     switch(iuOpciones.getOpcion()){
                         case"comanda FRIGOBAR":
-                            IUNuevaComanda iuNuevaComanda = new IUNuevaComanda(ventanaPrincipal, new CFrigobar().getListaProductos(habitacion.getFrigobar().getId(), habitacion.getId(), "categoria"), "Registrar Nueva Comanda de Frigobar", new Limitacion(Asistente.ANCHO - Asistente.ANCHO/7, Asistente.ALTO - Asistente.ALTO/12));
+                            IUNuevaComanda iuNuevaComanda = new IUNuevaComanda(ventanaPrincipal, iuRegistro.getRegistroHospedaje().getId(), new CFrigobar(), habitacion, "Registrar Nueva Comanda de Frigobar", new Limitacion(Asistente.ANCHO - Asistente.ANCHO/7, Asistente.ALTO - Asistente.ALTO/12));
                             iuNuevaComanda.mostrarVentana();
+                            if(iuNuevaComanda.getEstado()){
+                                if(new CComanda().guardarNuevaComanda(iuNuevaComanda.getComanda())){
+                                    ArrayList<Producto> lista = iuNuevaComanda.getListaProductos();
+                                    CFrigobar control = new CFrigobar();
+                                    for (int i = 0; i < lista.size(); i++) 
+                                        control.modificarProducto(lista.get(i));
+                                }                                
+                            }
                         break;
                         case"comanda OTROS":
                             

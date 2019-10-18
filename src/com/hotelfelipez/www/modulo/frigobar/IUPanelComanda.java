@@ -12,6 +12,10 @@ import com.aplicacionjava.www.paneles.IUPanelTT;
 import com.aplicacionjava.www.recursos.Fecha;
 import com.aplicacionjava.www.recursos.Hora;
 import com.aplicacionjava.www.recursos.Limitacion;
+import com.hotelfelipez.www.modulo.modelo.Asistente;
+import com.hotelfelipez.www.modulo.modelo.Comanda;
+import com.hotelfelipez.www.modulo.modelo.Detalle;
+import com.hotelfelipez.www.modulo.modelo.Producto;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.SwingConstants;
@@ -29,13 +33,15 @@ public class IUPanelComanda extends IUPanelBD{
     private IUPanelTT iuFecha;
     private IUPanelTT iuHora;    
     private IUPanelBD segundoPanel;
-    private IUTablaDetalleComanda iuTablaComanda;
+    public IUTablaDetalleComanda iuTablaComanda;
     private IUEtiqueta iuEstado;
     private IUPanel tercerPanel;
     private IUPanelTT iuTotal;
+    private int idRegistroHospedaje; 
     
-    public IUPanelComanda(Limitacion limitacion) {
+    public IUPanelComanda(Limitacion limitacion, int idRegistroHospedaje) {
         super(limitacion);
+        this.idRegistroHospedaje = idRegistroHospedaje;
         setArco(20);
         construirPaneles(getLimitacion());
     }
@@ -54,13 +60,13 @@ public class IUPanelComanda extends IUPanelBD{
         construirTercerPanel(tercerPanel.getLimitacion());
     }
     private void construirPrimerPanel(Limitacion limite){
-        iuNombre = new IUEtiqueta("Lavado y Planchado", new Limitacion(limite.getPorcentajeAncho(1), limite.getPorcentajeAlto(5), limite.getPorcentajeAncho(70), limite.getPorcentajeAlto(40)));        
+        iuNombre = new IUEtiqueta("", new Limitacion(limite.getPorcentajeAncho(1), limite.getPorcentajeAlto(5), limite.getPorcentajeAncho(70), limite.getPorcentajeAlto(40)));        
         iuNombre.setHorizontalAlignment(SwingConstants.CENTER);
         iuNombre.setFont(new Font("Verdana", Font.PLAIN, limite.getPorcentajeAlto(30)));
         iuNombre.setSubrayarTexto(true);
         primerPanel.add(iuNombre);
         
-        iuNumero = new IUPanelTT(new Limitacion(limite.getPorcentajeAncho(70), 0, limite.getPorcentajeAncho(70), limite.getPorcentajeAlto(50)), "nro: ", "12544", 15, 85);
+        iuNumero = new IUPanelTT(new Limitacion(limite.getPorcentajeAncho(70), 0, limite.getPorcentajeAncho(70), limite.getPorcentajeAlto(50)), "nro: ", String.valueOf(Asistente.getPostId("idcomanda", "select idcomanda from comanda order by idcomanda desc limit 1")), 15, 85);
         iuNumero.iuTitulo.setHorizontalAlignment(SwingConstants.CENTER);
         iuNumero.setFont(new Font("Verdana", Font.PLAIN, limite.getPorcentajeAlto(35)));
         primerPanel.add(iuNumero);        
@@ -72,7 +78,7 @@ public class IUPanelComanda extends IUPanelBD{
         primerPanel.add(iuHora);
     }
     private void construirSegundoPanel(Limitacion limite){
-        iuEstado = new IUEtiqueta("PAGADO", new Limitacion(limite.getAncho(), limite.getAlto()));
+        iuEstado = new IUEtiqueta("", new Limitacion(limite.getAncho(), limite.getAlto()));
         iuEstado.setHorizontalAlignment(SwingConstants.CENTER);
         iuEstado.setFont(new Font("Verdana", Font.PLAIN, limite.getPorcentajeAlto(20)));
         iuEstado.setForeground(new Color(120, 0, 0));
@@ -89,5 +95,65 @@ public class IUPanelComanda extends IUPanelBD{
         iuTotal.iuTexto.setFont(new Font("Verdana", Font.PLAIN, limite.getPorcentajeAlto(40)));
         iuTotal.iuTexto.setBorder(new LineBorder(Color.LIGHT_GRAY));
         tercerPanel.add(iuTotal);
+    }
+    public boolean existeProducto(Producto producto){
+        boolean verificador = false;
+        int contador = 0;
+        while(contador < iuTablaComanda.getRowCount() && !verificador){
+            Detalle detalle = iuTablaComanda.getFila(contador);
+            if(detalle.getProducto().getId() == producto.getId())
+                verificador = true;
+            contador++;
+        }        
+        return verificador;
+    }
+    public Detalle getDetalle(int idProducto){
+        boolean verificador = false;
+        Detalle detalle = null;
+        int contador = 0;
+        while(contador < iuTablaComanda.getRowCount() && !verificador){
+            if(iuTablaComanda.getFila(contador).getProducto().getId() == idProducto){
+                detalle = iuTablaComanda.getFila(contador);
+                verificador = true;
+            }                
+            contador++;
+        }        
+        return detalle;
+    }
+    public void actualizarTablaComanda(){
+        double total = 0;
+        iuTablaComanda.tabla.updateUI();
+        for (int i = 0; i < iuTablaComanda.getRowCount(); i++) {
+            total = total + iuTablaComanda.getFila(i).getTotal();
+        }
+        iuTotal.iuTexto.setText(String.valueOf(total));
+    }
+    public boolean getEstado(){
+        boolean verificador = false;
+        if(esCorrectoComanda())
+            verificador = true;
+        return verificador;
+    }
+    private boolean esCorrectoComanda(){
+        boolean verificador = false;
+        if(!iuTablaComanda.isVacia())
+            verificador = true;
+        return verificador;
+    }
+    public Comanda getComanda(){
+        Comanda comanda = new Comanda(0);
+        comanda.setNroComanda(iuNumero.getTexto());
+        comanda.setNombre(iuNombre.getText());
+        comanda.setFecha(new Fecha().fecha());
+        comanda.setHora(new Hora().getHora()+" "+new Hora().getFormato());
+        comanda.setTotal(Double.valueOf(iuTotal.iuTexto.getText()));
+        comanda.setEstado(iuEstado.getText());
+        comanda.setIdRegistroHospedaje(idRegistroHospedaje);
+        for (int i = 0; i < iuTablaComanda.getRowCount(); i++) {
+            Detalle detalle = iuTablaComanda.getFila(i);
+            detalle.setIdRegistroHospedaje(idRegistroHospedaje);
+            comanda.setDetalle(detalle);
+        }
+        return comanda;
     }
 }

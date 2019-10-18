@@ -219,7 +219,7 @@ public class IUVentanaRegistroHospedajeOcupado extends IUVentanaT{
         iuRegistroDatos = new IUPanelDatosPersonales(ventanaPrincipal, new CRegistroPersona(registro), this, limite);
         cuartoPanel.add(iuRegistroDatos);
         
-        iuServicios = new IUPanelServicio(ventanaPrincipal, this, controlHabitaciones, habitacion, limite);
+        iuServicios = new IUPanelServicio(ventanaPrincipal, this, habitacion, limite);
         cuartoPanel.add(iuServicios);
         
         iuEstadoCuentas = new IUPanelBD(limite);
@@ -303,5 +303,8 @@ public class IUVentanaRegistroHospedajeOcupado extends IUVentanaT{
                 botonEstadoReserva.setSubrayado(true);
             break;
         }
+    }
+    public RegistroHospedaje getRegistroHospedaje(){
+        return registro;
     }
 }

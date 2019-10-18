@@ -29,11 +29,11 @@ public class IUTablaDetalleComanda extends ModeloTabla<Detalle>{
     private final Class[] columnas = {String.class, Double.class, Integer.class, String.class, Double.class};
     private final int[] porcentajes = {52, 12, 11, 13, 12};
     private final Limitacion limitacion;
-    private Producto producto;
+    private Detalle detalle;
     
     public IUTablaDetalleComanda(Limitacion limitacion) {
         this.limitacion = limitacion;        
-        this.producto = null;
+        this.detalle = null;
         
         construirTabla();
         setEventos();
@@ -44,9 +44,10 @@ public class IUTablaDetalleComanda extends ModeloTabla<Detalle>{
         tabla = new IUTabla(this, limitacion);
         tabla.agregarAnchoColumnas(porcentajes);
         tabla.setPosicionTextoHorizontal(0, SwingConstants.LEFT);
-        tabla.setPosicionTextoHorizontal(1, SwingConstants.LEFT);
-        tabla.setPosicionTextoHorizontal(2, SwingConstants.RIGHT);
+        tabla.setPosicionTextoHorizontal(1, SwingConstants.CENTER);
+        tabla.setPosicionTextoHorizontal(2, SwingConstants.CENTER);
         tabla.setPosicionTextoHorizontal(3, SwingConstants.CENTER);
+        tabla.setPosicionTextoHorizontal(4, SwingConstants.CENTER);
         
         //tabla.setRowHeight(limitacion.getPorcentajeAlto(15));
         /*for (int i = 0; i < tipoColumnas.length - 1; i++) {
@@ -63,7 +64,7 @@ public class IUTablaDetalleComanda extends ModeloTabla<Detalle>{
                 int row = table.rowAtPoint(point);
                                 
                 if (row > -1) {
-                    
+                    detalle = getFila(row);
                 }
             }
         });
@@ -71,11 +72,22 @@ public class IUTablaDetalleComanda extends ModeloTabla<Detalle>{
     public boolean estaSeleccionado(){
         return tabla.getSelectedRow() > -1;
     }
+    public Detalle getDetalle(){
+        return detalle;
+    }
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (columnIndex) {
             case 0:                
-                return lista.get(rowIndex);    
+                return lista.get(rowIndex).getDescripcion();    
+            case 1:
+                return lista.get(rowIndex).getPrecio();
+            case 2:
+                return lista.get(rowIndex).getCantidad();
+            case 3:
+                return lista.get(rowIndex).getUnidad();
+            case 4:
+                return lista.get(rowIndex).getTotal();
             default:
                 return null;
         }

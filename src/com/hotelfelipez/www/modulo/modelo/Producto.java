@@ -120,6 +120,15 @@ public class Producto {
         Fecha fecha = new Fecha(fechaVencimiento);
         return fecha.restarDias(new Fecha());
     }
+    public void adicionarCantidad(int cantAdicional){
+        cantidad = cantidad + cantAdicional;
+    }
+    public void reducirCantidad(int cantReducir){
+        if(cantidad > 0){
+            cantidad = cantidad - cantReducir;
+            System.out.println("entro agregar cantidad....");
+        }            
+    }
     @Override
     public String toString() {
         return "Producto{" + "id=" + id + ", categoria=" + categoria + ", marca=" + marca + ", nombre=" + nombre + ", costo=" + costo + ", precio=" + precio + ", cantidad=" + cantidad + ", fechaVencimiento=" + fechaVencimiento + ", promocion=" + promocion + ", precioAnterior=" + precioAnterior + ", idmoneda=" + idmoneda + ", idfrigobar=" + idfrigobar + ", idhabitacion=" + idhabitacion + '}';

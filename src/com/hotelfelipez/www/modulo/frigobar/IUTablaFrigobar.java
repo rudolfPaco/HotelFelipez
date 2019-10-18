@@ -64,13 +64,29 @@ public class IUTablaFrigobar extends ModeloTabla<Producto>{
                 int row = table.rowAtPoint(point);
                                 
                 if (row > -1) {
-                    
+                    producto = getFila(row);
                 }
             }
         });
     }
     public boolean estaSeleccionado(){
         return tabla.getSelectedRow() > -1;
+    }
+    public Producto getProducto(){
+        return producto;
+    }
+    public Producto getProducto(int idProducto){
+        Producto producto = null;
+        int contador = 0;
+        boolean verificador = false;
+        while(contador < tabla.getRowCount() && !verificador){            
+            if(getFila(contador).getId() == idProducto){
+                verificador = true;
+                producto = getFila(contador);
+            }
+            contador++;
+        }
+        return producto;
     }
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
