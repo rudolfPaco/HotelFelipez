@@ -21,10 +21,11 @@ public class Comanda {
     private String estado;
     private int idRegistroHospedaje;
     private ArrayList<Detalle> lista;
+    private boolean check;
 
     public Comanda(int id) {
         this.id = id;
-        lista = new ArrayList<>();
+        lista = new ArrayList<>();        
     }
 
     public int getId() {
@@ -84,8 +85,14 @@ public class Comanda {
     public void setDetalle(Detalle detalle){
         lista.add(detalle);
     }
+    public boolean isCheck() {
+        return check;
+    }
+    public void setCheck(boolean check) {
+        this.check = check;
+    }
     @Override
     public String toString() {
-        return "Comanda{" + "id=" + id + ", nroComanda=" + nroComanda + ", nombre=" + nombre + ", fecha=" + fecha + ", hora=" + hora + ", total=" + total + ", estado=" + estado + ", idRegistroHospedaje=" + idRegistroHospedaje + ", lista=" + lista + '}';
+        return "Comanda{" + "id=" + id + ", nroComanda=" + nroComanda + ", nombre=" + nombre + ", fecha=" + fecha + ", hora=" + hora + ", total=" + total + ", estado=" + estado + ", idRegistroHospedaje=" + idRegistroHospedaje + ", lista=" + lista + ", check=" + check + '}';
     }
 }

@@ -90,7 +90,7 @@ public class IUPanelServicio extends IUPanel{
         iuTituloTabla.setFont(new Font("Verdana", Font.PLAIN, limite.getPorcentajeAlto(3)));
         primerPanel.add(iuTituloTabla);
         
-        iuTablaComanda = new IUTablaComanda(new Limitacion(limite.getPorcentajeAncho(42), limite.getPorcentajeAlto(7), limite.getPorcentajeAncho(57), limite.getPorcentajeAlto(91)));
+        iuTablaComanda = new IUTablaComanda(iuComanda, new Limitacion(limite.getPorcentajeAncho(42), limite.getPorcentajeAlto(7), limite.getPorcentajeAncho(57), limite.getPorcentajeAlto(82)));
         primerPanel.add(iuTablaComanda.tabla.deslizador);
     }
     private void construirSegundoPanel(Limitacion limite){
@@ -135,7 +135,7 @@ public class IUPanelServicio extends IUPanel{
                 if(iuOpciones.getEstado()){
                     switch(iuOpciones.getOpcion()){
                         case"comanda FRIGOBAR":
-                            IUNuevaComanda iuNuevaComanda = new IUNuevaComanda(ventanaPrincipal, iuRegistro.getRegistroHospedaje().getId(), new CFrigobar(), habitacion, "Registrar Nueva Comanda de Frigobar", new Limitacion(Asistente.ANCHO - Asistente.ANCHO/7, Asistente.ALTO - Asistente.ALTO/12));
+                            IUNuevaComanda iuNuevaComanda = new IUNuevaComanda(ventanaPrincipal, "Frigobar", iuRegistro.getRegistroHospedaje().getId(), new CFrigobar(), habitacion, "Registrar Nueva Comanda de Frigobar", new Limitacion(Asistente.ANCHO - Asistente.ANCHO/7, Asistente.ALTO - Asistente.ALTO/12));
                             iuNuevaComanda.mostrarVentana();
                             if(iuNuevaComanda.getEstado()){
                                 if(new CComanda().guardarNuevaComanda(iuNuevaComanda.getComanda())){
@@ -143,7 +143,8 @@ public class IUPanelServicio extends IUPanel{
                                     CFrigobar control = new CFrigobar();
                                     for (int i = 0; i < lista.size(); i++) 
                                         control.modificarProducto(lista.get(i));
-                                }                                
+                                } 
+                                actualizarTablaComandas();
                             }
                         break;
                         case"comanda OTROS":

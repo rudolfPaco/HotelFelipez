@@ -66,15 +66,15 @@ public class IUPanelComanda extends IUPanelBD{
         iuNombre.setSubrayarTexto(true);
         primerPanel.add(iuNombre);
         
-        iuNumero = new IUPanelTT(new Limitacion(limite.getPorcentajeAncho(70), 0, limite.getPorcentajeAncho(70), limite.getPorcentajeAlto(50)), "nro: ", String.valueOf(Asistente.getPostId("idcomanda", "select idcomanda from comanda order by idcomanda desc limit 1")), 15, 85);
+        iuNumero = new IUPanelTT(new Limitacion(limite.getPorcentajeAncho(70), 0, limite.getPorcentajeAncho(70), limite.getPorcentajeAlto(50)), "nro: ", "", 15, 85);
         iuNumero.iuTitulo.setHorizontalAlignment(SwingConstants.CENTER);
         iuNumero.setFont(new Font("Verdana", Font.PLAIN, limite.getPorcentajeAlto(35)));
         primerPanel.add(iuNumero);        
         
-        iuFecha = new IUPanelTT(new Limitacion(limite.getPorcentajeAncho(5), limite.getPorcentajeAlto(50), limite.getPorcentajeAncho(55), limite.getPorcentajeAlto(50)), "fecha: ", new Fecha().getFecha6(), 30, 70);
+        iuFecha = new IUPanelTT(new Limitacion(limite.getPorcentajeAncho(5), limite.getPorcentajeAlto(50), limite.getPorcentajeAncho(55), limite.getPorcentajeAlto(50)), "fecha: ", "", 30, 70);
         primerPanel.add(iuFecha);
         
-        iuHora = new IUPanelTT(new Limitacion(limite.getPorcentajeAncho(55), limite.getPorcentajeAlto(50), limite.getPorcentajeAncho(45), limite.getPorcentajeAlto(50)), "hrs: ", new Hora().getHora()+" "+new Hora().getFormato(), 25, 75);
+        iuHora = new IUPanelTT(new Limitacion(limite.getPorcentajeAncho(55), limite.getPorcentajeAlto(50), limite.getPorcentajeAncho(45), limite.getPorcentajeAlto(50)), "hrs: ", "", 25, 75);
         primerPanel.add(iuHora);
     }
     private void construirSegundoPanel(Limitacion limite){
@@ -83,11 +83,10 @@ public class IUPanelComanda extends IUPanelBD{
         iuEstado.setFont(new Font("Verdana", Font.PLAIN, limite.getPorcentajeAlto(20)));
         iuEstado.setForeground(new Color(120, 0, 0));
         iuEstado.setVisible(false);
-        segundoPanel.add(iuEstado);
         
         iuTablaComanda = new IUTablaDetalleComanda(new Limitacion(limite.getAncho(), limite.getAlto()));
         segundoPanel.add(iuTablaComanda.tabla.deslizador);
-        
+        iuTablaComanda.tabla.add(iuEstado);
     }
     private void construirTercerPanel(Limitacion limite){
         iuTotal = new IUPanelTT(new Limitacion(limite.getPorcentajeAncho(30), limite.getPorcentajeAlto(5), limite.getPorcentajeAncho(70), limite.getPorcentajeAlto(90)), "total a pagar (en BOB.-)", "", 70, 30);
@@ -95,6 +94,29 @@ public class IUPanelComanda extends IUPanelBD{
         iuTotal.iuTexto.setFont(new Font("Verdana", Font.PLAIN, limite.getPorcentajeAlto(40)));
         iuTotal.iuTexto.setBorder(new LineBorder(Color.LIGHT_GRAY));
         tercerPanel.add(iuTotal);
+    }
+    public void llenarNuevaComanda(String tipoComanda){
+        iuNombre.setText(tipoComanda);
+        iuNumero.iuTexto.setText(String.valueOf(Asistente.getPostId("idcomanda", "select idcomanda from comanda order by idcomanda desc limit 1")));
+        iuFecha.iuTexto.setText(new Fecha().getFecha6());
+        iuHora.iuTexto.setText(new Hora().getHora()+" "+new Hora().getFormato());
+        iuEstado.setText("DEBE");
+    }
+    public void llenarComanda(Comanda c){
+        iuNombre.setText(c.getNombre());
+        iuNumero.iuTexto.setText(c.getNroComanda());
+        iuEstado.setText(c.getEstado());
+        iuFecha.iuTexto.setText(new Fecha(c.getFecha()).getFecha6());
+        iuHora.iuTexto.setText(c.getHora());
+        iuTotal.iuTexto.setText(String.valueOf(c.getTotal()));
+        iuTablaComanda.limpiarTabla();
+        for (int i = 0; i < c.getLista().size(); i++) {
+            iuTablaComanda.setFila(c.getLista().get(i));
+        }
+        if(iuEstado.getText().equalsIgnoreCase("PAGADO"))
+            iuEstado.setVisible(true);
+        else
+            iuEstado.setVisible(false);
     }
     public boolean existeProducto(Producto producto){
         boolean verificador = false;
@@ -142,7 +164,7 @@ public class IUPanelComanda extends IUPanelBD{
     }
     public Comanda getComanda(){
         Comanda comanda = new Comanda(0);
-        comanda.setNroComanda(iuNumero.getTexto());
+        comanda.setNroComanda(iuNumero.iuTexto.getText());
         comanda.setNombre(iuNombre.getText());
         comanda.setFecha(new Fecha().fecha());
         comanda.setHora(new Hora().getHora()+" "+new Hora().getFormato());

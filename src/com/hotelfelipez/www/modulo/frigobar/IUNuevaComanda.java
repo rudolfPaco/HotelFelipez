@@ -34,6 +34,7 @@ public class IUNuevaComanda extends IUVentanaT{
     
     private IUVentanaHotel ventanaPrincipal;    
     private CFrigobar control;
+    private String tipoComanda;
     private int idRegistro;
     private boolean estado;
     private ArrayList<Producto> lista;
@@ -48,10 +49,11 @@ public class IUNuevaComanda extends IUVentanaT{
     private IUBoton botonSalir;
     private IUBoton botonGuardar;
     //.getListaProductos(habitacion.getFrigobar().getId()
-    public IUNuevaComanda(IUVentanaHotel ventanaPrincipal, int idRegistro, CFrigobar control, Habitacion habitacion, String titulo, Limitacion limitacion) {
+    public IUNuevaComanda(IUVentanaHotel ventanaPrincipal, String tipoComanda, int idRegistro, CFrigobar control, Habitacion habitacion, String titulo, Limitacion limitacion) {
         super(ventanaPrincipal, titulo, limitacion, 5);
         this.ventanaPrincipal = ventanaPrincipal;
         this.control = control;
+        this.tipoComanda = tipoComanda;
         this.idRegistro = idRegistro;
         
         this.lista = control.getListaProductos(habitacion.getFrigobar().getId(), habitacion.getId(), "categoria");
@@ -66,6 +68,7 @@ public class IUNuevaComanda extends IUVentanaT{
         construirPrimerPanel(primerPanel.getLimitacion());
         
         panelComanda = new IUPanelComanda(new Limitacion(limite.getPorcentajeAncho(59), limite.getPorcentajeAlto(1), limite.getPorcentajeAncho(40), limite.getPorcentajeAlto(70)), idRegistro);
+        panelComanda.llenarNuevaComanda(tipoComanda);
         panelFondo.add(panelComanda);
         
         tercerPanel = new IUPanel(new Limitacion(limite.getPorcentajeAncho(59), limite.getPorcentajeAlto(71), limite.getPorcentajeAncho(40), limite.getPorcentajeAlto(29)));

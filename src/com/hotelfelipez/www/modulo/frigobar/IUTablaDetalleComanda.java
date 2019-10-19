@@ -42,6 +42,7 @@ public class IUTablaDetalleComanda extends ModeloTabla<Detalle>{
         setModelo(nombreCabecera, columnas, lista);
         
         tabla = new IUTabla(this, limitacion);
+        tabla.setOpaque(false);
         tabla.agregarAnchoColumnas(porcentajes);
         tabla.setPosicionTextoHorizontal(0, SwingConstants.LEFT);
         tabla.setPosicionTextoHorizontal(1, SwingConstants.CENTER);

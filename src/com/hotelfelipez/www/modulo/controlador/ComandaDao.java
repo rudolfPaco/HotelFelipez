@@ -92,6 +92,10 @@ public class ComandaDao {
                 p.setHora(rs.getString("hora"));
                 p.setTotal(rs.getDouble("total"));
                 p.setEstado(rs.getString("estado"));
+                if(p.getEstado().equalsIgnoreCase("PAGADO"))
+                    p.setCheck(true);
+                else
+                    p.setCheck(false);
                 p.setIdRegistroHospedaje(rs.getInt("idregistroHospedaje"));                
                 p.setLista(getListaDetalles(p.getId(), p.getIdRegistroHospedaje()));
                 lista.add(p);
