@@ -15,6 +15,7 @@ import com.hotelfelipez.www.modulo.controlador.CFrigobar;
 import com.hotelfelipez.www.modulo.controlador.CHabitaciones;
 import com.hotelfelipez.www.modulo.controlador.CRegistroPersona;
 import com.hotelfelipez.www.modulo.disponibilidad.IUVentanaDisponibilidad;
+import com.hotelfelipez.www.modulo.frigobar.IUModificarComanda;
 import com.hotelfelipez.www.modulo.frigobar.IUNuevaComanda;
 import com.hotelfelipez.www.modulo.frigobar.IUPanelComanda;
 import com.hotelfelipez.www.modulo.frigobar.IUTablaComanda;
@@ -51,7 +52,9 @@ public class IUPanelServicio extends IUPanel{
     private IUBoton botonModificarComanda;
     private IUBoton botonEliminarComanda;
     private IUBoton botonImprimirComanda;
-    private IUBoton botonImprimirTodasComandas;    
+    private IUBoton botonImprimirTodasComandas;
+    private IUBoton botonSeleccionarTodo;
+    private IUBoton botonDeseleccionarTodo;
     private IUBoton botonSalir;
     private IUBoton botonPagarComanda;
     
@@ -109,6 +112,12 @@ public class IUPanelServicio extends IUPanel{
         botonImprimirTodasComandas = new IUBoton("imprimir todas comandas", new Limitacion(limite.getPorcentajeAncho(5), limite.getPorcentajeAlto(39), limite.getPorcentajeAncho(90), limite.getPorcentajeAlto(6)));
         segundoPanel.add(botonImprimirTodasComandas);
         
+        botonSeleccionarTodo = new IUBoton("seleccionar todo", new Limitacion(limite.getPorcentajeAncho(5), limite.getPorcentajeAlto(48), limite.getPorcentajeAncho(90), limite.getPorcentajeAlto(6)));
+        segundoPanel.add(botonSeleccionarTodo);
+        
+        botonDeseleccionarTodo = new IUBoton("deseleccionar todo", new Limitacion(limite.getPorcentajeAncho(5), limite.getPorcentajeAlto(57), limite.getPorcentajeAncho(90), limite.getPorcentajeAlto(6)));
+        segundoPanel.add(botonDeseleccionarTodo);
+        
         botonSalir = new IUBoton("salir del registro", new Limitacion(limite.getPorcentajeAncho(5), limite.getPorcentajeAlto(66), limite.getPorcentajeAncho(90), limite.getPorcentajeAlto(13)));
         segundoPanel.add(botonSalir);
     }
@@ -154,6 +163,39 @@ public class IUPanelServicio extends IUPanel{
                 }
                 
                 iuRegistro.setOpacity(1f);
+            }
+        });
+        botonModificarComanda.addEventoRaton(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                
+                if(iuTablaComanda.estaSeleccionado()){
+                    iuRegistro.setOpacity(0.2f);
+                    
+                    Comanda comanda = iuTablaComanda.getComanda();
+                    switch(comanda.getNombre()){
+                        case "Frigobar":
+                            IUModificarComanda iuModificarComanda = new IUModificarComanda(ventanaPrincipal, comanda, "Frigobar", iuRegistro.getRegistroHospedaje().getId(), new CFrigobar(), habitacion, "Registrar Nueva Comanda de Frigobar", new Limitacion(Asistente.ANCHO - Asistente.ANCHO/7, Asistente.ALTO - Asistente.ALTO/12));
+                            iuModificarComanda.mostrarVentana();
+                        break;
+                    }
+                    iuRegistro.setOpacity(1f);
+                }                
+            }
+        });
+        botonSeleccionarTodo.addEventoRaton(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                iuTablaComanda.seleccionarTodo();
+            }
+        });
+        botonDeseleccionarTodo.addEventoRaton(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                iuTablaComanda.deSeleccionarTodo();
             }
         });
     }

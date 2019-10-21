@@ -51,14 +51,7 @@ public class IUTablaComanda extends ModeloTabla<Comanda>{
         tabla.setPosicionTextoHorizontal(1, SwingConstants.CENTER);
         tabla.setPosicionTextoHorizontal(2, SwingConstants.CENTER);
         tabla.setPosicionTextoHorizontal(3, SwingConstants.CENTER);
-        tabla.setPosicionTextoHorizontal(4, SwingConstants.CENTER);
-        //tabla.setPosicionTextoHorizontal(5, SwingConstants.CENTER);
-
-        //tabla.setRowHeight(limitacion.getPorcentajeAlto(15));
-        /*for (int i = 0; i < tipoColumnas.length - 1; i++) {
-            tabla.setDefaultRenderer(tipoColumnas[i], new IURenderProductoMinibar(this));            
-        }
-        tabla.agregarCellRender(1, new IURenderProductoMinibar(new Limitacion(limitacion.getPorcentajeAncho(30) - 1, limitacion.getPorcentajeAlto(15) - 1)));        */
+        tabla.setPosicionTextoHorizontal(4, SwingConstants.CENTER);        
     }
     private void setEventos(){
         tabla.addMouseListener(new MouseAdapter() {
@@ -125,5 +118,21 @@ public class IUTablaComanda extends ModeloTabla<Comanda>{
                 }*/
             default:                
         }
+    }
+    public void seleccionarTodo(){
+        for (int i = 0; i < lista.size(); i++) {
+            Comanda comanda = getFila(i);
+            if(!comanda.getEstado().equalsIgnoreCase("PAGADO"))
+                comanda.setCheck(true);
+        }       
+        tabla.updateUI();
+    }
+    public void deSeleccionarTodo(){
+        for (int i = 0; i < lista.size(); i++) {
+            Comanda comanda = getFila(i);
+            if(!comanda.getEstado().equalsIgnoreCase("PAGADO"))
+                comanda.setCheck(false);
+        }       
+        tabla.updateUI();
     }
 }
