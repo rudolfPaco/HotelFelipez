@@ -178,6 +178,17 @@ public class IUPanelServicio extends IUPanel{
                         case "Frigobar":
                             IUModificarComanda iuModificarComanda = new IUModificarComanda(ventanaPrincipal, comanda, "Frigobar", iuRegistro.getRegistroHospedaje().getId(), new CFrigobar(), habitacion, "Registrar Nueva Comanda de Frigobar", new Limitacion(Asistente.ANCHO - Asistente.ANCHO/7, Asistente.ALTO - Asistente.ALTO/12));
                             iuModificarComanda.mostrarVentana();
+                            if(iuModificarComanda.getEstado()){
+                                if(new CComanda().modificarComanda(iuModificarComanda.getComanda())){
+                                    ArrayList<Producto> lista = iuModificarComanda.getListaProductos();
+                                    CFrigobar control = new CFrigobar();
+                                    for (int i = 0; i < lista.size(); i++){                                        
+                                        control.modificarProducto(lista.get(i));
+                                    }
+                                        
+                                } 
+                                actualizarTablaComandas();
+                            }
                         break;
                     }
                     iuRegistro.setOpacity(1f);

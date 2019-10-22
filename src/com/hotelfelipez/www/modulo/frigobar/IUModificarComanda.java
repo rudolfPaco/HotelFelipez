@@ -10,6 +10,7 @@ import com.aplicacionjava.www.etiquetas.IUEtiqueta;
 import com.aplicacionjava.www.paneles.IUPanel;
 import com.aplicacionjava.www.recursos.Limitacion;
 import com.aplicacionjava.www.ventanas.IUVentanaT;
+import com.hotelfelipez.www.modulo.controlador.CComanda;
 import com.hotelfelipez.www.modulo.controlador.CFrigobar;
 import com.hotelfelipez.www.modulo.modelo.Comanda;
 import com.hotelfelipez.www.modulo.modelo.Detalle;
@@ -42,7 +43,7 @@ public class IUModificarComanda extends IUVentanaT{
     private IUBoton botonReponer;
     private IUBoton botonConsumir;
     private IUBoton botonSalir;
-    private IUBoton botonGuardar;
+    private IUBoton botonModificar;
     //.getListaProductos(habitacion.getFrigobar().getId()
     public IUModificarComanda(IUVentanaHotel ventanaPrincipal, Comanda comanda, String tipoComanda, int idRegistro, CFrigobar control, Habitacion habitacion, String titulo, Limitacion limitacion) {
         super(ventanaPrincipal, titulo, limitacion, 5);
@@ -94,8 +95,8 @@ public class IUModificarComanda extends IUVentanaT{
         botonSalir = new IUBoton("Salir de COMANDA", new Limitacion(limite.getPorcentajeAncho(5), limite.getPorcentajeAlto(70), limite.getPorcentajeAncho(42), limite.getPorcentajeAlto(20)));
         tercerPanel.add(botonSalir);
         
-        botonGuardar = new IUBoton("Guardar COMANDA", new Limitacion(limite.getPorcentajeAncho(54), limite.getPorcentajeAlto(70), limite.getPorcentajeAncho(42), limite.getPorcentajeAlto(20)));
-        tercerPanel.add(botonGuardar);
+        botonModificar = new IUBoton("Modificar COMANDA", new Limitacion(limite.getPorcentajeAncho(54), limite.getPorcentajeAlto(70), limite.getPorcentajeAncho(42), limite.getPorcentajeAlto(20)));
+        tercerPanel.add(botonModificar);
     }
     private void escucharEvento(){
         botonConsumir.addEventoRaton(new MouseAdapter() {
@@ -127,6 +128,7 @@ public class IUModificarComanda extends IUVentanaT{
                         productoFrigobar.setCantidad(cant);
                         detalle.setUnidad("uds.");
                         detalle.setTotal(productoFrigobar.getPrecio());
+                        detalle.setIdProducto(productoFrigobar.getId());
                         detalle.setIdComanda(0);
                         detalle.setIdRegistroHospedaje(0);
                         detalle.setProducto(productoFrigobar);
@@ -141,7 +143,7 @@ public class IUModificarComanda extends IUVentanaT{
             public void mousePressed(MouseEvent e) {
                 if(panelComanda.iuTablaComanda.estaSeleccionado()){
                     Detalle detalle = panelComanda.iuTablaComanda.getDetalle();
-                    Producto productoFrigobar = iuTablaFrigobar.getProducto(detalle.getProducto().getId());
+                    Producto productoFrigobar = iuTablaFrigobar.getProducto(detalle.getIdProducto());
                     
                     if(detalle.getCantidad() > 0){
                         int cantFrigobar = productoFrigobar.getCantidad();
@@ -151,8 +153,13 @@ public class IUModificarComanda extends IUVentanaT{
                         detalle.setCantidad(cantComanda);
                         productoFrigobar.setCantidad(cantFrigobar);
                     }
-                    if(detalle.getCantidad() == 0)    
+                    if(detalle.getCantidad() == 0){
                         panelComanda.iuTablaComanda.removeFila(panelComanda.iuTablaComanda.tabla.getSelectedRow());
+                        CComanda control = new CComanda();
+                        
+                    }
+                        
+                    
                     actualizarTablas();
                 }
                 
@@ -164,7 +171,7 @@ public class IUModificarComanda extends IUVentanaT{
                 dispose();
             }
         });
-        botonGuardar.addEventoRaton(new MouseAdapter() {
+        botonModificar.addEventoRaton(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 if(panelComanda.getEstado()){
@@ -180,7 +187,7 @@ public class IUModificarComanda extends IUVentanaT{
             Producto producto = iuTablaFrigobar.getFila(i);
             for (int j = 0; j < panelComanda.iuTablaComanda.getRowCount(); j++) {
                 Detalle detalle = panelComanda.iuTablaComanda.getFila(j);
-                if(producto.getId() == detalle.getProducto().getId()){
+                if(producto.getId() == detalle.getIdProducto()){
                     listaProductos.add(producto);
                 }
             }
@@ -199,7 +206,7 @@ public class IUModificarComanda extends IUVentanaT{
         iuTablaFrigobar.tabla.updateUI();
         panelComanda.actualizarTablaComanda();
     }
-    private void llenarDatosComanda(Comanda comanda){
+    private void llenarDatosComanda(Comanda comanda){        
         panelComanda.llenarComanda(comanda);
     }
     private void actualizarTablaProductos(){        

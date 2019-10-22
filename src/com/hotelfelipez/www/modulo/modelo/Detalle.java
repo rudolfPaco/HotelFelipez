@@ -16,6 +16,7 @@ public class Detalle {
     private double cantidad;
     private String unidad;
     private double total;
+    private int idProducto;
     private int idComanda;
     private int idRegistroHospedaje;
     private Producto producto;
@@ -60,6 +61,12 @@ public class Detalle {
     public void setTotal(double total) {
         this.total = total;
     }
+    public int getIdProducto() {
+        return idProducto;
+    }
+    public void setIdProducto(int idProducto) {
+        this.idProducto = idProducto;
+    }
     public int getIdComanda() {
         return idComanda;
     }
@@ -80,6 +87,6 @@ public class Detalle {
     }
     @Override
     public String toString() {
-        return "Detalle{" + "id=" + id + ", descripcion=" + descripcion + ", precio=" + precio + ", cantidad=" + cantidad + ", unidad=" + unidad + ", total=" + total + ", idComanda=" + idComanda + ", idRegistroHospedaje=" + idRegistroHospedaje + ", producto=" + producto + '}';
+        return "Detalle{" + "id=" + id + ", descripcion=" + descripcion + ", precio=" + precio + ", cantidad=" + cantidad + ", unidad=" + unidad + ", total=" + total + ", idProducto=" + idProducto + ", idComanda=" + idComanda + ", idRegistroHospedaje=" + idRegistroHospedaje + ", producto=" + producto + '}';
     }
 }

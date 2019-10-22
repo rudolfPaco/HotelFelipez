@@ -123,7 +123,7 @@ public class IUPanelComanda extends IUPanelBD{
         int contador = 0;
         while(contador < iuTablaComanda.getRowCount() && !verificador){
             Detalle detalle = iuTablaComanda.getFila(contador);
-            if(detalle.getProducto().getId() == producto.getId())
+            if(detalle.getIdProducto() == producto.getId())
                 verificador = true;
             contador++;
         }        
@@ -169,7 +169,7 @@ public class IUPanelComanda extends IUPanelBD{
         comanda.setFecha(new Fecha().fecha());
         comanda.setHora(new Hora().getHora()+" "+new Hora().getFormato());
         comanda.setTotal(Double.valueOf(iuTotal.iuTexto.getText()));
-        comanda.setEstado(iuEstado.getText());
+        comanda.setEstado(iuEstado.getText());        
         comanda.setIdRegistroHospedaje(idRegistroHospedaje);
         for (int i = 0; i < iuTablaComanda.getRowCount(); i++) {
             Detalle detalle = iuTablaComanda.getFila(i);

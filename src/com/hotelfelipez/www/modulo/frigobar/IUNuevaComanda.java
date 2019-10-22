@@ -131,6 +131,7 @@ public class IUNuevaComanda extends IUVentanaT{
                         productoFrigobar.setCantidad(cant);
                         detalle.setUnidad("uds.");
                         detalle.setTotal(productoFrigobar.getPrecio());
+                        detalle.setIdProducto(productoFrigobar.getId());
                         detalle.setIdComanda(0);
                         detalle.setIdRegistroHospedaje(0);
                         detalle.setProducto(productoFrigobar);
