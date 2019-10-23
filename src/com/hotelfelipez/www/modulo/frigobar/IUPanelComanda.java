@@ -38,10 +38,12 @@ public class IUPanelComanda extends IUPanelBD{
     private IUPanel tercerPanel;
     private IUPanelTT iuTotal;
     private int idRegistroHospedaje; 
+    private int id;
     
     public IUPanelComanda(Limitacion limitacion, int idRegistroHospedaje) {
         super(limitacion);
         this.idRegistroHospedaje = idRegistroHospedaje;
+        this.id = 0;
         setArco(20);
         construirPaneles(getLimitacion());
     }
@@ -103,6 +105,7 @@ public class IUPanelComanda extends IUPanelBD{
         iuEstado.setText("DEBE");
     }
     public void llenarComanda(Comanda c){
+        id = c.getId();
         iuNombre.setText(c.getNombre());
         iuNumero.iuTexto.setText(c.getNroComanda());
         iuEstado.setText(c.getEstado());
@@ -134,7 +137,7 @@ public class IUPanelComanda extends IUPanelBD{
         Detalle detalle = null;
         int contador = 0;
         while(contador < iuTablaComanda.getRowCount() && !verificador){
-            if(iuTablaComanda.getFila(contador).getProducto().getId() == idProducto){
+            if(iuTablaComanda.getFila(contador).getIdProducto() == idProducto){
                 detalle = iuTablaComanda.getFila(contador);
                 verificador = true;
             }                
@@ -163,7 +166,7 @@ public class IUPanelComanda extends IUPanelBD{
         return verificador;
     }
     public Comanda getComanda(){
-        Comanda comanda = new Comanda(0);
+        Comanda comanda = new Comanda(id);
         comanda.setNroComanda(iuNumero.iuTexto.getText());
         comanda.setNombre(iuNombre.getText());
         comanda.setFecha(new Fecha().fecha());

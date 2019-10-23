@@ -44,7 +44,8 @@ public class IUModificarComanda extends IUVentanaT{
     private IUBoton botonConsumir;
     private IUBoton botonSalir;
     private IUBoton botonModificar;
-    //.getListaProductos(habitacion.getFrigobar().getId()
+    private ArrayList<Detalle> detallesEliminados;
+    
     public IUModificarComanda(IUVentanaHotel ventanaPrincipal, Comanda comanda, String tipoComanda, int idRegistro, CFrigobar control, Habitacion habitacion, String titulo, Limitacion limitacion) {
         super(ventanaPrincipal, titulo, limitacion, 5);
         this.ventanaPrincipal = ventanaPrincipal;
@@ -54,6 +55,7 @@ public class IUModificarComanda extends IUVentanaT{
         
         this.lista = control.getListaProductos(habitacion.getFrigobar().getId(), habitacion.getId(), "categoria");
         this.estado = false;
+        this.detallesEliminados = new ArrayList<>();
         construirPaneles(panelFondo.getLimitacion());
         llenarDatosComanda(comanda);
         actualizarTablaProductos();
@@ -155,11 +157,8 @@ public class IUModificarComanda extends IUVentanaT{
                     }
                     if(detalle.getCantidad() == 0){
                         panelComanda.iuTablaComanda.removeFila(panelComanda.iuTablaComanda.tabla.getSelectedRow());
-                        CComanda control = new CComanda();
-                        
+                        detallesEliminados.add(detalle);
                     }
-                        
-                    
                     actualizarTablas();
                 }
                 
@@ -191,6 +190,11 @@ public class IUModificarComanda extends IUVentanaT{
                     listaProductos.add(producto);
                 }
             }
+            for (int j = 0; j < detallesEliminados.size(); j++) {
+                Detalle detalle = detallesEliminados.get(j);
+                if(producto.getId() == detalle.getIdProducto())
+                    listaProductos.add(producto);
+            }
         }        
     }
     public boolean getEstado(){
@@ -201,6 +205,9 @@ public class IUModificarComanda extends IUVentanaT{
     }
     public ArrayList<Producto> getListaProductos(){
         return listaProductos;
+    }
+    public ArrayList<Detalle> getDetalleEliminados(){
+        return detallesEliminados;
     }
     private void actualizarTablas(){
         iuTablaFrigobar.tabla.updateUI();

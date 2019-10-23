@@ -37,7 +37,7 @@ public class CComanda {
         conexion.cerrarConexion();
         return verificador;
     }
-    public boolean modificarComanda(Comanda comanda){
+    public boolean modificarComanda(Comanda comanda, ArrayList<Detalle> detallesEliminados){
         boolean verificador = false;
         Conexion conexion = new Conexion();
         ComandaDao comandaDao = new ComandaDao(conexion);
@@ -49,9 +49,31 @@ public class CComanda {
                    comandaDao.seModificoDetalle(detalle); 
                 }else{
                     comandaDao.seGuardoDetalle(detalle);
-                }                
+                }
             }
+            for (int i = 0; i < detallesEliminados.size(); i++) {
+                Detalle detalle = detallesEliminados.get(i);                
+                if(Asistente.existeAlgunDato("iddetalle", "select * from detalle where iddetalle = "+detalle.getId())){
+                   comandaDao.seEliminoDetalle(detalle); 
+                }
+            }
+            verificador = true;
         }
+        conexion.cerrarConexion();
+        return verificador;
+    }
+    public boolean eliminarComanda(Comanda comanda){
+        boolean verificador = false;
+        Conexion conexion = new Conexion();
+        ComandaDao comandaDao = new ComandaDao(conexion);
+        if(comandaDao.seEliminoComanda(comanda)){
+            for (int i = 0; i < comanda.getLista().size(); i++) {
+                Detalle detalle = comanda.getLista().get(i);
+                
+                comandaDao.seEliminoDetalle(comanda.getLista().get(i));
+            }
+            verificador = true;
+        }            
         conexion.cerrarConexion();
         return verificador;
     }
@@ -62,13 +84,5 @@ public class CComanda {
         lista = comandaDao.getListaComandas(idRegistroHospedaje);
         conexion.cerrarConexion();
         return lista;
-    }
-    public boolean seEliminoDetalle(Detalle d){
-        boolean verificador = false;
-        Conexion conexion = new Conexion();
-        ComandaDao comandaDao = new ComandaDao(conexion);
-        
-        conexion.cerrarConexion();
-        return verificador;
-    }
+    }    
 }

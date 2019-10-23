@@ -176,23 +176,43 @@ public class IUPanelServicio extends IUPanel{
                     Comanda comanda = iuTablaComanda.getComanda();
                     switch(comanda.getNombre()){
                         case "Frigobar":
-                            IUModificarComanda iuModificarComanda = new IUModificarComanda(ventanaPrincipal, comanda, "Frigobar", iuRegistro.getRegistroHospedaje().getId(), new CFrigobar(), habitacion, "Registrar Nueva Comanda de Frigobar", new Limitacion(Asistente.ANCHO - Asistente.ANCHO/7, Asistente.ALTO - Asistente.ALTO/12));
-                            iuModificarComanda.mostrarVentana();
-                            if(iuModificarComanda.getEstado()){
-                                if(new CComanda().modificarComanda(iuModificarComanda.getComanda())){
-                                    ArrayList<Producto> lista = iuModificarComanda.getListaProductos();
-                                    CFrigobar control = new CFrigobar();
-                                    for (int i = 0; i < lista.size(); i++){                                        
-                                        control.modificarProducto(lista.get(i));
+                            if(comanda.getEstado().equalsIgnoreCase("PAGADO")){
+                                Asistente.mensajeVerificacion(ventanaPrincipal, "aviso", "lo siento...!  No puede modificar la comanda, por que ya esta PAGADO...!", "advertencia");
+                            }else{
+                                IUModificarComanda iuModificarComanda = new IUModificarComanda(ventanaPrincipal, comanda, "Frigobar", iuRegistro.getRegistroHospedaje().getId(), new CFrigobar(), habitacion, "Modificar la Comanda de Frigobar", new Limitacion(Asistente.ANCHO - Asistente.ANCHO/7, Asistente.ALTO - Asistente.ALTO/12));
+                                iuModificarComanda.mostrarVentana();
+                                if(iuModificarComanda.getEstado()){
+                                    if(new CComanda().modificarComanda(iuModificarComanda.getComanda(), iuModificarComanda.getDetalleEliminados())){
+                                        ArrayList<Producto> lista = iuModificarComanda.getListaProductos();
+                                        CFrigobar control = new CFrigobar();
+                                        for (int i = 0; i < lista.size(); i++){
+                                            control.modificarProducto(lista.get(i));
+                                        }
                                     }
-                                        
-                                } 
-                                actualizarTablaComandas();
-                            }
+                                    actualizarTablaComandas();
+                                }
+                            }                            
                         break;
                     }
                     iuRegistro.setOpacity(1f);
                 }                
+            }
+        });
+        botonEliminarComanda.addEventoRaton(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if(iuTablaComanda.estaSeleccionado()){
+                    iuRegistro.setOpacity(0.2f);
+                    
+                    Comanda comanda = iuTablaComanda.getComanda();
+                    if(Asistente.mensajeVerificacion(ventanaPrincipal, "aviso", "esta seguro que quiere eliminar la comanda: "+comanda.getNroComanda()+"  "+comanda.getNombre(), "advertencia"))
+                        if(new CComanda().eliminarComanda(comanda))
+                            Asistente.mensajeVerificacion(ventanaPrincipal, "aviso", "se elimino la comanda CORRECTAMENTE...!", "advertencia");                    
+                    actualizarTablaComandas();
+                    //mequede aqui...debo modificar el producto modificado
+                    iuRegistro.setOpacity(1f);
+                }
             }
         });
         botonSeleccionarTodo.addEventoRaton(new MouseAdapter() {

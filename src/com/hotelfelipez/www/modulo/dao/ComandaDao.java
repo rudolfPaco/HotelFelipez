@@ -116,9 +116,9 @@ public class ComandaDao {
         }
         return verificador;
     }
-    public boolean eliminarDetalle(Detalle d){
+    public boolean seEliminoComanda(Comanda c){
         boolean verificador = false;
-        String sql = "delete from producto where idproducto = "+d.getId();
+        String sql = "delete from comanda where idcomanda = "+c.getId();
         try {
             PreparedStatement ps = conexion.getConexion().prepareStatement(sql);
             int estado = ps.executeUpdate();
@@ -126,7 +126,21 @@ public class ComandaDao {
                 verificador = true;
             
         } catch (SQLException e) {
-            System.out.println("Error ProductoDao.seEliminoProducto(): "+e.getMessage());
+            System.out.println("Error ComandaDao.seEliminoComanda(): "+e.getMessage());
+        }
+        return verificador;
+    }
+    public boolean seEliminoDetalle(Detalle d){
+        boolean verificador = false;
+        String sql = "delete from detalle where iddetalle = "+d.getId();
+        try {
+            PreparedStatement ps = conexion.getConexion().prepareStatement(sql);
+            int estado = ps.executeUpdate();
+            if(estado > 0)
+                verificador = true;
+            
+        } catch (SQLException e) {
+            System.out.println("Error DetalleDao.seEliminoDetalle(): "+e.getMessage());
         }
         return verificador;
     }
