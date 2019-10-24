@@ -54,6 +54,35 @@ public class ProductoDao {
         }
         return lista;
     }
+    public Producto getProducto(int idProducto){
+        Producto p = null;
+        try {
+            String sql = "select * from producto where idproducto = "+idProducto;
+            PreparedStatement ps = conexion.getConexion().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next()){
+                p = new Producto(rs.getInt("idproducto"));
+                p.setCategoria(rs.getString("categoria"));
+                p.setMarca(rs.getString("marca"));
+                p.setNombre(rs.getString("nombre"));
+                p.setCosto(rs.getDouble("costo"));
+                p.setPrecio(rs.getDouble("precio"));
+                p.setCantidad(rs.getInt("cantidad"));
+                p.setFechaVencimiento(rs.getString("fechaVencimiento"));
+                p.setPromocion(rs.getString("promocion"));
+                p.setPrecioAnterior(rs.getDouble("precioAnterior"));
+                p.setIdmoneda(rs.getInt("idmoneda"));
+                p.setIdfrigobar(rs.getInt("idfrigobar"));
+                p.setIdhabitacion(rs.getInt("idhabitacion"));
+                p.setMoneda(getMoneda(p.getIdmoneda()));                
+            }
+            
+        } catch (SQLException e) {
+            System.out.println("Error... ProductoDao.getlistaProductos(): "+e.getMessage());
+        }
+        return p;
+    }
     private Moneda getMoneda(int id){
         Moneda moneda = new Moneda(id);
         MonedaDao monedaDao = new MonedaDao(conexion);

@@ -9,6 +9,7 @@ import com.aplicacionjava.www.botones.IUBoton;
 import com.aplicacionjava.www.etiquetas.IUEtiqueta;
 import com.aplicacionjava.www.paneles.IUPanel;
 import com.aplicacionjava.www.paneles.IUPanelBD;
+import com.aplicacionjava.www.paneles.IUPanelTT;
 import com.aplicacionjava.www.recursos.Limitacion;
 import com.hotelfelipez.www.modulo.controlador.CComanda;
 import com.hotelfelipez.www.modulo.controlador.CFrigobar;
@@ -47,6 +48,7 @@ public class IUPanelServicio extends IUPanel{
     private IUPanelComanda iuComanda;
     private IUEtiqueta iuTituloTabla;
     private IUTablaComanda iuTablaComanda;
+    private IUPanelTT iuTotal;
     private IUPanelBD segundoPanel;
     private IUBoton botonNuevaComanda;
     private IUBoton botonModificarComanda;
@@ -95,6 +97,14 @@ public class IUPanelServicio extends IUPanel{
         
         iuTablaComanda = new IUTablaComanda(iuComanda, new Limitacion(limite.getPorcentajeAncho(42), limite.getPorcentajeAlto(7), limite.getPorcentajeAncho(57), limite.getPorcentajeAlto(82)));
         primerPanel.add(iuTablaComanda.tabla.deslizador);
+        
+        iuTotal = new IUPanelTT(new Limitacion(limite.getPorcentajeAncho(62), limite.getPorcentajeAlto(89), limite.getPorcentajeAncho(25), limite.getPorcentajeAlto(7)), "Total a Pagar", "", 70, 30);
+        iuTotal.iuTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+        iuTotal.iuTexto.setBorder(new LineBorder(Color.LIGHT_GRAY));
+        iuTotal.iuTexto.setFont(new Font("Verdana", Font.PLAIN, limite.getPorcentajeAlto(4)));
+        iuTotal.iuTitulo.setFont(new Font("Verdana", Font.PLAIN, limite.getPorcentajeAlto(4)));
+        iuTotal.iuTexto.setHorizontalAlignment(SwingConstants.CENTER);
+        primerPanel.add(iuTotal);
     }
     private void construirSegundoPanel(Limitacion limite){
         botonNuevaComanda = new IUBoton("nueva comanda", new Limitacion(limite.getPorcentajeAncho(5), limite.getPorcentajeAlto(3), limite.getPorcentajeAncho(90), limite.getPorcentajeAlto(6)));
@@ -124,12 +134,16 @@ public class IUPanelServicio extends IUPanel{
     private void actualizarTablaComandas(){
         CComanda control = new CComanda();
         ArrayList<Comanda> lista = control.getListaComandas(iuRegistro.getRegistroHospedaje().getId());
+        double total = 0;
         
         iuTablaComanda.limpiarTabla();
         for (int i = 0; i < lista.size(); i++) {
             Comanda comanda = lista.get(i);
             iuTablaComanda.setFila(comanda);
+            if(!comanda.getEstado().equalsIgnoreCase("PAGADO"))
+                total = total + comanda.getTotal();
         }
+        iuTotal.iuTexto.setText(String.valueOf(total));
     }
     private void escucharEvento(){
         botonNuevaComanda.addEventoRaton(new MouseAdapter() {
@@ -206,11 +220,15 @@ public class IUPanelServicio extends IUPanel{
                     iuRegistro.setOpacity(0.2f);
                     
                     Comanda comanda = iuTablaComanda.getComanda();
-                    if(Asistente.mensajeVerificacion(ventanaPrincipal, "aviso", "esta seguro que quiere eliminar la comanda: "+comanda.getNroComanda()+"  "+comanda.getNombre(), "advertencia"))
-                        if(new CComanda().eliminarComanda(comanda))
-                            Asistente.mensajeVerificacion(ventanaPrincipal, "aviso", "se elimino la comanda CORRECTAMENTE...!", "advertencia");                    
-                    actualizarTablaComandas();
-                    //mequede aqui...debo modificar el producto modificado
+                    if(comanda.getEstado().equalsIgnoreCase("PAGADO"))
+                        Asistente.mensajeVerificacion(ventanaPrincipal, "aviso", "lo siento... pero NO PUEDE ELIMINAR LA COMANDA... por que ya esta PAGADA la comanda...!", "advertencia");
+                    else{
+                        if(Asistente.mensajeVerificacion(ventanaPrincipal, "peligro", "esta seguro que quiere eliminar la comanda: "+comanda.getNroComanda()+"  "+comanda.getNombre(), "advertencia"))
+                            if(new CComanda().eliminarComanda(comanda))
+                                Asistente.mensajeVerificacion(ventanaPrincipal, "aviso", "se elimino la comanda CORRECTAMENTE...!", "advertencia");                    
+                        actualizarTablaComandas();
+                    }                    
+                    
                     iuRegistro.setOpacity(1f);
                 }
             }
@@ -227,6 +245,13 @@ public class IUPanelServicio extends IUPanel{
             @Override
             public void mousePressed(MouseEvent e) {
                 iuTablaComanda.deSeleccionarTodo();
+            }
+        });
+        botonSalir.addEventoRaton(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                iuRegistro.dispose();
             }
         });
     }

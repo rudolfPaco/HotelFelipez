@@ -51,7 +51,8 @@ public class IUTablaComanda extends ModeloTabla<Comanda>{
         tabla.setPosicionTextoHorizontal(1, SwingConstants.CENTER);
         tabla.setPosicionTextoHorizontal(2, SwingConstants.CENTER);
         tabla.setPosicionTextoHorizontal(3, SwingConstants.CENTER);
-        tabla.setPosicionTextoHorizontal(4, SwingConstants.CENTER);        
+        tabla.setPosicionTextoHorizontal(4, SwingConstants.CENTER);     
+        tabla.setOpaque(false);
     }
     private void setEventos(){
         tabla.addMouseListener(new MouseAdapter() {

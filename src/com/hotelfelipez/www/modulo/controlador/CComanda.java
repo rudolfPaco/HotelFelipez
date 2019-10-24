@@ -7,9 +7,11 @@ package com.hotelfelipez.www.modulo.controlador;
 
 import com.hotelfelipez.www.modulo.dao.ComandaDao;
 import com.hotelfelipez.www.modulo.dao.Conexion;
+import com.hotelfelipez.www.modulo.dao.ProductoDao;
 import com.hotelfelipez.www.modulo.modelo.Asistente;
 import com.hotelfelipez.www.modulo.modelo.Comanda;
 import com.hotelfelipez.www.modulo.modelo.Detalle;
+import com.hotelfelipez.www.modulo.modelo.Producto;
 import java.util.ArrayList;
 
 /**
@@ -66,11 +68,18 @@ public class CComanda {
         boolean verificador = false;
         Conexion conexion = new Conexion();
         ComandaDao comandaDao = new ComandaDao(conexion);
+        ProductoDao productoDao = new ProductoDao(conexion);
+        int cantComanda = 0;
+        int cantProducto = 0;
         if(comandaDao.seEliminoComanda(comanda)){
             for (int i = 0; i < comanda.getLista().size(); i++) {
                 Detalle detalle = comanda.getLista().get(i);
-                
-                comandaDao.seEliminoDetalle(comanda.getLista().get(i));
+                cantComanda = (int) detalle.getCantidad();
+                Producto producto = productoDao.getProducto(detalle.getIdProducto());
+                cantProducto = producto.getCantidad() + cantComanda;
+                producto.setCantidad(cantProducto);
+                if(productoDao.seModificoProducto(producto))
+                    comandaDao.seEliminoDetalle(comanda.getLista().get(i));
             }
             verificador = true;
         }            
