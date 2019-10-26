@@ -11,6 +11,7 @@ import com.aplicacionjava.www.paneles.IUPanel;
 import com.aplicacionjava.www.paneles.IUPanelBD;
 import com.aplicacionjava.www.paneles.IUPanelTT;
 import com.aplicacionjava.www.recursos.Limitacion;
+import com.hotelfelipez.www.modulo.contabilidad.IURecibo;
 import com.hotelfelipez.www.modulo.controlador.CComanda;
 import com.hotelfelipez.www.modulo.controlador.CFrigobar;
 import com.hotelfelipez.www.modulo.controlador.CHabitaciones;
@@ -130,6 +131,9 @@ public class IUPanelServicio extends IUPanel{
         
         botonSalir = new IUBoton("salir del registro", new Limitacion(limite.getPorcentajeAncho(5), limite.getPorcentajeAlto(66), limite.getPorcentajeAncho(90), limite.getPorcentajeAlto(13)));
         segundoPanel.add(botonSalir);
+        
+        botonPagarComanda = new IUBoton("pagar comanda(s)", new Limitacion(limite.getPorcentajeAncho(5), limite.getPorcentajeAlto(82), limite.getPorcentajeAncho(90), limite.getPorcentajeAlto(6)));
+        segundoPanel.add(botonPagarComanda);
     }
     private void actualizarTablaComandas(){
         CComanda control = new CComanda();
@@ -252,6 +256,18 @@ public class IUPanelServicio extends IUPanel{
             @Override
             public void mousePressed(MouseEvent e) {
                 iuRegistro.dispose();
+            }
+        });
+        botonPagarComanda.addEventoRaton(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                iuRegistro.setOpacity(0.3f);
+                
+                IURecibo iuRecibo = new IURecibo(ventanaPrincipal, "Recibo por el Pago de Comandas", new Limitacion(Asistente.ANCHO/2 - Asistente.ANCHO/10, Asistente.ALTO - Asistente.ALTO/7), iuRegistro.getRegistroHospedaje());
+                iuRecibo.mostrarVentana();
+                
+                iuRegistro.setOpacity(1f);
             }
         });
     }
