@@ -13,6 +13,7 @@ import com.hotelfelipez.www.modulo.disponibilidad.RenderResultado;
 import com.hotelfelipez.www.modulo.modelo.Comanda;
 import com.hotelfelipez.www.modulo.modelo.Detalle;
 import com.hotelfelipez.www.modulo.modelo.Producto;
+import com.hotelfelipez.www.modulo.registroHospedaje.IUPanelServicio;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -33,11 +34,13 @@ public class IUTablaComanda extends ModeloTabla<Comanda>{
     private final Limitacion limitacion;
     private IUPanelComanda panelComanda;
     private Comanda comanda;
+    public ArrayList<Comanda> comandasSeleccionadas;
     
     public IUTablaComanda(IUPanelComanda panelComanda, Limitacion limitacion) {
         this.limitacion = limitacion;        
         this.panelComanda = panelComanda;
         this.comanda = null;
+        this.comandasSeleccionadas = new ArrayList<>();
         
         construirTabla();
         setEventos();
@@ -112,27 +115,33 @@ public class IUTablaComanda extends ModeloTabla<Comanda>{
             case 5:
                 lista.get(rowIndex).setCheck((boolean) value);                
                 fireTableCellUpdated(rowIndex, columnIndex);
-                /*if((boolean)value){
-                    //habitacionesSeleccionadas.add(lista.get(rowIndex));
+                if((boolean)value){
+                    comandasSeleccionadas.add(lista.get(rowIndex));
                 }else{
-                    //habitacionesSeleccionadas.remove(lista.get(rowIndex));
-                }*/
-            default:                
-        }
+                    comandasSeleccionadas.remove(lista.get(rowIndex));
+                }
+            default:
+        }        
     }
     public void seleccionarTodo(){
         for (int i = 0; i < lista.size(); i++) {
             Comanda comanda = getFila(i);
-            if(!comanda.getEstado().equalsIgnoreCase("PAGADO"))
+            if(!comanda.getEstado().equalsIgnoreCase("PAGADO")){
                 comanda.setCheck(true);
+                comandasSeleccionadas.add(comanda);
+            }
+                
         }       
         tabla.updateUI();
     }
     public void deSeleccionarTodo(){
         for (int i = 0; i < lista.size(); i++) {
             Comanda comanda = getFila(i);
-            if(!comanda.getEstado().equalsIgnoreCase("PAGADO"))
+            if(!comanda.getEstado().equalsIgnoreCase("PAGADO")){
                 comanda.setCheck(false);
+                comandasSeleccionadas.remove(comanda);
+            }
+                
         }       
         tabla.updateUI();
     }

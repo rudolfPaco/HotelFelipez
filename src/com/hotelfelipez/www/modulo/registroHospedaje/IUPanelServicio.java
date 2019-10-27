@@ -25,6 +25,7 @@ import com.hotelfelipez.www.modulo.modelo.Asistente;
 import com.hotelfelipez.www.modulo.modelo.Comanda;
 import com.hotelfelipez.www.modulo.modelo.Habitacion;
 import com.hotelfelipez.www.modulo.modelo.Producto;
+import com.hotelfelipez.www.modulo.modelo.Recibo;
 import com.hotelfelipez.www.modulo.principal.IUVentanaHotel;
 import com.hotelfelipez.www.modulo.principal.IUVentanaOpciones;
 import java.awt.Color;
@@ -262,12 +263,20 @@ public class IUPanelServicio extends IUPanel{
 
             @Override
             public void mousePressed(MouseEvent e) {
-                iuRegistro.setOpacity(0.3f);
                 
-                IURecibo iuRecibo = new IURecibo(ventanaPrincipal, "Recibo por el Pago de Comandas", new Limitacion(Asistente.ANCHO/2 - Asistente.ANCHO/10, Asistente.ALTO - Asistente.ALTO/7), iuRegistro.getRegistroHospedaje());
-                iuRecibo.mostrarVentana();
+                if(Double.parseDouble(iuTotal.iuTexto.getText()) > 0 && !iuTablaComanda.comandasSeleccionadas.isEmpty()){
+                    iuRegistro.setOpacity(0.3f);
+                    
+                    IURecibo iuRecibo = new IURecibo(ventanaPrincipal, iuTablaComanda.comandasSeleccionadas, "Recibo por el Pago de Comandas", new Limitacion(Asistente.ANCHO/2 - Asistente.ANCHO/10, Asistente.ALTO - Asistente.ALTO/7), iuRegistro.getRegistroHospedaje());
+                    iuRecibo.mostrarVentana();
+                    if(iuRecibo.getEstado()){
+                        Recibo recibo = iuRecibo.getRecibo();
+                        System.out.println("el recibo es: "+recibo.toString());
+                    }
+                    
+                    iuRegistro.setOpacity(1f);
+                }
                 
-                iuRegistro.setOpacity(1f);
             }
         });
     }
