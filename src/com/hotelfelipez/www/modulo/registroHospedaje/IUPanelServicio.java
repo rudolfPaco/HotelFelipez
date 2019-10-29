@@ -15,6 +15,7 @@ import com.hotelfelipez.www.modulo.contabilidad.IURecibo;
 import com.hotelfelipez.www.modulo.controlador.CComanda;
 import com.hotelfelipez.www.modulo.controlador.CFrigobar;
 import com.hotelfelipez.www.modulo.controlador.CHabitaciones;
+import com.hotelfelipez.www.modulo.controlador.CRecibo;
 import com.hotelfelipez.www.modulo.controlador.CRegistroPersona;
 import com.hotelfelipez.www.modulo.disponibilidad.IUVentanaDisponibilidad;
 import com.hotelfelipez.www.modulo.frigobar.IUModificarComanda;
@@ -138,10 +139,12 @@ public class IUPanelServicio extends IUPanel{
     }
     private void actualizarTablaComandas(){
         CComanda control = new CComanda();
+        
         ArrayList<Comanda> lista = control.getListaComandas(iuRegistro.getRegistroHospedaje().getId());
         double total = 0;
-        
+                
         iuTablaComanda.limpiarTabla();
+        iuTablaComanda.comandasSeleccionadas.clear();
         for (int i = 0; i < lista.size(); i++) {
             Comanda comanda = lista.get(i);
             iuTablaComanda.setFila(comanda);
@@ -271,7 +274,14 @@ public class IUPanelServicio extends IUPanel{
                     iuRecibo.mostrarVentana();
                     if(iuRecibo.getEstado()){
                         Recibo recibo = iuRecibo.getRecibo();
-                        System.out.println("el recibo es: "+recibo.toString());
+                        CRecibo controlRecibo = new CRecibo();
+                        if(controlRecibo.guardarNuevoRecibo(recibo)){
+                            if(controlRecibo.guardoRecibo_RegistroHospedaje(Asistente.getId("idrecibo", "select idrecibo from recibo order by idrecibo desc limit 1"), iuRegistro.getRegistroHospedaje().getId())){
+                                if(new CComanda().modificarComandaPagada(iuTablaComanda.comandasSeleccionadas)){
+                                    actualizarTablaComandas();
+                                }                                
+                            }                            
+                        }
                     }
                     
                     iuRegistro.setOpacity(1f);

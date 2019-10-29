@@ -64,6 +64,20 @@ public class CComanda {
         conexion.cerrarConexion();
         return verificador;
     }
+    public boolean modificarComandaPagada(ArrayList<Comanda> comandas){
+        boolean verificador = false;
+        Conexion conexion = new Conexion();
+        ComandaDao comandaDao = new ComandaDao(conexion);
+        for (int i = 0; i < comandas.size(); i++) {
+            Comanda comanda = comandas.get(i);
+            comanda.setEstado("PAGADO");
+            comanda.setCheck(true);
+            if(comandaDao.seModificoComanda(comanda))
+                verificador = true;
+        }
+        conexion.cerrarConexion();
+        return verificador;
+    }
     public boolean eliminarComanda(Comanda comanda){
         boolean verificador = false;
         Conexion conexion = new Conexion();
