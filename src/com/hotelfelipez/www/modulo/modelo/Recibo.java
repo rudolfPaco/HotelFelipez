@@ -19,8 +19,9 @@ public class Recibo {
     private String montoLiteral;
     private String descripcion;
     private double total;
-    private double acuenta;
-    private double saldo;
+    private double pago;
+    private double cambio;
+    private String estado;
 
     public Recibo(int id) {
         this.id = id;
@@ -73,20 +74,26 @@ public class Recibo {
     public void setTotal(double total) {
         this.total = total;
     }
-    public double getAcuenta() {
-        return acuenta;
+    public double getPago() {
+        return pago;
     }
-    public void setAcuenta(double acuenta) {
-        this.acuenta = acuenta;
+    public void setPago(double pago) {
+        this.pago = pago;
     }
-    public double getSaldo() {
-        return saldo;
+    public double getCambio() {
+        return cambio;
     }
-    public void setSaldo(double saldo) {
-        this.saldo = saldo;
+    public void setCambio(double cambio) {
+        this.cambio = cambio;
+    }
+    public String getEstado() {
+        return estado;
+    }
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
     @Override
     public String toString() {
-        return "Recibo{" + "id=" + id + ", nroRecibo=" + nroRecibo + ", fecha=" + fecha + ", nombrePersona=" + nombrePersona + ", montoRecibido=" + montoRecibido + ", montoLiteral=" + montoLiteral + ", descripcion=" + descripcion + ", total=" + total + ", acuenta=" + acuenta + ", saldo=" + saldo + '}';
+        return "Recibo{" + "id=" + id + ", nroRecibo=" + nroRecibo + ", fecha=" + fecha + ", nombrePersona=" + nombrePersona + ", montoRecibido=" + montoRecibido + ", montoLiteral=" + montoLiteral + ", descripcion=" + descripcion + ", total=" + total + ", pago=" + pago + ", cambio=" + cambio + ", estado=" + estado + '}';
     }
 }

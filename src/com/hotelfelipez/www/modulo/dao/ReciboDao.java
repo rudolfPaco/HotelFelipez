@@ -21,7 +21,7 @@ public class ReciboDao {
     }
     public boolean seGuardoRecibo(Recibo r){
         boolean verificador = false;
-        String sql = "insert into recibo values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "insert into recibo values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         try {
             PreparedStatement ps = conexion.getConexion().prepareStatement(sql);
@@ -34,8 +34,9 @@ public class ReciboDao {
             ps.setString(6, r.getMontoLiteral());
             ps.setString(7, r.getDescripcion());
             ps.setDouble(8, r.getTotal());
-            ps.setDouble(9, r.getAcuenta());
-            ps.setDouble(10, r.getSaldo());            
+            ps.setDouble(9, r.getPago());
+            ps.setDouble(10, r.getCambio());            
+            ps.setString(11, r.getEstado());
                         
             int resultado = ps.executeUpdate();
             if(resultado > 0)

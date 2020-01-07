@@ -3,6 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.hotelfelipez.www.modulo.frigobar;
 
 import com.aplicacionjava.www.botones.IUBoton;
@@ -26,7 +31,7 @@ import javax.swing.SwingConstants;
  *
  * @author rudolf
  */
-public class IUNuevaComanda extends IUVentanaT{
+public class IUNuevaComandaCafeteria extends IUVentanaT{
     
     private IUVentanaHotel ventanaPrincipal;    
     private CFrigobar control;
@@ -45,7 +50,7 @@ public class IUNuevaComanda extends IUVentanaT{
     private IUBoton botonSalir;
     private IUBoton botonGuardar;
     
-    public IUNuevaComanda(IUVentanaHotel ventanaPrincipal, String tipoComanda, int idRegistro, CFrigobar control, Habitacion habitacion, String titulo, Limitacion limitacion) {
+    public IUNuevaComandaCafeteria(IUVentanaHotel ventanaPrincipal, String tipoComanda, int idRegistro, CFrigobar control, Habitacion habitacion, String titulo, Limitacion limitacion) {
         super(ventanaPrincipal, titulo, limitacion, 5);
         this.ventanaPrincipal = ventanaPrincipal;
         this.control = control;
@@ -208,3 +213,4 @@ public class IUNuevaComanda extends IUVentanaT{
         }        
     }
 }
+

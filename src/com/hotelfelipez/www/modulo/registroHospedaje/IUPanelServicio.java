@@ -20,6 +20,7 @@ import com.hotelfelipez.www.modulo.controlador.CRegistroPersona;
 import com.hotelfelipez.www.modulo.disponibilidad.IUVentanaDisponibilidad;
 import com.hotelfelipez.www.modulo.frigobar.IUModificarComanda;
 import com.hotelfelipez.www.modulo.frigobar.IUNuevaComanda;
+import com.hotelfelipez.www.modulo.frigobar.IUNuevaComandaCafeteria;
 import com.hotelfelipez.www.modulo.frigobar.IUPanelComanda;
 import com.hotelfelipez.www.modulo.frigobar.IUTablaComanda;
 import com.hotelfelipez.www.modulo.modelo.Asistente;
@@ -160,7 +161,7 @@ public class IUPanelServicio extends IUPanel{
             public void mousePressed(MouseEvent e) {
                 iuRegistro.setOpacity(0.2f);
                 
-                String[] opciones = {"comanda FRIGOBAR", "comanda OTROS"};
+                String[] opciones = {"comanda FRIGOBAR", "comanda CAFETERIA", "comanda LAVANDERIA", "comanda OTROS"};
                 IUVentanaOpciones iuOpciones = new IUVentanaOpciones(ventanaPrincipal, "elija una opcion", new Limitacion(Asistente.ANCHO/3, Asistente.ALTO - Asistente.ALTO/7), opciones);
                 iuOpciones.mostrarVentana();
                 if(iuOpciones.getEstado()){
@@ -178,9 +179,20 @@ public class IUPanelServicio extends IUPanel{
                                 actualizarTablaComandas();
                             }
                         break;
+                        case"comanda CAFETERIA":
+                            IUNuevaComandaCafeteria iuComandaCafeteria = new IUNuevaComandaCafeteria(ventanaPrincipal, "Cafeteria", iuRegistro.getRegistroHospedaje().getId(), new CFrigobar(), habitacion, "Registrar Nueva Comanda de Cafeteria", new Limitacion(Asistente.ANCHO - Asistente.ANCHO/7, Asistente.ALTO - Asistente.ALTO/12));
+                            iuComandaCafeteria.mostrarVentana();
+                            if(iuComandaCafeteria.getEstado()){
+                                
+                            }
+                        break;
+                        case"comanda LAVANDERIA":
+                            
+                        break;    
                         case"comanda OTROS":
                             
-                        break;
+                        break;   
+                            
                     }
                 }
                 
